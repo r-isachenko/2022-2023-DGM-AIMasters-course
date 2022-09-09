@@ -109,7 +109,7 @@
     \tableofcontents
 \end{frame}
 %=======
-\section{Autoregressive models (WaveNet, PixelCNN, PixelCNN++)}
+\section{Autoregressive models (WaveNet, PixelCNN)}
 %=======
 \begin{frame}{Autoregressive models}
 	\begin{itemize}
@@ -190,7 +190,7 @@
 			\end{figure}
 		\end{block}
 		\vspace{-0.5cm}
-		\begin{block}{Masked convolution kernel}
+		\begin{block}{Mask for the convolution kernel}
 			\begin{figure}
 				\centering
 		        \includegraphics[width=0.35\linewidth]{figs/pixelcnn_0_1.png}
@@ -213,61 +213,77 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1601.06759}{Oord A., Kalchbrenner N., Kavukcuoglu K. Pixel recurrent neural networks, 2016}
 \end{frame}
 %=======
-\begin{frame}{PixelCNN++}
-	\begin{block}{CIFAR-10 pixel values distribution}
-		\begin{figure}
-			\includegraphics[width=0.3\linewidth]{figs/pixelcnn++_pixels_distr}
-		\end{figure}
+\section{Bayesian framework}
+%=======
+\begin{frame}{Bayesian framework}
+	\begin{block}{Bayes theorem}
+		\[
+			p(\bt | \bx) = \frac{p(\bx | \bt) p(\bt)}{p(\bx)} = \frac{p(\bx | \bt) p(\bt)}{\int p(\bx | \bt) p(\bt) d \bt} 
+		\]
+		\begin{itemize}
+			\item $\bx$ -- observed variables, $\bt$ -- unobserved variables (latent variables/parameters);
+			\item $p(\bx | \bt)$ -- likelihood;
+			\item $p(\bx) = \int p(\bx | \bt) p(\bt) d \bt$ -- evidence;
+			\item $p(\bt)$ -- prior distribution, $p(\bt | \bx)$ -- posterior distribution.
+		\end{itemize}
 	\end{block}
-	\vspace{-0.5cm}
+	\begin{block}{Meaning}
+		We have unobserved variables $\bt$ and some prior knowledge about them $p(\bt)$. Then, the data $\bx$ has been observed. 
+		Posterior distribution $p(\bt | \bx)$ summarizes the knowledge after the observations.
+	\end{block}
+\end{frame}
+%=======
+\begin{frame}{Bayesian framework}
+	Let consider the case, where the unobserved variables $\bt$ is our model parameters $\btheta$.
 	\begin{itemize}
-		\item Standard PixelCNN outputs softmax probabilities for values $\{0, 255\}$ (256 outputs feature maps). 
-		\item Categorical distribution do not know anything about numerical relationships (220 is close to 221 and far from 15).
-		\item If pixel value is not presented in the training dataset, it won't be predicted.
-		\item (Look at the edges of the distributions: they have higher probability mass).
+		\item $\bX = \{\bx_i\}_{i=1}^n$ -- observed samples;
+		\item $p(\btheta)$ -- prior parameters distribution (we treat model parameters $\btheta$ as random variables).
 	\end{itemize}
-	\myfootnotewithlink{https://arxiv.org/abs/1701.05517}{Salimans T. et al. PixelCNN++: Improving the PixelCNN with Discretized Logistic Mixture Likelihood and Other Modifications, 2017}
+	\begin{block}{Posterior distribution}
+		\vspace{-0.3cm}
+		\[
+			p(\btheta | \bX) = \frac{p(\bX | \btheta) p(\btheta)}{p(\bX)} = \frac{p(\bX | \btheta) p(\btheta)}{\int p(\bX | \btheta) p(\btheta) d \btheta} 
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	\begin{block}{Bayesian inference}
+		\vspace{-0.3cm}
+		\[
+			p(\bx | \bX) = \int p(\bx | \btheta) p(\btheta | \bX) d \btheta
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+ 	Note the difference from
+	 	\[
+	 		p(\bx) = \int p(\bx | \btheta) p(\btheta) d \btheta.
+	 	\]
 \end{frame}
 %=======
-\begin{frame}{PixelCNN++}
-		\begin{minipage}[t]{0.55\columnwidth}
-		\begin{block}{Mixture of logistic distributions}
-			\begin{align*}
-				p(x | \mu, s) &= \frac{\exp^{-(x - \mu) / s}}{s (1 + \exp^{-(x - \mu) / s})^2}; \\
-				p(x | \bmu, \bs, \bpi) &= \sum_{k=1}^K \pi_k p(x | \mu_k, s_k);
-			\end{align*}
-		\end{block}
-		\end{minipage}%
-		\begin{minipage}[t]{0.45\columnwidth}
-				\begin{figure}
-					\includegraphics[width=\linewidth]{figs/picelcnn++logistic}
-				\end{figure}
-		\end{minipage}
-	To adopt probability calculation to discrete values:
-	\[
-		P_d(x | \bmu, \bs, \bpi) = P(x + 0.5 | \bmu, \bs, \bpi) - P(x - 0.5 | \bmu, \bs, \bpi)
-	\]
-	For the edge case of 0, replace $x - 0.5$ by $-\infty$, and for 255 replace $x + 0.5$ by $+\infty$.
-	\myfootnotewithlink{https://arxiv.org/abs/1701.05517}{Salimans T. et al. PixelCNN++: Improving the PixelCNN with Discretized Logistic Mixture Likelihood and Other Modifications, 2017}
+\begin{frame}{Bayesian framework}
+	\begin{block}{Bayesian inference}
+		\vspace{-0.3cm}
+		\[
+			p(\bx | \bX) = \int p(\bx | \btheta) p(\btheta | \bX) d \btheta
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	If evidence $p(\bX)$ is intractable (due to multidimensional integration), we can't get posterior distribution and perform the precise inference.
+    \begin{block}{Maximum a posteriori (MAP) estimation}
+	    \vspace{-0.3cm}
+	    \[
+	        \btheta^* = \argmax_{\btheta} p(\btheta | \bX) = \argmax_{\btheta} \bigl(\log p(\bX | \btheta) + \log p(\btheta) \bigr)
+	    \]
+	     \vspace{-0.3cm}
+    \end{block}
+	Estimated $\btheta^*$ is a deterministic variable, but we could treat it as a random variable with density $p(\btheta | \bX) = \delta(\btheta - \btheta^*)$.
+	\begin{block}{MAP inference}
+		\[
+			p(\bx | \bX) = \int p(\bx| \btheta) p(\btheta | \bX ) d \btheta \approx p(\bx | \btheta^*).
+		\]
+	\end{block}
 \end{frame}
 %=======
-\begin{frame}{CIFAR-10 generated samples}
-	\begin{block}{PixelCNN}
-		\vspace{-0.2cm}
-		\begin{figure}
-			\includegraphics[width=0.8\linewidth]{figs/pixelcnn_samples}
-		\end{figure}
-	\end{block}
-	\vspace{-0.5cm}
-	\begin{block}{PixelCNN++}
-		\vspace{-0.2cm}
-		\begin{figure}
-	  		\includegraphics[width=0.8\linewidth]{figs/pixelcnn++_samples}
-		\end{figure}
-	\end{block}
-	\myfootnote{\href{https://arxiv.org/abs/1601.06759}{Oord A., Kalchbrenner N., Kavukcuoglu K. Pixel recurrent neural networks, 2016} \\
-	\href{https://arxiv.org/abs/1701.05517}{Salimans T. et al. PixelCNN++: Improving the PixelCNN with Discretized Logistic Mixture Likelihood and Other Modifications, 2017}}
-\end{frame}
+\section{Latent variable models (LVM)}
 %=======
 \begin{frame}{Generative models zoo}
 	\begin{tikzpicture}[
@@ -317,100 +333,6 @@
 		
 	\end{tikzpicture}
 \end{frame}
-%=======
-\section{Bayesian framework}
-%=======
-\begin{frame}{Bayesian framework}
-	\begin{block}{Bayes theorem}
-		\[
-			p(\bt | \bx) = \frac{p(\bx | \bt) p(\bt)}{p(\bx)} = \frac{p(\bx | \bt) p(\bt)}{\int p(\bx | \bt) p(\bt) d \bt} 
-		\]
-		\begin{itemize}
-			\item $\bx$ -- observed variables, $\bt$ -- unobserved variables (latent variables/parameters);
-			\item $p(\bx | \bt)$ -- likelihood;
-			\item $p(\bx) = \int p(\bx | \bt) p(\bt) d \bt$ -- evidence;
-			\item $p(\bt)$ -- prior distribution, $p(\bt | \bx)$ -- posterior distribution.
-		\end{itemize}
-	\end{block}
-	\begin{block}{Meaning}
-		We have unobserved variables $\bt$ and some prior knowledge about them $p(\bt)$. Then, the data $\bx$ has been observed. 
-		Posterior distribution $p(\bt | \bx)$ summarizes the knowledge after the observations.
-	\end{block}
-\end{frame}
-%=======
-\begin{frame}{Bayesian framework}
-	Let consider the case, where the unobserved variables $\bt$ is our model parameters $\btheta$.
-	\begin{itemize}
-		\item $\bX = \{\bx_i\}_{i=1}^n$ -- observed samples;
-		\item $p(\btheta)$ -- prior parameters distribution (we treat model parameters $\btheta$ as random variables).
-	\end{itemize}
-	\begin{block}{Posterior distribution}
-		\[
-			p(\btheta | \bX) = \frac{p(\bX | \btheta) p(\btheta)}{p(\bX)} = \frac{p(\bX | \btheta) p(\btheta)}{\int p(\bX | \btheta) p(\btheta) d \btheta} 
-		\]
-		\vspace{-0.2cm}
-	\end{block}
-	\begin{block}{Bayesian inference}
-		\vspace{-0.2cm}
-		\[
-			p(\bx | \bX) = \int p(\bx | \btheta) p(\btheta | \bX) d \btheta
-		\]
-	\end{block}
- 	Note the difference from
-	 	\[
-	 		p(\bx) = \int p(\bx | \btheta) p(\btheta) d \btheta.
-	 	\]
-\end{frame}
-%=======
-\begin{frame}{Bayesian framework}
-	\begin{block}{Posterior distribution}
-		\[
-		p(\btheta | \bX) = \frac{p(\bX | \btheta) p(\btheta)}{p(\bX)} = \frac{p(\bX | \btheta) p(\btheta)}{\int p(\bX | \btheta) p(\btheta) d \btheta} 
-		\]
-		\vspace{-0.2cm}
-	\end{block}
-	\begin{block}{Bayesian inference}
-		\vspace{-0.2cm}
-		\[
-		p(\bx | \bX) = \int p(\bx | \btheta) p(\btheta | \bX) d \btheta
-		\]
-	\end{block}
-	If evidence $p(\bX)$ is intractable (due to multidimensional integration), we can't get posterior distribution and perform the precise inference.
-    \begin{block}{Maximum a posteriori (MAP) estimation}
-    \vspace{-0.2cm}
-    \[
-        \btheta^* = \argmax_{\btheta} p(\btheta | \bX) = \argmax_{\btheta} \bigl(\log p(\bX | \btheta) + \log p(\btheta) \bigr)
-    \]
-    \end{block}
-\end{frame}
-%=======
-\begin{frame}{Bayesian framework}
-	\begin{block}{MAP estimation}
-		\vspace{-0.2cm}
-		\[
-		\btheta^* = \argmax_{\btheta} p(\btheta | \bX) = \argmax_{\btheta} \bigl(\log p(\bX | \btheta) + \log p(\btheta) \bigr)
-		\]
-	\end{block}
-	Estimated $\btheta^*$ is a deterministic variable, but we could treat it as a random variable with density $p(\btheta | \bX) = \delta(\btheta - \btheta^*)$.
-	\begin{block}{Dirac delta function}
-		\[
-			\delta(x) = 
-			\begin{cases}
-				+\infty, \quad x = 0; \\
-				0, \quad x \neq 0;
-			\end{cases} \, 
-			\int \delta(x) dx = 1; \,\, 
-			\int f(x) \delta (x - y) dx = f(y).
-		\]
-	\end{block}
-	\begin{block}{MAP inference}
-		\[
-			p(\bx | \bX) = \int p(\bx| \btheta) p(\btheta | \bX ) d \btheta \approx p(\bx | \btheta^*).
-		\]
-	\end{block}
-\end{frame}
-%=======
-\section{Latent variable models (LVM)}
 %=======
 \begin{frame}{Latent variable models (LVM)}
 	\begin{block}{MLE problem}
@@ -520,21 +442,77 @@
 			p(\bx | \btheta) = \int p(\bx | \bz, \btheta) p(\bz) d\bz = \bbE_{p(\bz)} p(\bx | \bz, \btheta) \approx \frac{1}{K} \sum_{k=1}^{K} p(\bx | \bz_k, \btheta),
 		\]
 		\vspace{-0.5cm} \\
-		where $\bz_k \sim p(\bz)$. \\
+		where each $\bz_k \sim p(\bz)$. \\
 		\textbf{Challenge:} to cover the space properly, the number of samples grows exponentially with respect to dimensionality of $\bz$. 
 	\end{block}
 	\myfootnotewithlink{https://jmtomczak.github.io/blog/4/4\_VAE.html}{image credit: https://jmtomczak.github.io/blog/4/4\_VAE.html}
+\end{frame}
+%=======
+\section{Variational lower bound (ELBO)}
+%=======
+\begin{frame}{Variational lower bound (ELBO)}
+	\begin{block}{Derivation 1 (inequality)}
+		\vspace{-0.7cm}
+		\begin{multline*}
+			\log p(\bx| \btheta) 
+			= \log \int p(\bx, \bz | \btheta) d\bz = \log \int {\color{violet}\frac{q(\bz)}{q(\bz)}} p(\bx, \bz | \btheta) d\bz = \\
+			= {\color{teal}\log} {\color{olive}\bbE_{q}} \left[\frac{p(\bx, \bz| \btheta)}{q(\bz)} \right] \geq {\color{olive}\bbE_{q}} {\color{teal}\log} \frac{p(\bx, \bz| \btheta)}{q(\bz)} =  \cL(q, \btheta)
+		\end{multline*}
+		\vspace{-0.7cm}
+	\end{block}
+	\begin{block}{Derivation 2 (equality)}
+		\vspace{-0.7cm}
+		\begin{multline*}
+			\mathcal{L} (q, \btheta) = \int q(\bz) \log \frac{\color{violet}p(\bx, \bz | \btheta)}{q(\bz)}d\bz = 
+			\int q(\bz) \log \frac{\color{violet}p(\bz|\bx, \btheta)p(\bx| \btheta)}{q(\bz)}d\bz = \\
+			= {\color{teal}\int q(\bz)} \log p(\bx| \btheta) {\color{teal}d\bz} + \int q(\bz) \log \frac{p(\bz|\bx, \btheta)}{q(\bz)}d\bz = \\
+			= \log p(\bx| \btheta) - KL(q(\bz) || p(\bz|\bx, \btheta))
+		\end{multline*}
+	\end{block}
+	\vspace{-0.7cm}
+	\begin{block}{Variational decomposition}
+		\[
+			\log p(\bx| \btheta) = \mathcal{L} (q, \btheta) + KL(q(\bz) || p(\bz|\bx, \btheta)) \geq \mathcal{L} (q, \btheta).
+		\]
+	\end{block}
+\end{frame}
+%=======
+\begin{frame}{Variational lower bound (ELBO)}
+	\vspace{-0.3cm}
+	\begin{align*}
+ 	 \mathcal{L} (q, \btheta) &= \int q(\bz) \log \frac{p(\bx, \bz | \btheta)}{q(\bz)}d\bz = \\ 
+	  &= \int q(\bz) \log p(\bx | \bz, \btheta) d\bz + \int q(\bz) \log \frac{p(\bz)}{q(\bz)}d\bz \\ 
+	  &= \mathbb{E}_{q} \log p(\bx | \bz, \btheta) - KL (q(\bz) || p(\bz))
+	\end{align*}
+	\vspace{-0.5cm}
+	\begin{block}{Log-likelihood decomposition}
+		\vspace{-0.5cm}
+		\[
+			 \log p(\bx| \btheta) = \mathbb{E}_{q} \log p(\bx | \bz, \btheta) - KL (q(\bz) || p(\bz)) + KL(q(\bz) || p(\bz|\bx, \btheta)).
+		\]
+	\end{block}
+	\begin{itemize}
+	\item Instead of maximizing incomplete likelihood, maximize ELBO
+   	\[
+	    \max_{\btheta} p(\bx | \btheta) \quad \rightarrow \quad \max_{q, \btheta} \mathcal{L} (q, \btheta)
+   	\]
+   	\item Maximization of ELBO by variational distribution $q$ is equivalent to minimization of KL
+  	\[
+	    \max_q \mathcal{L} (q, \btheta) \equiv \min_q KL(q(\bz) || p(\bz|\bx, \btheta)).
+  	\]
+  	\end{itemize}
+	   	    
 \end{frame}
 %=======
 \begin{frame}{Summary}
 	\begin{itemize}
 		\item WaveNet and PixelCNN models use masked causal convolutions (1D or 2D) to get autoregressive model.
 		\vfill
-		\item PixelCNN++ proposes to use discretized mixture of logistics for output distribution.
-		\vfill
 		\item Bayesian inference is a generalization of most common machine learning tasks. It allows to construct MLE, MAP and bayesian inference, to compare models complexity and many-many more cool stuff.
 		\vfill
 		\item LVM introduces latent representation of observed samples to make model more interpretable.
+		\vfill
+		\item LVM maximizes variational evidence lower bound (ELBO) to find MLE for the parameters.
 	\end{itemize}
 \end{frame}
 \end{document} 
