@@ -80,96 +80,18 @@
 	\end{block}
 \end{frame}
 %=======
-\begin{frame}{Outline}
-	\tableofcontents
-\end{frame}
-%=======
-\section{Variational autoencoder (VAE)}
-%=======
-\begin{frame}{Generative models zoo}
-	\begin{tikzpicture}[
-	 	basic/.style  = {draw, text width=2cm, drop shadow, rectangle},
-	 	root/.style   = {basic, rounded corners=2pt, thin, text height=1.1em, text width=7em, align=center, fill=blue!40},
-	 	level 1/.style={sibling distance=55mm},
-	 	level 2/.style = {basic, rounded corners=6pt, thin, align=center, fill=blue!20, text height=1.1em, text width=9em, sibling distance=38mm},
-	 	level 3/.style = {basic, rounded corners=6pt, thin,align=center, fill=blue!20, text width=8.5em},
-	 	level 4/.style = {basic, thin, align=left, fill=pink!30, text width=7em},
-	 	level 5/.style = {basic, thin, align=left, fill=pink!90, text width=7em},
-		edge from parent/.style={->,draw},
-		>=latex]
-		
-		% root of the the initial tree, level 1
-		\node[root] {\Large Generative models}
-		% The first level, as children of the initial tree
-		child {node[level 2] (c1) {Likelihood-based}
-			child {node[level 3] (c11) {Tractable density}}
-			child {node[level 3] (c12) {Approximate density}}
-		}
-		child {node[level 2] (c2) {Implicit density}};
-				
-		% The second level, relatively positioned nodes
-		\begin{scope}[every node/.style={level 5}]
-		\node [below of = c12, xshift=10pt] (c121) {VAEs};
-		\end{scope}
-		
-		% The second level, relatively positioned nodes
-		\begin{scope}[every node/.style={level 4}]
-		\node [below of = c11, yshift=-5pt, xshift=10pt] (c111) {Autoregressive models};
-		\node [below of = c111, yshift=-5pt] (c112) {Normalizing Flows};
-		
-		\node [below of = c121] (c122) {Diffusion models};
-		\node [below of = c2, xshift=10pt] (c21) {GANs};
-		
-		\end{scope}
-		
-		
-		% lines from each level 1 node to every one of its "children"
-		\foreach \value in {1,2}
-		\draw[->] (c11.194) |- (c11\value.west);
-		
-		\foreach \value in {1,2}
-		\draw[->] (c12.194) |- (c12\value.west);
-		
-		\draw[->] (c2.194) |- (c21.west);
-		
-	\end{tikzpicture}
-\end{frame}
-%=======
-\begin{frame}{Variational autoencoder (VAE)}
-	\begin{block}{Final EM-algorithm}
-		\begin{itemize}
-			\item pick random sample $\bx_i, i \sim U[1, n]$.
-			\item compute the objective:
-			\vspace{-0.3cm}
-			\[
-				\bepsilon^* \sim r(\bepsilon); \quad \bz^* = g(\bx, \bepsilon^*, \bphi);
-			\]
-			\[
-				\cL(\bphi, \btheta) \approx  \log p(\bx | \bz^*, \btheta) - KL(q(\bz^* | \bx, \bphi) || p(\bz^*)).
-			\]
-			\item compute a stochastic gradients w.r.t. $\bphi$ and $\btheta$
-			\begin{align*}
-				\nabla_{\bphi} \mathcal{L} (\bphi, \btheta) &\approx \nabla_{\bphi} \log p(\bx | g(\bx, \bepsilon^*, \bphi), \btheta)  - \nabla_{\bphi} \text{KL}(q(\bz | \bx, \bphi) || p(\bz)); \\
-				\nabla_{\btheta} \mathcal{L} (\bphi, \btheta) &\approx \nabla_{\btheta} \log p(\bx|\bz^*, \btheta).
-			\end{align*}
-			\item update $\btheta, \bphi$ according to the selected optimization method (SGD, Adam, RMSProp):
-			\begin{align*}
-				\bphi &:= \bphi + \eta \nabla_{\bphi} \mathcal{L}(\bphi, \btheta), \\
-				\btheta &:= \btheta + \eta \nabla_{\btheta} \mathcal{L}(\bphi, \btheta).
-			\end{align*}
-		\end{itemize}
-	\end{block}
-\end{frame}
-%=======
-\begin{frame}{Variational autoencoder (VAE)}
+\begin{frame}{Recap of previous lecture}
 	\begin{minipage}[t]{0.55\columnwidth}
-	    \begin{itemize}
-	    \item VAE learns stochastic mapping between $\bx$-space, from complicated distribution $\pi(\bx)$, and a latent $\bz$-space, with simple distribution. 
-	    \item The generative model learns a joint distribution $p(\bx, \bz | \btheta) = p(\bz) p(\bx |\bz, \btheta)$, with a prior distribution $p(\bz)$, and a stochastic decoder $p(\bx|\bz, \btheta)$. 
-	    \item The stochastic encoder $q(\bz|\bx, \bphi)$ (inference model), approximates the true but intractable posterior $p(\bz|\bx, \btheta)$ of the generative model.
-	    \end{itemize}
+		\begin{block}{Variational autoencoder (VAE)}
+		    \begin{itemize}
+			    \item VAE learns stochastic mapping between $\bx$-space, from $\pi(\bx)$, and a latent $\bz$-space, with simple distribution. 
+			    \item The generative model learns  distribution $p(\bx, \bz | \btheta) = p(\bz) p(\bx |\bz, \btheta)$, with a prior distribution $p(\bz)$, and a stochastic decoder $p(\bx|\bz, \btheta)$. 
+			    \item The stochastic encoder $q(\bz|\bx, \bphi)$ (inference model), approximates the true but intractable posterior $p(\bz|\bx, \btheta)$.
+		    \end{itemize}
+	    \end{block}
 	\end{minipage}%
 	\begin{minipage}[t]{0.45\columnwidth}
+		\vspace{0.7cm}
 		\begin{figure}[h]
 			\centering
 			\includegraphics[width=\linewidth]{figs/vae_scheme}
@@ -179,84 +101,8 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1906.02691}{Kingma D. P., Welling M. An introduction to variational autoencoders, 2019}
 \end{frame}
 %=======
-\begin{frame}{Variational Autoencoder}
-	\[
-		 \mathcal{L} (\bphi, \btheta)  = \mathbb{E}_{q(\bz | \bx, \bphi)} \left[\log p(\bx | \bz, \btheta) - \log \frac{q(\bz | \bx, \bphi)}{p(\bz)} \right] \rightarrow \max_{\bphi, \btheta}.
-	\]	
-	\vspace{-0.3cm}
-	\begin{figure}[h]
-		\centering
-		\includegraphics[width=.65\linewidth]{figs/VAE.png}
-	\end{figure}
-	\myfootnotewithlink{http://ijdykeman.github.io/ml/2016/12/21/cvae.html}{image credit: http://ijdykeman.github.io/ml/2016/12/21/cvae.html}
-\end{frame}
-%=======
-\begin{frame}{Variational autoencoder (VAE)}
-	\begin{itemize}
-		\item Encoder $q(\bz | \bx, \bphi) = \text{NN}_e(\bx, \bphi)$ outputs $\bmu_{\bphi}(\bx)$ and $\bsigma_{\bphi}(\bx)$.
-		\item Decoder $p(\bx | \bz, \btheta) = \text{NN}_d(\bz, \btheta)$ outputs parameters of the sample distribution.
-	\end{itemize}
-	\begin{figure}[h]
-		\centering
-		\includegraphics[width=\linewidth]{figs/vae-gaussian.png}
-	\end{figure}
-	
-	\myfootnotewithlink{https://lilianweng.github.io/lil-log/2018/08/12/from-autoencoder-to-beta-vae.html}{image credit: https://lilianweng.github.io/lil-log/2018/08/12/from-autoencoder-to-beta-vae.html}
-\end{frame}
-%=======
-\begin{frame}{VAE limitations}
-	\begin{itemize}
-		\item Poor generative distribution (decoder)
-		\[
-			p(\bx | \bz, \btheta) = \mathcal{N}(\bx| \bmu_{\btheta}(\bz), \bsigma^2_{\btheta}(\bz)) \quad \text{or } = \text{Softmax}(\bpi_{\btheta}(\bz)).
-		\]
-		\item Loose lower bound
-		\[
-			\log p(\bx | \btheta) - \mathcal{L}(q, \btheta) = (?).
-		\]
-		\item Poor prior distribution
-		\[
-			p(\bz) = \mathcal{N}(0, \mathbf{I}).
-		\]
-		\item Poor variational posterior distribution (encoder)
-		\[
-			q(\bz | \bx, \bphi) = \mathcal{N}(\bz| \bmu_{\bphi}(\bx), \bsigma^2_{\bphi}(\bx)).
-		\]
-	\end{itemize}
-\end{frame}
-%=======
-\begin{frame}{VAE as Bayesian model}
-	\begin{block}{Posterior distribution}
-		\vspace{-0.2cm}
-		\[
-			p(\btheta | \bX) = \frac{p(\bX | \btheta) p(\btheta)}{p(\bX)}
-		\]
-		\vspace{-0.5cm}
-	\end{block}
-	\begin{block}{ELBO}
-		\vspace{-0.5cm}
-		\begin{align*}
-			 \log p(\btheta | \bX) &= \log p(\bX | \btheta) + \log p(\btheta) - \log p(\bX) \\
-			 &= \cL(q, \btheta) + KL(q || p) + \log p(\btheta) - \log p(\bX) \\
-			 &\geq \left[ \cL(q, \btheta) + \log p(\btheta) \right] - \log p(\bX) .
-		\end{align*}
-		\vspace{-0.7cm}
-	\end{block}
-	\begin{block}{EM-algorithm}
-		\begin{itemize}
-			\item E-step
-				\vspace{-0.2cm}
-				\[
-					q(\bz) = \argmax_q \mathcal{L} (q, \btheta^*) = \argmin_q KL(q || p) =
-				 p(\bz| \bx, \btheta^*);
-				\]
-				\vspace{-0.5cm}
-			\item M-step
-				\[
-					\btheta^* = \argmax_{\btheta} \left[ \mathcal{L} (q, \btheta) + \log p(\btheta) \right].
-				\]
-		\end{itemize}
-	\end{block}
+\begin{frame}{Outline}
+	\tableofcontents
 \end{frame}
 %=======
 \section{Posterior collapse and decoder weakening techniques}
@@ -523,19 +369,163 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1802.04537}{Rainforth T. et al. Tighter variational bounds are not necessarily better, 2018}
 \end{frame}
 %=======
+\section{Normalizing flows}
+%=======
+\begin{frame}{Likelihood-based models so far...}
+	\begin{minipage}[t]{0.5\columnwidth}
+		\begin{block}{Autoregressive models}
+			\vspace{-0.5cm}
+			\[
+				p(\bx|\btheta) = \prod_{j=1}^m p(x_j | \bx_{1:j - 1}, \btheta)
+			\]
+			\vspace{-0.2cm}
+			\begin{itemize}
+				\item tractable likelihood, 
+				\item no inferred latent factors.
+			\end{itemize}
+		\end{block}
+	\end{minipage}%
+	\begin{minipage}[t]{0.5\columnwidth}
+		\begin{block}{Latent variable models}
+			\[
+				p(\bx| \btheta) = \int p(\bx, \bz | \btheta) d \bz
+			\]
+			\begin{itemize}
+				\item latent feature representation, 
+				\item intractable likelihood.
+			\end{itemize}
+		\end{block}
+	\end{minipage}
+	
+	\vspace{1cm } 
+	How to build model with latent variables and tractable likelihood?
+\end{frame}
+%=======
+\begin{frame}{Generative models zoo}
+	\begin{tikzpicture}[
+	 	basic/.style  = {draw, text width=2cm, drop shadow, rectangle},
+	 	root/.style   = {basic, rounded corners=2pt, thin, text height=1.1em, text width=7em, align=center, fill=blue!40},
+	 	level 1/.style={sibling distance=55mm},
+	 	level 2/.style = {basic, rounded corners=6pt, thin, align=center, fill=blue!20, text height=1.1em, text width=9em, sibling distance=38mm},
+	 	level 3/.style = {basic, rounded corners=6pt, thin,align=center, fill=blue!20, text width=8.5em},
+	 	level 4/.style = {basic, thin, align=left, fill=pink!30, text width=7em},
+	 	level 5/.style = {basic, thin, align=left, fill=pink!90, text width=7em},
+		edge from parent/.style={->,draw},
+		>=latex]
+		
+		% root of the the initial tree, level 1
+		\node[root] {\Large Generative models}
+		% The first level, as children of the initial tree
+		child {node[level 2] (c1) {Likelihood-based}
+			child {node[level 3] (c11) {Tractable density}}
+			child {node[level 3] (c12) {Approximate density}}
+		}
+		child {node[level 2] (c2) {Implicit density}};
+		
+		% The second level, relatively positioned nodes
+		\begin{scope}[every node/.style={level 4}]
+		\node [below of = c11, yshift=-5pt, xshift=10pt] (c111) {Autoregressive models};
+		
+		\node [below of = c12, xshift=10pt] (c121) {VAEs};
+		\node [below of = c121] (c122) {Diffusion models};
+		\node [below of = c2, xshift=10pt] (c21) {GANs};
+		
+		\end{scope}
+		
+		% The second level, relatively positioned nodes
+		\begin{scope}[every node/.style={level 5}]
+			\node [below of = c111, yshift=-5pt] (c112) {Normalizing Flows};
+		\end{scope}
+		
+		
+		% lines from each level 1 node to every one of its "children"
+		\foreach \value in {1,2}
+		\draw[->] (c11.194) |- (c11\value.west);
+		
+		\foreach \value in {1,2}
+		\draw[->] (c12.194) |- (c12\value.west);
+		
+		\draw[->] (c2.194) |- (c21.west);
+		
+	\end{tikzpicture}
+\end{frame}
+%=======
+\begin{frame}{Normalizing flows prerequisites}
+	\begin{block}{Jacobian matrix}
+		\[
+			\bz = f(\bx), \quad 
+			\bJ =  \frac{\partial \bz}{\partial \bx} =
+			\begin{pmatrix}
+				\frac{\partial z_1}{\partial x_1} & \dots & \frac{\partial z_1}{\partial x_m} \\
+				\dots & \dots & \dots \\ 
+				\frac{\partial z_m}{\partial x_1} & \dots & \frac{\partial z_m}{\partial x_m}
+			\end{pmatrix} \in \bbR^{m \times m}
+		\]
+	\end{block}
+	\begin{block}{Change of variable theorem (CoV)}
+		Let $\bx$ be a random variable with density function $p(\bx)$ and $f: \mathbb{R}^m \rightarrow \mathbb{R}^m$ is a differentiable, invertible function (diffeomorphism). If $\bz = f(\bx)$, $\bx = f^{-1}(\bz) = g(\bz)$, then
+		\begin{align*}
+			p(\bx) &= p(\bz) |\det(\bJ_f)| = p(\bz) \left|\det \left(  \frac{\partial \bz}{\partial \bx} \right) \right| = p(f(\bx)) \left|\det \left(  \frac{\partial f(\bx)}{\partial \bx} \right) \right| \\
+			p(\bz) &= p(\bx) |\det(\bJ_g)|= p(\bx) \left|\det \left(  \frac{\partial \bx}{\partial \bz} \right) \right| = p(g(\bz)) \left|\det \left(  \frac{\partial g(\bz)}{\partial \bz} \right) \right|.
+		\end{align*}
+		\vspace{-0.5cm}
+	\end{block}
+\end{frame}
+%=======
+\begin{frame}{Jacobian determinant}
+	\begin{block}{Inverse function theorem}
+		If function $f$ is invertible and Jacobian matrix is continuous and non-singular, then
+		\vspace{-0.3cm}
+		\[
+			\bJ_f = \bJ_{g^{-1}} = \bJ_g^{-1}, \quad |\det (\bJ_f)| = \frac{1}{|\det (\bJ_g)|}
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	\begin{minipage}{0.55\columnwidth}
+		\begin{itemize}
+			\item $\bx$ and $\bz$ have the same dimensionality ($\bbR^m$).
+			\vfill
+			\item $f(\bx, \btheta)$ could be parametric function.
+			\vfill
+			\item Determinant  of Jacobian matrix $\mathbf{J} =\frac{\partial f(\bx, \btheta)}{\partial \bx}$ shows how the volume changes under the transorfmation.
+		\end{itemize}
+	\end{minipage}%
+	\begin{minipage}{0.45\columnwidth}
+		\begin{figure}
+			\includegraphics[width=0.8\linewidth]{figs/jacobian_det}
+		\end{figure}
+	\end{minipage}
+	\myfootnotewithlink{https://jmtomczak.github.io/blog/3/3\_flows.html}{https://jmtomczak.github.io/blog/3/3\_flows.html}
+\end{frame}
+%=======
+\begin{frame}{Fitting flows}
+	\begin{block}{MLE problem}
+		\vspace{-0.3cm}
+		\[
+			p(\bx|\btheta) = p(\bz) \left|\det \left(  \frac{\partial \bz}{\partial \bx} \right) \right|  = p(f(\bx, \btheta)) \left|\det \left( \frac{\partial f(\bx, \btheta)}{\partial \bx} \right) \right|
+		\]
+		\[
+			\log p(\bx|\btheta) = \log p(f(\bx, \btheta)) + \log  |\det (\bJ_f) | \rightarrow \max_{\btheta}
+		\]
+	\end{block}
+	\vspace{-0.2cm}
+	\begin{figure}
+		\includegraphics[width=0.85\linewidth]{figs/flows_how2}
+	\end{figure}
+	\myfootnotewithlink{https://arxiv.org/abs/1605.08803}{Dinh L., Sohl-Dickstein J., Bengio S. Density estimation using Real NVP, 2016} 
+\end{frame}
+%=======
 \begin{frame}{Summary}
 	\begin{itemize}
-		\item The VAE model is an LVM with two neural network: stochastic encoder $q(\bz | \bx, \bphi)$ and stochastic decoder $p(\bx | \bz, \btheta)$.
-		\vfill
-		\item VAE is not a "true" bayesian model since parameters $\btheta$ do not have a prior distribution.
-		\vfill
-		\item Standart VAE has several limitations that we will address later in the course.
-		\vfill
 		\item More powerful decoder in VAE leads to more expressive generative model. However, too expressive decoder could lead to the posterior collapse.
 		\vfill
 		\item The decoder weakening is a set of techniques to avoid the posterior collapse.
 		\vfill
 		\item The IWAE could get the tighter lower bound to the likelihood, but the training of such model becomes more difficult.
+		\vfill
+		\item Flow models transform a simple base distribution to a complex one via a sequence of invertible transformations with tractable Jacobian.
+		\vfill
+		\item Flow models have a tractable likelihood that is given by the change of variable theorem.
 	\end{itemize}
 \end{frame}
 \end{document} 

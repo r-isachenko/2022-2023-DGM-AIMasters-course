@@ -13,27 +13,6 @@
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
-	\begin{minipage}[t]{0.55\columnwidth}
-		\begin{block}{Variational autoencoder (VAE)}
-		    \begin{itemize}
-			    \item VAE learns stochastic mapping between $\bx$-space, from $\pi(\bx)$, and a latent $\bz$-space, with simple distribution. 
-			    \item The generative model learns  distribution $p(\bx, \bz | \btheta) = p(\bz) p(\bx |\bz, \btheta)$, with a prior distribution $p(\bz)$, and a stochastic decoder $p(\bx|\bz, \btheta)$. 
-			    \item The stochastic encoder $q(\bz|\bx, \bphi)$ (inference model), approximates the true but intractable posterior $p(\bz|\bx, \btheta)$.
-		    \end{itemize}
-	    \end{block}
-	\end{minipage}%
-	\begin{minipage}[t]{0.45\columnwidth}
-		\vspace{0.7cm}
-		\begin{figure}[h]
-			\centering
-			\includegraphics[width=\linewidth]{figs/vae_scheme}
-		\end{figure}
-	\end{minipage}
-	
-	\myfootnotewithlink{https://arxiv.org/abs/1906.02691}{Kingma D. P., Welling M. An introduction to variational autoencoders, 2019}
-\end{frame}
-%=======
-\begin{frame}{Recap of previous lecture}
 	\begin{block}{LVM}
 		\vspace{-0.3cm}
 		\[
@@ -113,103 +92,7 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1509.00519}{Burda Y., Grosse R., Salakhutdinov R. Importance Weighted Autoencoders, 2015}
 \end{frame}
 %=======
-\begin{frame}{Outline}
-	\tableofcontents
-\end{frame}
-%=======
-\section{Normalizing flows}
-%=======
-\begin{frame}{Likelihood-based models so far...}
-	\begin{minipage}[t]{0.5\columnwidth}
-		\begin{block}{Autoregressive models}
-			\vspace{-0.5cm}
-			\[
-				p(\bx|\btheta) = \prod_{j=1}^m p(x_j | \bx_{1:j - 1}, \btheta)
-			\]
-			\vspace{-0.2cm}
-			\begin{itemize}
-				\item tractable likelihood, 
-				\item no inferred latent factors.
-			\end{itemize}
-		\end{block}
-	\end{minipage}%
-	\begin{minipage}[t]{0.5\columnwidth}
-		\begin{block}{Latent variable models}
-			\[
-				p(\bx| \btheta) = \int p(\bx, \bz | \btheta) d \bz
-			\]
-			\begin{itemize}
-				\item latent feature representation, 
-				\item intractable likelihood.
-			\end{itemize}
-		\end{block}
-	\end{minipage}
-	
-	\vspace{1cm } 
-	How to build model with latent variables and tractable likelihood?
-\end{frame}
-%=======
-\begin{frame}{Generative models zoo}
-	\begin{tikzpicture}[
-	 	basic/.style  = {draw, text width=2cm, drop shadow, rectangle},
-	 	root/.style   = {basic, rounded corners=2pt, thin, text height=1.1em, text width=7em, align=center, fill=blue!40},
-	 	level 1/.style={sibling distance=55mm},
-	 	level 2/.style = {basic, rounded corners=6pt, thin, align=center, fill=blue!20, text height=1.1em, text width=9em, sibling distance=38mm},
-	 	level 3/.style = {basic, rounded corners=6pt, thin,align=center, fill=blue!20, text width=8.5em},
-	 	level 4/.style = {basic, thin, align=left, fill=pink!30, text width=7em},
-	 	level 5/.style = {basic, thin, align=left, fill=pink!90, text width=7em},
-		edge from parent/.style={->,draw},
-		>=latex]
-		
-		% root of the the initial tree, level 1
-		\node[root] {\Large Generative models}
-		% The first level, as children of the initial tree
-		child {node[level 2] (c1) {Likelihood-based}
-			child {node[level 3] (c11) {Tractable density}}
-			child {node[level 3] (c12) {Approximate density}}
-		}
-		child {node[level 2] (c2) {Implicit density}};
-		
-		% The second level, relatively positioned nodes
-		\begin{scope}[every node/.style={level 4}]
-		\node [below of = c11, yshift=-5pt, xshift=10pt] (c111) {Autoregressive models};
-		
-		\node [below of = c12, xshift=10pt] (c121) {VAEs};
-		\node [below of = c121] (c122) {Diffusion models};
-		\node [below of = c2, xshift=10pt] (c21) {GANs};
-		
-		\end{scope}
-		
-		% The second level, relatively positioned nodes
-		\begin{scope}[every node/.style={level 5}]
-			\node [below of = c111, yshift=-5pt] (c112) {Normalizing Flows};
-		\end{scope}
-		
-		
-		% lines from each level 1 node to every one of its "children"
-		\foreach \value in {1,2}
-		\draw[->] (c11.194) |- (c11\value.west);
-		
-		\foreach \value in {1,2}
-		\draw[->] (c12.194) |- (c12\value.west);
-		
-		\draw[->] (c2.194) |- (c21.west);
-		
-	\end{tikzpicture}
-\end{frame}
-%=======
-\begin{frame}{Normalizing flows prerequisites}
-	\begin{block}{Jacobian matrix}
-		\[
-			\bz = f(\bx), \quad 
-			\bJ =  \frac{\partial \bz}{\partial \bx} =
-			\begin{pmatrix}
-				\frac{\partial z_1}{\partial x_1} & \dots & \frac{\partial z_1}{\partial x_m} \\
-				\dots & \dots & \dots \\ 
-				\frac{\partial z_m}{\partial x_1} & \dots & \frac{\partial z_m}{\partial x_m}
-			\end{pmatrix} \in \bbR^{m \times m}
-		\]
-	\end{block}
+\begin{frame}{Recap of previous lecture}
 	\begin{block}{Change of variable theorem (CoV)}
 		Let $\bx$ be a random variable with density function $p(\bx)$ and $f: \mathbb{R}^m \rightarrow \mathbb{R}^m$ is a differentiable, invertible function (diffeomorphism). If $\bz = f(\bx)$, $\bx = f^{-1}(\bz) = g(\bz)$, then
 		\begin{align*}
@@ -218,35 +101,17 @@
 		\end{align*}
 		\vspace{-0.5cm}
 	\end{block}
-\end{frame}
-%=======
-\begin{frame}{Jacobian determinant}
 	\begin{block}{Inverse function theorem}
-		If function $f$ is invertible and Jacobian matrix is continuous and non-singular, then
+		If function $f$ is invertible and Jacobian is continuous and non-singular, then
 		\vspace{-0.3cm}
 		\[
 			\bJ_f = \bJ_{g^{-1}} = \bJ_g^{-1}, \quad |\det (\bJ_f)| = \frac{1}{|\det (\bJ_g)|}
 		\]
 		\vspace{-0.3cm}
 	\end{block}
-	\begin{minipage}{0.55\columnwidth}
-		\begin{itemize}
-			\item $\bx$ and $\bz$ have the same dimensionality ($\bbR^m$).
-			\vfill
-			\item $f(\bx, \btheta)$ could be parametric function.
-			\vfill
-			\item Determinant  of Jacobian matrix $\mathbf{J} =\frac{\partial f(\bx, \btheta)}{\partial \bx}$ shows how the volume changes under the transorfmation.
-		\end{itemize}
-	\end{minipage}%
-	\begin{minipage}{0.45\columnwidth}
-		\begin{figure}
-			\includegraphics[width=0.8\linewidth]{figs/jacobian_det}
-		\end{figure}
-	\end{minipage}
-	\myfootnotewithlink{https://jmtomczak.github.io/blog/3/3\_flows.html}{https://jmtomczak.github.io/blog/3/3\_flows.html}
 \end{frame}
 %=======
-\begin{frame}{Fitting flows}
+\begin{frame}{Recap of previous lecture}
 	\begin{block}{MLE problem}
 		\vspace{-0.3cm}
 		\[
@@ -261,6 +126,10 @@
 		\includegraphics[width=0.85\linewidth]{figs/flows_how2}
 	\end{figure}
 	\myfootnotewithlink{https://arxiv.org/abs/1605.08803}{Dinh L., Sohl-Dickstein J., Bengio S. Density estimation using Real NVP, 2016} 
+\end{frame}
+%=======
+\begin{frame}{Outline}
+	\tableofcontents
 \end{frame}
 %=======
 \begin{frame}{Composition of flows}
@@ -547,10 +416,6 @@
 %=======
 \begin{frame}{Summary}
 	\begin{itemize}
-		\item Flow models transform a simple base distribution to a complex one via a sequence of invertible transformations with tractable Jacobian.
-		\vfill
-		\item Flow models have a tractable likelihood that is given by the change of variable theorem.
-		\vfill
 		\item Flows could be fitted using forward and reverse KL minimization. We will consider each of the scenarios later in the course.
 		\vfill 
 		\item Linear flows try to parametrize set of invertible matrices via matrix decompositions.

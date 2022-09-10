@@ -9,42 +9,6 @@
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
-	\begin{block}{Change of variable theorem (CoV)}
-		Let $\bx$ be a random variable with density function $p(\bx)$ and $f: \mathbb{R}^m \rightarrow \mathbb{R}^m$ is a differentiable, invertible function (diffeomorphism). If $\bz = f(\bx)$, $\bx = f^{-1}(\bz) = g(\bz)$, then
-		\begin{align*}
-			p(\bx) &= p(\bz) |\det(\bJ_f)| = p(\bz) \left|\det \left(  \frac{\partial \bz}{\partial \bx} \right) \right| = p(f(\bx)) \left|\det \left(  \frac{\partial f(\bx)}{\partial \bx} \right) \right| \\
-			p(\bz) &= p(\bx) |\det(\bJ_g)|= p(\bx) \left|\det \left(  \frac{\partial \bx}{\partial \bz} \right) \right| = p(g(\bz)) \left|\det \left(  \frac{\partial g(\bz)}{\partial \bz} \right) \right|.
-		\end{align*}
-		\vspace{-0.5cm}
-	\end{block}
-	\begin{block}{Inverse function theorem}
-		If function $f$ is invertible and Jacobian is continuous and non-singular, then
-		\vspace{-0.3cm}
-		\[
-			\bJ_f = \bJ_{g^{-1}} = \bJ_g^{-1}, \quad |\det (\bJ_f)| = \frac{1}{|\det (\bJ_g)|}
-		\]
-		\vspace{-0.3cm}
-	\end{block}
-\end{frame}
-%=======
-\begin{frame}{Recap of previous lecture}
-	\begin{block}{MLE problem}
-		\vspace{-0.3cm}
-		\[
-			p(\bx|\btheta) = p(\bz) \left|\det \left(  \frac{\partial \bz}{\partial \bx} \right) \right|  = p(f(\bx, \btheta)) \left|\det \left( \frac{\partial f(\bx, \btheta)}{\partial \bx} \right) \right|
-		\]
-		\[
-			\log p(\bx|\btheta) = \log p(f(\bx, \btheta)) + \log  |\det (\bJ_f) | \rightarrow \max_{\btheta}
-		\]
-	\end{block}
-	\vspace{-0.2cm}
-	\begin{figure}
-		\includegraphics[width=0.85\linewidth]{figs/flows_how2}
-	\end{figure}
-	\myfootnotewithlink{https://arxiv.org/abs/1605.08803}{Dinh L., Sohl-Dickstein J., Bengio S. Density estimation using Real NVP, 2016} 
-\end{frame}
-%=======
-\begin{frame}{Recap of previous lecture}
 	\[
 		\log p(\bx|\btheta) = \log p(f(\bx, \btheta)) + \log  |\det (\bJ_f) | \rightarrow \max_{\btheta}
 	\]

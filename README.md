@@ -21,13 +21,13 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | # | Date | Description | Slides |
 |---------|------|-------------|---------|
 | 0 | September, 12 | Logistics and intro. | [slides](lectures/intro.pdf) |
-| 1 | September, 12 | <b>Lecture:</b> Motivation. Divergence minimization framework. Autoregressive modelling. | [slides](lectures/lecture1/Lecture1.pdf) |
+| 1 | September, 12 | <b>Lecture:</b> Generative models overview and motivation. Problem statement. Divergence minimization framework. Autoregressive modelling. | [slides](lectures/lecture1/Lecture1.pdf) |
 |  |  | <b>Seminar:</b> Introduction. Density estimation in 1D. MADE theory. | TBA |
-| 2 | September, 19 | <b>Lecture:</b> Autoregressive models (WaveNet, PixelCNN, PixelCNN++). Bayesian Framework. Latent Variable Models. | TBA |
+| 2 | September, 19 | <b>Lecture:</b> Autoregressive models (WaveNet, PixelCNN). Bayesian Framework. Latent Variable Models. Variational lower bound (ELBO). | [slides](lectures/lecture1/Lecture2.pdf) |
 |  |  | <b>Seminar:</b> MADE practice. PixelCNN implementation hints. Bayesian inference intro, conjugate distributions. | TBA |
-| 3 | September, 26 | <b>Lecture:</b> Variational lower bound. EM-algorithm, amortized inference. ELBO gradients, reparametrization trick. | TBA |
+| 3 | September, 26 | <b>Lecture:</b> EM-algorithm, amortized inference. ELBO gradients, reparametrization trick. Variational Autoencoder (VAE). | TBA |
 |  |  | <b>Seminar:</b> Mean field approximation. | TBA |
-| 4 | October, 3 | <b>Lecture:</b> Variational Autoencoder (VAE). Posterior collapse and decoder weakening. Tighter ELBO (IWAE). | TBA |
+| 4 | October, 3 | <b>Lecture:</b> Posterior collapse and decoder weakening. Tighter ELBO (IWAE). Idea of normalizing flows. | TBA |
 |  |  | <b>Seminar:</b> EM-algorithm. VAE theory. Automatic differentiation through random graph. | TBA |
 | 5 | October, 10 | <b>Lecture:</b> Flow models definition. Forward and reverse KL divergence. Linear flows (Glow). Residual flows (Planar/Sylvester flows). | TBA |
 |  |  | <b>Seminar:</b> IWAE theory. IWAE variational posterior. VAE vs Normalizing flows. | TBA |
@@ -54,12 +54,12 @@ The course is accompanied by practical tasks that allow you to understand the pr
 ## Homeworks 
 | Homework | Date | Deadline | Description | Link |
 |---------|------|-------------|--------|-------|
-| 1 | September, ?? | September, ?? | <ol><li>Theory (MADE, Mixture of Logistics).</li><li>PixelCNN on MNIST.</li><li>PixelCNN autocomplete and receptive field.</li></ol> | [![Open In Github](https://img.shields.io/static/v1.svg?logo=github&label=Repo&message=Open%20in%20Github&color=lightgrey)](homeworks/hw1.ipynb)<br>[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/r-isachenko/2022-DGM-Ozon-course/blob/main/homeworks/hw1.ipynb) |
-| 2 |  |  | <ol><li>Theory (log-derivative trick, IWAE theorem).</li><li>VAE on 2D data.</li><li>VAE on CIFAR10.</li></ol> | TBA |
-| 3 |  |  | <ol><li>Theory (Sylvester flows).</li><li>RealNVP on 2D data.</li><li>RealNVP on CIFAR10.</li></ol> | TBA |
-| 4 |  |  | <ol><li>Theory (MI in ELBO surgery).</li><li>VAE with AR decoder on MNIST.</li><li>VAE with AR prior on CIFAR10.</li></ol> | TBA |
-| 5 |  |  | <ol><li>Theory (IW dequantization, LSGAN).</li><li>WGAN/WGAN-GP on 2D data.</li><li>WGAN-GP on CIFAR10.</li></ol> | TBA |
-| 6 |  |  | <ol><li>Theory (Neural ODE backprop).</li><li>SN-GAN on CIFAR10.</li><li>FID and Inception Score.</li></ol> | TBA |
+| 1 | September, 22 | October, 6 | <ol><li>Theory (MADE, Mixture of Logistics).</li><li>PixelCNN on MNIST.</li><li>PixelCNN autocomplete and receptive field.</li></ol> |  |
+| 2 | October, 6 | October, 20 | <ol><li>Theory (log-derivative trick, IWAE theorem).</li><li>VAE on 2D data.</li><li>VAE on CIFAR10.</li></ol> | TBA |
+| 3 | October, 20 | November, 3 | <ol><li>Theory (Sylvester flows).</li><li>RealNVP on 2D data.</li><li>RealNVP on CIFAR10.</li></ol> | TBA |
+| 4 | November, 3 | November, 17 | <ol><li>Theory (MI in ELBO surgery).</li><li>VAE with AR decoder on MNIST.</li><li>VAE with AR prior on CIFAR10.</li></ol> | TBA |
+| 5 | November, 17 | December, 1 | <ol><li>Theory (IW dequantization, LSGAN).</li><li>WGAN/WGAN-GP on 2D data.</li><li>WGAN-GP on CIFAR10.</li></ol> | TBA |
+| 6 | December, 1 | December, 14 | <ol><li>Theory (Neural ODE backprop).</li><li>SN-GAN on CIFAR10.</li><li>FID and Inception Score.</li></ol> | TBA |
 
 ## Game rules
 - 6 homeworks each of 13 points = **78 points**
