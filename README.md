@@ -22,7 +22,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 |---------|------|-------------|---------|
 | 0 | September, 12 | Logistics and intro. | [slides](lectures/intro.pdf) |
 | 1 | September, 12 | <b>Lecture:</b> Generative models overview and motivation. Problem statement. Divergence minimization framework. Autoregressive modelling. | [slides](lectures/lecture1/Lecture1.pdf) |
-|  |  | <b>Seminar:</b> Introduction. Density estimation in 1D. MADE theory. | TBA |
+|  |  | <b>Seminar:</b> Introduction. Histograms and KDE. MADE theory. | TBA |
 | 2 | September, 19 | <b>Lecture:</b> Autoregressive models (WaveNet, PixelCNN). Bayesian Framework. Latent Variable Models. Variational lower bound (ELBO). | [slides](lectures/lecture2/Lecture2.pdf) |
 |  |  | <b>Seminar:</b> MADE practice. PixelCNN implementation hints. Bayesian inference intro, conjugate distributions. | TBA |
 | 3 | September, 26 | <b>Lecture:</b> EM-algorithm, amortized inference. ELBO gradients, reparametrization trick. Variational Autoencoder (VAE). | TBA |
