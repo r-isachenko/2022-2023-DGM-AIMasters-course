@@ -24,7 +24,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 1 | September, 12 | <b>Lecture:</b> Generative models overview and motivation. Problem statement. Divergence minimization framework. Autoregressive modelling. | [slides](lectures/lecture1/Lecture1.pdf) |
 |  |  | <b>Seminar:</b> Introduction. Maximum Likelihood estimation. Histograms and KDE. | [notebook](seminars/seminar1_2/seminar1.ipynb) |
 | 2 | September, 19 | <b>Lecture:</b> Autoregressive models (WaveNet, PixelCNN). Bayesian Framework. Latent Variable Models. Variational lower bound (ELBO). | [slides](lectures/lecture2/Lecture2.pdf) |
-|  |  | <b>Seminar:</b> MADE theory and practice. PixelCNN implementation hints. | [notebook](seminars/seminar1_2/seminar1.ipynb) |
+|  |  | <b>Seminar:</b> MADE theory and practice. PixelCNN implementation hints. | [notebook](seminars/seminar1_2/seminar2.ipynb) |
 | 3 | September, 26 | <b>Lecture:</b> EM-algorithm, amortized inference. ELBO gradients, reparametrization trick. Variational Autoencoder (VAE). | TBA |
 |  |  | <b>Seminar:</b> Mean field approximation. | TBA |
 | 4 | October, 3 | <b>Lecture:</b> Posterior collapse and decoder weakening. Tighter ELBO (IWAE). Idea of normalizing flows. | TBA |
