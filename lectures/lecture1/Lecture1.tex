@@ -168,7 +168,7 @@
 \end{frame}
 %=======
 \begin{frame}{Problem statement}
-	We are given i.i.d. samples $\{\bx_i\}_{i=1}^n \in \cX$ (e.g. $\cX = \bbR^m$) from unknown distribution $\pi(\bx)$.
+	We are given i.i.d. samples $\bX = \{\bx_i\}_{i=1}^n$, where $\bx_i \in \cX$ (e.g. $\cX = \bbR^m$) comes from unknown distribution $\pi(\bx)$.
 	
 	\begin{block}{Goal}
 		We would like to learn a distribution $\pi(\bx)$ for 
@@ -187,7 +187,7 @@
 	\begin{minipage}[t]{0.6\columnwidth}
 	    Let $x \sim \text{Categorical}(\bpi)$. The histogram is totally defined by
 		\[
-		    \pi_k = \pi(x = k) = \frac{\sum_{i=1}^n [x_i = k]}{n}.
+		    \hat{\pi}_k = \hat{\pi}(x = k) = \frac{\sum_{i=1}^n [x_i = k]}{n}.
 		\]
 		\textbf{Problem:} curse of dimensionality (number of bins grows exponentially). \\
 		\end{minipage}%
@@ -371,8 +371,8 @@
     \begin{itemize}
 	    \item Sampling is sequential:
 	    \begin{itemize}
-    		\item sample $\hat{x}_1 \sim p(x_1 | \btheta)$;
-    		\item sample $\hat{x}_2 \sim p(x_2 | \hat{x}_1, \btheta)$;
+    		\item sample ${\color{teal}\hat{x}_1} \sim p(x_1 | \btheta)$;
+    		\item sample $\hat{x}_2 \sim p(x_2 | {\color{teal}\hat{x}_1}, \btheta)$;
     		\item \dots
     		\item sample $\hat{x}_m \sim p(x_m | \hat{\bx}_{1:m-1}, \btheta)$;
     		\item new generated object is $\hat{\bx} = (\hat{x}_1, \hat{x}_2, \dots, \hat{x}_m)$.
@@ -412,23 +412,6 @@
 			 Is it possible to model continuous distributions instead of discrete one?
 		\end{minipage}
 	\end{block}
-	 \myfootnotewithlink{https://jmtomczak.github.io/blog/2/2\_ARM.html}{image credit: https://jmtomczak.github.io/blog/2/2\_ARM.html}
-\end{frame}
-%=======
-\begin{frame}{Autoregressive models}
-	\begin{itemize}
-		\item Previous model has \textbf{limited} memory $d$. It is insufficient for many modalities (e.g. for images and text). 
-		\item Recurrent NN fixes this problem and potentially could learn long-range dependencies:
-		\[
-			p(x_j | \bx_{1:j - 1}, \btheta) = p(x_j | \bh_j, \btheta), \quad \bh_j = \text{RNN}(\bx_{j-d:j - 1}, \bh_{j - 1})
-		\]
-		 \begin{figure}
-	    \centering
-	    \includegraphics[width=0.7\linewidth]{figs/sequential_RNN}
-		 \end{figure}
-		\item Sequential computation of all conditionals $p(x_j | \bx_{1:j-1}, \btheta)$, hence, the training is slow.
-		\item RNN suffers from vanishing and exploding gradients.
-	\end{itemize}
 	 \myfootnotewithlink{https://jmtomczak.github.io/blog/2/2\_ARM.html}{image credit: https://jmtomczak.github.io/blog/2/2\_ARM.html}
 \end{frame}
 %=======
