@@ -69,7 +69,7 @@
 	\begin{block}{Sampling}
 		\vspace{-0.7cm}
 		\[
-			\hat{x}_1 \sim p(x_1 | \btheta), \quad \hat{x}_2 \sim p(x_2 | \hat{x}_1, \btheta), \quad \dots, \quad \hat{x}_m \sim p(x_m | \hat{\bx}_{1:m-1}, \btheta)
+			{\color{teal}\hat{x}_1} \sim p(x_1 | \btheta), \quad \hat{x}_2 \sim p(x_2 | {\color{teal}\hat{x}_1}, \btheta), \quad \dots, \quad \hat{x}_m \sim p(x_m | \hat{\bx}_{1:m-1}, \btheta)
 		\]
 		New generated object is $\hat{\bx} = (\hat{x}_1, \hat{x}_2, \dots, \hat{x}_m)$.
 	\end{block}
@@ -339,7 +339,7 @@
 %=======
 \begin{frame}{Latent variable models (LVM)}
 	\[
-	\log p(\bx | \btheta) = \log \int p(\bx | \bz, \btheta) p(\bz) d\bz \rightarrow \max_{\btheta}
+	\log p(\bx | \btheta) = \log \int {\color{teal}p(\bx | \bz, \btheta)} {\color{olive}p(\bz)} d\bz \rightarrow \max_{\btheta}
 	\]
 	\vspace{-0.6cm}
 	\begin{block}{Examples}
@@ -352,8 +352,8 @@
 			\end{figure}
 			\vspace{-0.5cm}
 			\begin{itemize}
-				\item $p(\bx | z, \btheta) = \cN(\bx | \bmu_z, \bSigma_z)$
-				\item $p(z) = \text{Categorical}(\bpi)$
+				\item ${\color{teal}p(\bx | z, \btheta)} = \cN(\bx | \bmu_z, \bSigma_z)$
+				\item ${\color{olive}p(z)} = \text{Categorical}(\bpi)$
 			\end{itemize}
 		\end{minipage}%
 		\begin{minipage}[t]{0.53\columnwidth}
@@ -365,8 +365,8 @@
 			\end{figure}
 			\vspace{-0.3cm}
 			\begin{itemize}
-				\item $p(\bx | \bz, \btheta) = \cN(\bx | \bW \bz + \bmu, \sigma^2 \bI)$
-				\item $p(\bz) = \cN(\bz | 0, \bI)$
+				\item ${\color{teal}p(\bx | \bz, \btheta)} = \cN(\bx | \bW \bz + \bmu, \sigma^2 \bI)$
+				\item ${\color{olive}p(\bz)} = \cN(\bz | 0, \bI)$
 			\end{itemize}
 		\end{minipage}
 	\end{block}
@@ -386,7 +386,7 @@
 	\begin{itemize}
 		\item $p(\bx | \bz, \btheta) = \cN(\bx | \bW \bz + \bmu, \sigma^2 \bI)$
 		\item $p(\bz) = \cN(\bz | 0, \bI)$
-		\item $p(\bx) = \cN(\bx | \bmu, \bW \bW^T + \sigma^2 \bI)$
+		\item $p(\bx | \btheta) = \cN(\bx | \bmu, \bW \bW^T + \sigma^2 \bI)$
 		\item $p(\bz | \bx) = \cN \bigl(\bM^{-1} \bW^T (\bx - \bmu), \sigma^2 \bM\bigr)$, where $\bM = \bW \bW^T + \sigma^2 \bI$
 	\end{itemize}
 \end{frame}
