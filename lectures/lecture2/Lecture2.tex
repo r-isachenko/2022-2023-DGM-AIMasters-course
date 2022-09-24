@@ -9,7 +9,7 @@
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
-	We are given i.i.d. samples $\{\bx_i\}_{i=1}^n \in \cX$ (e.g. $\cX = \bbR^m$) from unknown distribution $\pi(\bx)$.
+	We are given i.i.d. samples $\bX = \{\bx_i\}_{i=1}^n$, where $\bx_i \in \cX$ (e.g. $\cX = \bbR^m$) comes from unknown distribution $\pi(\bx)$.
 
 	\begin{block}{Goal}
 		We would like to learn a distribution $\pi(\bx)$ for 
@@ -58,45 +58,27 @@
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
-	\begin{block}{Likelihood as product of conditionals}
-		Let $\bx = (x_1, \dots, x_m)$, $\bx_{1:j} = (x_1, \dots, x_j)$. Then 
-		\[
-		p(\bx | \btheta) = \prod_{j=1}^m p(x_j | \bx_{1:j - 1}, \btheta); \quad 
-		\log p(\bx | \btheta) = \sum_{j=1}^m \log p(x_j | \bx_{1:j - 1}, \btheta).
-		\]
-	\end{block}
-	\vspace{-0.3cm}
 	\begin{block}{MLE problem for autoregressive model}
-		\vspace{-0.5cm}
+		Let $\bx = (x_1, \dots, x_m)$, $\bx_{1:j} = (x_1, \dots, x_j)$. Then 
+		\vspace{-0.3cm}
 		\[
-		\btheta^* = \argmax_{\btheta} p(\bX | \btheta) = \argmax_{\btheta} \sum_{i=1}^n \sum_{j=1}^m \log p(x_{ij} | \bx_{i, 1:j - 1}\btheta).
+			\btheta^* = \argmax_{\btheta} p(\bX | \btheta) = \argmax_{\btheta} \sum_{i=1}^n \sum_{j=1}^m \log p(x_{ij} | \bx_{i, 1:j - 1}\btheta).
 		\]
-		\vspace{-0.5cm}
+		\vspace{-0.7cm}
 	\end{block}
 	\begin{block}{Sampling}
-		\vspace{-0.5cm}
+		\vspace{-0.7cm}
 		\[
-			\hat{x}_1 \sim p(x_1 | \btheta), \quad \hat{x}_2 \sim p(x_2 | \hat{x}_1, \btheta), \dots, \quad \hat{x}_m \sim p(x_m | \hat{\bx}_{1:m-1}, \btheta)
+			\hat{x}_1 \sim p(x_1 | \btheta), \quad \hat{x}_2 \sim p(x_2 | \hat{x}_1, \btheta), \quad \dots, \quad \hat{x}_m \sim p(x_m | \hat{\bx}_{1:m-1}, \btheta)
 		\]
 		New generated object is $\hat{\bx} = (\hat{x}_1, \hat{x}_2, \dots, \hat{x}_m)$.
 	\end{block}
-\end{frame}
-%=======
-\begin{frame}{Recap of previous lecture}
 	\begin{block}{Autoregressive MLP}
 		\vspace{-0.3cm}
  		\begin{figure}
 		     \centering
-		     \includegraphics[width=0.75\linewidth]{figs/sequential_MLP}
+		     \includegraphics[width=0.65\linewidth]{figs/sequential_MLP}
 		 \end{figure}
-	\end{block}
-	\vspace{-0.3cm}
-	\begin{block}{Autoregressive RNN}
-	   	\vspace{-0.3cm}
-		\begin{figure}
-		   \centering
-		   \includegraphics[width=0.75\linewidth]{figs/sequential_RNN}
-		\end{figure}
 	\end{block}
 	 \myfootnotewithlink{https://jmtomczak.github.io/blog/2/2\_ARM.html}{image credit: https://jmtomczak.github.io/blog/2/2\_ARM.html}
 \end{frame}
@@ -473,33 +455,6 @@
 	\end{block}
 \end{frame}
 %=======
-\begin{frame}{Variational lower bound (ELBO)}
-	\vspace{-0.3cm}
-	\begin{align*}
- 	 \mathcal{L} (q, \btheta) &= \int q(\bz) \log \frac{p(\bx, \bz | \btheta)}{q(\bz)}d\bz = \\ 
-	  &= \int q(\bz) \log p(\bx | \bz, \btheta) d\bz + \int q(\bz) \log \frac{p(\bz)}{q(\bz)}d\bz \\ 
-	  &= \mathbb{E}_{q} \log p(\bx | \bz, \btheta) - KL (q(\bz) || p(\bz))
-	\end{align*}
-	\vspace{-0.5cm}
-	\begin{block}{Log-likelihood decomposition}
-		\vspace{-0.5cm}
-		\[
-			 \log p(\bx| \btheta) = \mathbb{E}_{q} \log p(\bx | \bz, \btheta) - KL (q(\bz) || p(\bz)) + KL(q(\bz) || p(\bz|\bx, \btheta)).
-		\]
-	\end{block}
-	\begin{itemize}
-	\item Instead of maximizing incomplete likelihood, maximize ELBO
-   	\[
-	    \max_{\btheta} p(\bx | \btheta) \quad \rightarrow \quad \max_{q, \btheta} \mathcal{L} (q, \btheta)
-   	\]
-   	\item Maximization of ELBO by variational distribution $q$ is equivalent to minimization of KL
-  	\[
-	    \max_q \mathcal{L} (q, \btheta) \equiv \min_q KL(q(\bz) || p(\bz|\bx, \btheta)).
-  	\]
-  	\end{itemize}
-	   	    
-\end{frame}
-%=======
 \begin{frame}{Summary}
 	\begin{itemize}
 		\item WaveNet and PixelCNN models use masked causal convolutions (1D or 2D) to get autoregressive model.
@@ -508,7 +463,7 @@
 		\vfill
 		\item LVM introduces latent representation of observed samples to make model more interpretable.
 		\vfill
-		\item LVM maximizes variational evidence lower bound (ELBO) to find MLE for the parameters.
+		\item LVM decomposes log likelihood to ELBO and KL terms.
 	\end{itemize}
 \end{frame}
 \end{document} 
