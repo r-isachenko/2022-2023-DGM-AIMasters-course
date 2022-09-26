@@ -26,7 +26,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 2 | September, 19 | <b>Lecture:</b> Autoregressive models (WaveNet, PixelCNN). Bayesian Framework. Latent Variable Models (LVM). Variational lower bound (ELBO). | [slides](lectures/lecture2/Lecture2.pdf) |
 |  |  | <b>Seminar:</b> MADE theory and practice. PixelCNN implementation hints. | [notebook](seminars/seminar2/seminar2.ipynb) |
 | 3 | September, 26 | <b>Lecture:</b> EM-algorithm, amortized inference. ELBO gradients, reparametrization trick. Variational Autoencoder (VAE). | TBA |
-|  |  | <b>Seminar:</b> CNNs. Additional notes on autoregressive models. Latent Variables Models. | [notebool](seminars/seminar3/seminar3.ipynb) [CNNs_note](seminars/seminar3/convolutions.pdf) |
+|  |  | <b>Seminar:</b> CNNs. Additional notes on autoregressive models. Latent Variables Models. | [notebook](seminars/seminar3/seminar3.ipynb) [CNNs_note](seminars/seminar3/convolutions.pdf) |
 | 4 | October, 3 | <b>Lecture:</b> Posterior collapse and decoder weakening. Tighter ELBO (IWAE). Idea of normalizing flows. | TBA |
 |  |  | <b>Seminar:</b> EM-algorithm. VAE theory. Automatic differentiation through random graph. | TBA |
 | 5 | October, 10 | <b>Lecture:</b> Flow models definition. Forward and reverse KL divergence. Linear flows (Glow). Residual flows (Planar/Sylvester flows). | TBA |
