@@ -83,8 +83,8 @@
 	\end{block}
 \end{frame}
 %=======
-\begin{frame}{Variational lower bound (ELBO)}
-	\begin{block}{Derivation 1 (inequality)}
+\begin{frame}{Recap of previous lecture}
+	\begin{block}{ELBO derivation 1 (inequality)}
 		\vspace{-0.3cm}
 		\begin{multline*}
 			\log p(\bx| \btheta) 
@@ -92,7 +92,7 @@
 		\end{multline*}
 		\vspace{-0.3cm}
 	\end{block}
-	\begin{block}{Derivation 2 (equality)}
+	\begin{block}{ELBO derivation 2 (equality)}
 		\vspace{-0.3cm}
 		\begin{multline*}
 			\mathcal{L} (q, \btheta) = \int q(\bz) \log \frac{p(\bx, \bz | \btheta)}{q(\bz)}d\bz = 
@@ -123,19 +123,20 @@
 	\end{align*}
 	\vspace{-0.5cm}
 	\begin{block}{Log-likelihood decomposition}
-		\vspace{-0.5cm}
-		\[
-			 \log p(\bx| \btheta) = \mathbb{E}_{q} \log p(\bx | \bz, \btheta) - KL (q(\bz) || p(\bz)) + KL(q(\bz) || p(\bz|\bx, \btheta)).
-		\]
+		\vspace{-0.8cm}
+		\begin{multline*}
+			 \log p(\bx| \btheta) = {\color{olive}\mathcal{L} (q, \btheta)} + KL(q(\bz) || p(\bz|\bx, \btheta)) \\ = {\color{olive}\mathbb{E}_{q} \log p(\bx | \bz, \btheta) - KL (q(\bz) || p(\bz))} + KL(q(\bz) || p(\bz|\bx, \btheta)).
+		\end{multline*}
+		\vspace{-0.7cm}
 	\end{block}
 	\begin{itemize}
 	\item Instead of maximizing incomplete likelihood, maximize ELBO
    	\[
 	    \max_{\btheta} p(\bx | \btheta) \quad \rightarrow \quad \max_{q, \btheta} \mathcal{L} (q, \btheta)
    	\]
-   	\item Maximization of ELBO by variational distribution $q$ is equivalent to minimization of KL
+   	\item Maximization of ELBO by \textbf{variational} distribution $q$ is equivalent to minimization of KL
   	\[
-	    \max_q \mathcal{L} (q, \btheta) \equiv \min_q KL(q(\bz) || p(\bz|\bx, \btheta)).
+	    \argmax_q \mathcal{L} (q, \btheta) \equiv \argmin_q KL(q(\bz) || p(\bz|\bx, \btheta)).
   	\]
   	\end{itemize}
 	   	    
@@ -148,23 +149,26 @@
 	\end{multline*}
 	\vspace{-0.5cm}
 	\begin{block}{Block-coordinate optimization}
-	\begin{itemize}
-		\item Initialize $\btheta^*$;
-		\item E-step
-		\begin{multline*}
-			q^*(\bz) = \argmax_q \mathcal{L} (q, \btheta^*) = \\
-			= \argmin_q KL(q(\bz) || p(\bz | \bx, \btheta^*)) = p(\bz| \bx, \btheta^*);
-		\end{multline*}
-		\item M-step
-		\[
-			\btheta^* = \argmax_{\btheta} \mathcal{L} (q^*, \btheta);
-		\]
-		\item Repeat E-step and M-step until convergence.
-	\end{itemize}
+		\begin{itemize}
+			\item Initialize $\btheta^*$;
+			\item \textbf{E-step} ($\mathcal{L} (q, \btheta) \rightarrow \max_q$)
+			\vspace{-0.2cm}
+			\begin{multline*}
+				q^*(\bz) = \argmax_q \mathcal{L} (q, \btheta^*) = \\
+				= \argmin_q KL(q(\bz) || p(\bz | \bx, \btheta^*)) = p(\bz| \bx, \btheta^*);
+			\end{multline*}
+			\item \textbf{M-step} ($\mathcal{L} (q, \btheta) \rightarrow \max_{\btheta}$)
+			\vspace{-0.2cm}
+			\[
+				\btheta^* = \argmax_{\btheta} \mathcal{L} (q^*, \btheta);
+			\]
+			\vspace{-0.2cm}
+			\item Repeat E-step and M-step until convergence.
+		\end{itemize}
 	\end{block}
 \end{frame}
 %=======
-\begin{frame}{EM illustration}
+\begin{frame}{EM-algorithm illustration}
 	
 	\begin{minipage}[t]{0.45\columnwidth}
 		\begin{figure}
@@ -433,74 +437,15 @@
 	\myfootnotewithlink{https://lilianweng.github.io/lil-log/2018/08/12/from-autoencoder-to-beta-vae.html}{image credit: https://lilianweng.github.io/lil-log/2018/08/12/from-autoencoder-to-beta-vae.html}
 \end{frame}
 %=======
-\begin{frame}{VAE limitations}
-	\begin{itemize}
-		\item Poor generative distribution (decoder)
-		\[
-			p(\bx | \bz, \btheta) = \mathcal{N}(\bx| \bmu_{\btheta}(\bz), \bsigma^2_{\btheta}(\bz)) \quad \text{or } = \text{Softmax}(\bpi_{\btheta}(\bz)).
-		\]
-		\item Loose lower bound
-		\[
-			\log p(\bx | \btheta) - \mathcal{L}(q, \btheta) = (?).
-		\]
-		\item Poor prior distribution
-		\[
-			p(\bz) = \mathcal{N}(0, \mathbf{I}).
-		\]
-		\item Poor variational posterior distribution (encoder)
-		\[
-			q(\bz | \bx, \bphi) = \mathcal{N}(\bz| \bmu_{\bphi}(\bx), \bsigma^2_{\bphi}(\bx)).
-		\]
-	\end{itemize}
-\end{frame}
-%=======
-\begin{frame}{VAE as Bayesian model}
-	\begin{block}{Posterior distribution}
-		\vspace{-0.2cm}
-		\[
-			p(\btheta | \bX) = \frac{p(\bX | \btheta) p(\btheta)}{p(\bX)}
-		\]
-		\vspace{-0.5cm}
-	\end{block}
-	\begin{block}{ELBO}
-		\vspace{-0.5cm}
-		\begin{align*}
-			 \log p(\btheta | \bX) &= \log p(\bX | \btheta) + \log p(\btheta) - \log p(\bX) \\
-			 &= \cL(q, \btheta) + KL(q || p) + \log p(\btheta) - \log p(\bX) \\
-			 &\geq \left[ \cL(q, \btheta) + \log p(\btheta) \right] - \log p(\bX) .
-		\end{align*}
-		\vspace{-0.7cm}
-	\end{block}
-	\begin{block}{EM-algorithm}
-		\begin{itemize}
-			\item E-step
-				\vspace{-0.2cm}
-				\[
-					q(\bz) = \argmax_q \mathcal{L} (q, \btheta^*) = \argmin_q KL(q || p) =
-				 p(\bz| \bx, \btheta^*);
-				\]
-				\vspace{-0.5cm}
-			\item M-step
-				\[
-					\btheta^* = \argmax_{\btheta} \left[ \mathcal{L} (q, \btheta) + \log p(\btheta) \right].
-				\]
-		\end{itemize}
-	\end{block}
-\end{frame}
-%=======
 \begin{frame}{Summary}
 	\begin{itemize}
-		\item The general variational EM algorithm maximizes ELBO objective.
+		\item The general variational EM algorithm maximizes ELBO objective for LVM model to find MLE for parameters $\btheta$.
 		\vfill
 		\item Amortized variational inference allows to efficiently compute the stochastic gradients for ELBO using Monte-Carlo estimation.
 		\vfill
-		\item The reparametrization trick gets unbiased gradients w.r.t to the variational posterior distribution.
+		\item The reparametrization trick gets unbiased gradients w.r.t to the variational posterior distribution $q(\bz | \bx, \bphi)$.
 		\vfill
 		\item The VAE model is an LVM with two neural network: stochastic encoder $q(\bz | \bx, \bphi)$ and stochastic decoder $p(\bx | \bz, \btheta)$.
-		\vfill
-		\item Standart VAE has several limitations that we will address later in the course.
-		\vfill
-		\item VAE is not a "true" bayesian model since parameters $\btheta$ do not have a prior distribution.
 	\end{itemize}
 \end{frame}
 %=======
