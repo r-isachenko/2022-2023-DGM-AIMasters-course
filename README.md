@@ -25,9 +25,9 @@ The course is accompanied by practical tasks that allow you to understand the pr
 |  |  | <b>Seminar:</b> Introduction. Maximum likelihood estimation. Kernel density estimation. Histograms and KDE. | [notebook](seminars/seminar1/seminar1.ipynb) |
 | 2 | September, 19 | <b>Lecture:</b> Autoregressive models (WaveNet, PixelCNN). Bayesian Framework. Latent Variable Models (LVM). Variational lower bound (ELBO). | [slides](lectures/lecture2/Lecture2.pdf) |
 |  |  | <b>Seminar:</b> MADE theory and practice. PixelCNN implementation hints. | [notebook](seminars/seminar2/seminar2.ipynb) |
-| 3 | September, 26 | <b>Lecture:</b> EM-algorithm, amortized inference. ELBO gradients, reparametrization trick. Variational Autoencoder (VAE). | TBA |
+| 3 | September, 26 | <b>Lecture:</b> EM-algorithm, amortized inference. ELBO gradients, reparametrization trick. Variational Autoencoder (VAE). | [slides](lectures/lecture3/Lecture3.pdf) |
 |  |  | <b>Seminar:</b> CNNs. Additional notes on autoregressive models. Latent Variables Models. | [notebook](seminars/seminar3/seminar3.ipynb) [CNNs_note](seminars/seminar3/convolutions.pdf) |
-| 4 | October, 3 | <b>Lecture:</b> Posterior collapse and decoder weakening. Tighter ELBO (IWAE). Idea of normalizing flows. | TBA |
+| 4 | October, 3 | <b>Lecture:</b> VAE limitations. Posterior collapse and decoder weakening. Tighter ELBO (IWAE). Idea of normalizing flows. | [slides](lectures/lecture4/Lecture4.pdf) |
 |  |  | <b>Seminar:</b> EM-algorithm. VAE theory. Automatic differentiation through random graph. | TBA |
 | 5 | October, 10 | <b>Lecture:</b> Flow models definition. Forward and reverse KL divergence. Linear flows (Glow). Residual flows (Planar/Sylvester flows). | TBA |
 |  |  | <b>Seminar:</b> IWAE theory. IWAE variational posterior. VAE vs Normalizing flows. | TBA |
