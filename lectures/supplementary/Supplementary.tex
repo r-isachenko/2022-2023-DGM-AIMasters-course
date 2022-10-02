@@ -525,17 +525,75 @@
 \end{frame}
 %=======
 \begin{frame}{IWAE, 2015}
-How to determine whether all VAE latent variables are informative?
-\[
-A_{i} = \text{cov}_\bx \left( \mathbb{E}_{q(z_i | \bx)} [z_i] \right) > 0.01 \quad \Leftrightarrow \quad z_i \text{ is active}
-\]
-\begin{figure}
-	\centering
-	\includegraphics[width=\linewidth]{figs/IWAE_3.png}
-\end{figure}
-\vfill
-\hrule\medskip
-{\scriptsize \href{https://arxiv.org/pdf/1509.00519.pdf}{https://arxiv.org/pdf/1509.00519.pdf}}
+	How to determine whether all VAE latent variables are informative?
+	\[
+	A_{i} = \text{cov}_\bx \left( \mathbb{E}_{q(z_i | \bx)} [z_i] \right) > 0.01 \quad \Leftrightarrow \quad z_i \text{ is active}
+	\]
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figs/IWAE_3.png}
+	\end{figure}
+	\vfill
+	\hrule\medskip
+	{\scriptsize \href{https://arxiv.org/pdf/1509.00519.pdf}{https://arxiv.org/pdf/1509.00519.pdf}}
+\end{frame}
+%=======
+\begin{frame}{Importance Weighted Autoencoders (IWAE)}
+	\begin{block}{Objective}
+		\vspace{-0.5cm}
+		\[
+		\mathcal{L}_K (q, \btheta)  = \mathbb{E}_{\bz_1, \dots, \bz_K \sim q(\bz | \bx, \bphi)} \log \left( \frac{1}{K}\sum_{k=1}^K\frac{p(\bx, \bz_k | \btheta)}{q(\bz_k| \bx, \bphi)} \right) \rightarrow \max_{\bphi, \btheta}.
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	\begin{block}{Gradient}
+		\vspace{-0.3cm}
+		\[
+		\Delta_K = \nabla_{\btheta, \bphi} \log \left( \frac{1}{K}\sum_{k=1}^K\frac{p(\bx, \bz_k | \btheta)}{q(\bz_k| \bx, \bphi)} \right), \quad \bz_k \sim q(\bz | \bx, \bphi).
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	\begin{block}{Theorem}
+		\vspace{-0.4cm}
+		\[
+		\text{SNR}_K = \frac{\bbE [\Delta_K]}{\sigma(\Delta_K)}; \quad
+		\text{SNR}_K(\btheta) = O(\sqrt{K}); \quad 
+		\text{SNR}_K(\bphi) = O\left(\sqrt{\frac{1}{K}}\right).
+		\]
+		Hence, increasing $K$ vanishes gradient signal of inference network $q(\bz | \bx, \bphi)$.
+	\end{block}
+	
+	\myfootnotewithlink{https://arxiv.org/abs/1802.04537}{Rainforth T. et al. Tighter variational bounds are not necessarily better, 2018}
+\end{frame}
+%=======
+\begin{frame}{Importance Weighted Autoencoders (IWAE)}
+	\begin{block}{Theorem}
+		\vspace{-0.5cm}
+		\[
+		\text{SNR}_K = \frac{\bbE [\Delta_K]}{\sigma(\Delta_K)}; \quad
+		\text{SNR}_K(\btheta) = O(\sqrt{K}); \quad 
+		\text{SNR}_K(\bphi) = O\left(\sqrt{\frac{1}{K}}\right).
+		\]
+		\vspace{-0.8cm}
+	\end{block}
+	\begin{minipage}[t]{0.5\columnwidth}
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=1.\linewidth]{figs/IWAE_SNR_1.png}
+		\end{figure}
+	\end{minipage}%
+	\begin{minipage}[t]{0.5\columnwidth}
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=1.\linewidth]{figs/IWAE_SNR_2.png}
+		\end{figure}
+	\end{minipage}
+	\begin{itemize}
+		\item IWAE makes the variational bound tighter and extends the class of variational distributions.
+		\item Gradient signal becomes really small, training is complicated.
+		\item IWAE is a standard quality measure for VAE models.
+	\end{itemize}
+	\myfootnotewithlink{https://arxiv.org/abs/1802.04537}{Rainforth T. et al. Tighter variational bounds are not necessarily better, 2018}
 \end{frame}
 %=======
 \section{PixelVAE, Hierarchical VAE}
@@ -645,6 +703,30 @@ A_{i} = \text{cov}_\bx \left( \mathbb{E}_{q(z_i | \bx)} [z_i] \right) > 0.01 \qu
 		\end{minipage}
 		Latent variables are not used, since the decoder could model the data without the encoder.
 	\end{block}
+\end{frame}
+%=======
+\begin{frame}{PixelVAE}
+	\begin{block}{Autoregressive decoder}
+		\vspace{-0.3cm}
+		\[
+		p(\bx | \bz , \btheta) = \prod_{j=1}^m p(x_j | \bx_{1:j - 1}, \bz , \btheta)
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	\begin{itemize}
+		\item Global structure is captured by latent variables.
+		\item Local statistics are captured by limited receptive field autoregressive model.
+	\end{itemize}
+	\vspace{-0.1cm}
+	\begin{block}{MNIST results}
+		\vspace{-0.3cm}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.75\linewidth]{figs/PixelVAE_2.png}
+		\end{figure}
+	\end{block}
+	
+	\myfootnotewithlink{https://arxiv.org/abs/1611.05013}{Gulrajani I. et al. PixelVAE: A Latent Variable Model for Natural Images, 2016}
 \end{frame}
 %=======
 \begin{frame}{Variational Lossy AutoEncoder}

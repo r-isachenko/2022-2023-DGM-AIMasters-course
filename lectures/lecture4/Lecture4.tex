@@ -22,13 +22,13 @@
 	
 	\vspace{-0.5cm}
 	\[
-	 \mathcal{L} (q, \btheta) = \int q(\bz) \log \frac{p(\bx, \bz | \btheta)}{q(\bz)}d\bz = \mathbb{E}_{q} \log p(\bx | \bz, \btheta) - KL (q(\bz) || p(\bz))
+	 	{\color{olive}\mathcal{L} (q, \btheta)} = \int q(\bz) \log \frac{p(\bx, \bz | \btheta)}{q(\bz)}d\bz = \mathbb{E}_{q} \log p(\bx | \bz, \btheta) - KL (q(\bz) || p(\bz))
 	\]
 	\vspace{-0.3cm}
 	\begin{block}{Log-likelihood decomposition}
 		\vspace{-0.5cm}
 		\[
-		 \log p(\bx| \btheta) = \mathbb{E}_{q} \log p(\bx | \bz, \btheta) - KL (q(\bz) || p(\bz)) + KL(q(\bz) || p(\bz|\bx, \btheta)).
+		 \log p(\bx| \btheta) = {\color{olive}\mathbb{E}_{q} \log p(\bx | \bz, \btheta) - KL (q(\bz) || p(\bz))} + KL(q(\bz) || p(\bz|\bx, \btheta)).
 		\]
 	\end{block}
 	\begin{itemize}
@@ -38,7 +38,7 @@
    	\]
    	\item Maximization of ELBO by variational distribution $q$ is equivalent to minimization of KL
   	\[
-  \max_q \mathcal{L} (q, \btheta) \equiv \min_q KL(q(\bz) || p(\bz|\bx, \btheta)).
+  \argmax_q \mathcal{L} (q, \btheta) \equiv \argmin_q KL(q(\bz) || p(\bz|\bx, \btheta)).
   	\]
   	\end{itemize}
 		   	    
@@ -137,6 +137,63 @@
 	\tableofcontents
 \end{frame}
 %=======
+\section{VAE limitations}
+%=======
+\begin{frame}{VAE limitations}
+	\begin{itemize}
+		\item Poor generative distribution (decoder)
+		\[
+		p(\bx | \bz, \btheta) = \mathcal{N}(\bx| \bmu_{\btheta}(\bz), \bsigma^2_{\btheta}(\bz)) \quad \text{or } = \text{Softmax}(\bpi_{\btheta}(\bz)).
+		\]
+		\item Loose lower bound
+		\[
+		\log p(\bx | \btheta) - \mathcal{L}(q, \btheta) = (?).
+		\]
+		\item Poor prior distribution
+		\[
+		p(\bz) = \mathcal{N}(0, \mathbf{I}).
+		\]
+		\item Poor variational posterior distribution (encoder)
+		\[
+		q(\bz | \bx, \bphi) = \mathcal{N}(\bz| \bmu_{\bphi}(\bx), \bsigma^2_{\bphi}(\bx)).
+		\]
+	\end{itemize}
+\end{frame}
+%=======
+\begin{frame}{VAE as Bayesian model}
+	\begin{block}{Posterior distribution}
+		\vspace{-0.2cm}
+		\[
+		p(\btheta | \bX) = \frac{p(\bX | \btheta) p(\btheta)}{p(\bX)}
+		\]
+		\vspace{-0.5cm}
+	\end{block}
+	\begin{block}{ELBO}
+		\vspace{-0.5cm}
+		\begin{align*}
+			\log p(\btheta | \bX) &= {\color{violet}\log p(\bX | \btheta)} + \log p(\btheta) - \log p(\bX) \\
+			&= {\color{violet}\cL(q, \btheta) + KL(q || p)} + \log p(\btheta) - \log p(\bX) \\
+			&\geq \left[ \cL(q, \btheta) + \log p(\btheta) \right] - \log p(\bX) .
+		\end{align*}
+		\vspace{-0.7cm}
+	\end{block}
+	\begin{block}{EM-algorithm}
+		\begin{itemize}
+			\item E-step
+			\vspace{-0.2cm}
+			\[
+			q(\bz) = \argmax_q \mathcal{L} (q, \btheta^*) = \argmin_q KL(q || p) =
+			p(\bz| \bx, \btheta^*);
+			\]
+			\vspace{-0.5cm}
+			\item M-step
+			\[
+			\btheta^* = \argmax_{\btheta} \left[ \mathcal{L} (q, \btheta) + \log p(\btheta) \right].
+			\]
+		\end{itemize}
+	\end{block}
+\end{frame}
+%=======
 \section{Posterior collapse and decoder weakening techniques}
 %=======
 \begin{frame}{VAE limitations}
@@ -164,68 +221,59 @@
 	\begin{block}{LVM}
 		\vspace{-0.3cm}
 		\[
-   			p(\bx | \btheta) = \int p(\bx, \bz | \btheta) d \bz = \int p(\bx | \bz, \btheta) p(\bz) d \bz 
+		p(\bx | \btheta) = \int p(\bx, \bz | \btheta) d \bz = \int p(\bx | \bz, \btheta) p(\bz) d \bz 
 		\]
 		\vspace{-0.5cm}
 	\end{block}
 	\begin{block}{ELBO objective}
 		\vspace{-0.3cm}
 		\[
-			\mathcal{L}(\bphi, \btheta) = \left[ \mathbb{E}_{q(\bz | \bx, \bphi)} \log p(\bx | \bz, \btheta) - KL(q(\bz | \bx, \bphi) || p(\bz)) \right].
+		\mathcal{L}(\bphi, \btheta) = \left[ \mathbb{E}_{q(\bz | \bx, \bphi)} \log p(\bx | \bz, \btheta) - KL(q(\bz | \bx, \bphi) || p(\bz)) \right].
 		\]
 	\end{block}
-	\begin{itemize}
-		\item More powerful $p(\bx | \bz, \btheta)$ leads to more powerful generative model $p(\bx | \btheta)$.
-		\item If the decoder $p(\bx | \bz, \btheta)$ is too powerful (it could  model $p(\bx | \btheta)$), then the latent variables $\bz$ becomes irrelevant. ELBO avoids paying any cost $KL(q(\bz| \bx, \bphi)||p(\bz))$ ($q(\bz| \bx, \bphi) \approx p(\bz)$), the variational posterior $q(\bz | \bx, \bphi)$ will not carry any information about $\bx$ .
-	\end{itemize}
-	How to make the generative model $p(\bx | \bz, \btheta)$ more powerful?
-\end{frame}
-%=======
-\begin{frame}{PixelVAE}
-	\begin{block}{Autoregressive decoder}
+	More powerful $p(\bx | \bz, \btheta)$ leads to more powerful generative model $p(\bx | \btheta)$.
+	\begin{block}{Extreme cast}
 		\vspace{-0.3cm}
 		\[
-		p(\bx | \bz , \btheta) = \prod_{j=1}^m p(x_j | \bx_{1:j - 1}, \bz , \btheta)
+			p(\bx | \btheta) \in \mathcal{P} = \{ p(\bx | \bz, \btheta) | \, \forall \bz, \btheta\}.
 		\]
-		\vspace{-0.3cm}
 	\end{block}
-	\begin{itemize}
-		\item Global structure is captured by latent variables.
-		\item Local statistics are captured by limited receptive field autoregressive model.
-	\end{itemize}
-	\vspace{-0.1cm}
-	\begin{block}{MNIST results}
+	If the decoder $p(\bx | \bz, \btheta)$ is too powerful (it could  model $p(\bx | \btheta)$), then ELBO avoids paying any cost $KL(q(\bz| \bx, \bphi)||p(\bz))$ ($q(\bz| \bx, \bphi) \approx p(\bz)$), the variational posterior $q(\bz | \bx, \bphi)$ will not carry any information about $\bx$, the latent variables $\bz$ becomes irrelevant.
+\end{frame}
+%=======
+\begin{frame}{Autoregressive VAE decoder}
+	How to make the generative model $p(\bx | \bz, \btheta)$ more powerful?
+	\begin{block}{PixelVAE/VLAE}
 		\vspace{-0.3cm}
-		\begin{figure}
-		    \centering
-		    \includegraphics[width=0.75\linewidth]{figs/PixelVAE_2.png}
-		\end{figure}
+		\[
+			p(\bx | \bz , \btheta) = \prod_{j=1}^m p(x_j | {\color{teal}\bx_{1:j - 1}}, {\color{violet}\bz}, \btheta)
+		\]
+		\begin{itemize}
+			\item Global structure is captured by latent variables ${\color{violet}\bz}$.
+			\item Local statistics are captured by limited receptive field of autoregressive context ${\color{teal}\bx_{1:j - 1}}$.
+		\end{itemize}
 	\end{block}
-		
-	\myfootnotewithlink{https://arxiv.org/abs/1611.05013}{Gulrajani I. et al. PixelVAE: A Latent Variable Model for Natural Images, 2016}
+	PixelVAE/VLAE models use the autoregressive PixelCNN decoder model with small number of layers to limit receptive field.
+	\myfootnote{{https://arxiv.org/abs/1611.05013}{Gulrajani I. et al. PixelVAE: A Latent Variable Model for Natural Images, 2016}, \\
+	{https://arxiv.org/abs/1611.02731}{Chen X. et al. Variational Lossy Autoencoder, 2016}}
 \end{frame}
 %=======
 \begin{frame}{Decoder weakening techniques}
-	\vspace{-0.3cm}
-	\begin{itemize}
-		\item Powerful decoder $p(\bx | \bz, \btheta)$ makes the model expressive, but posterior collapse is possible.
-		\item PixelVAE model uses the autoregressive PixelCNN model with small number of layers to limit receptive field.
-	\end{itemize}
 	How to force the model encode information about $\bx$ into $\bz$?
 	\begin{block}{KL annealing}
-		\vspace{-0.7cm}
+		\vspace{-0.3cm}
 		\[
-		    \mathcal{L}(\bphi, \btheta, \beta) = \mathbb{E}_{q(\bz | \bx, \bphi)} \log p(\bx | \bz, \btheta) - \beta \cdot KL (q(\bz | \bx, \bphi) || p(\bz))
+		    \mathcal{L}(\bphi, \btheta, \beta) = \mathbb{E}_{q(\bz | \bx, \bphi)} \log p(\bx | \bz, \btheta) - {\color{violet}\beta} \cdot KL (q(\bz | \bx, \bphi) || p(\bz))
 		\]
-		\vspace{-0.7cm} \\
+		\vspace{-0.3cm} \\
 		Start training with $\beta = 0$, increase it until $\beta = 1$ during training.
 	\end{block}
 	\begin{block}{Free bits}
-		\vspace{-0.7cm}
+		\vspace{-0.3cm}
 		\[
-		    \mathcal{L}(\bphi, \btheta, \lambda) = \mathbb{E}_{q(\bz | \bx, \bphi)} \log p(\bx | \bz, \btheta) - \max(\lambda, KL (q(\bz | \bx, \bphi) || p(\bz))).
+		    \mathcal{L}(\bphi, \btheta, \lambda) = \mathbb{E}_{q(\bz | \bx, \bphi)} \log p(\bx | \bz, \btheta) - {\color{violet}\max(\lambda,} KL (q(\bz | \bx, \bphi) || p(\bz)){\color{violet})}.
 		\]
-		\vspace{-0.7cm} \\
+		\vspace{-0.3cm} \\
 		It ensures the use of less than $\lambda$ bits of information and results in $KL (q(\bz | \bx, \bphi) || p(\bz)) \geq \lambda$.
 	\end{block}
 	\myfootnote{\href{https://arxiv.org/abs/1511.06349}{Bowman S. R. et al. Generating Sentences from a Continuous Space, 2015} \\
@@ -259,19 +307,20 @@
 	\begin{block}{LVM}
 		\vspace{-0.5cm}
 		\begin{align*}
-			p(\bx | \btheta) &= \int p(\bx, \bz | \btheta) d\bz = \int \left[\frac{p(\bx, \bz | \btheta)}{q(\bz | \bx, \bphi)} \right] q(\bz | \bx, \bphi) d\bz \\
-			&= \int f(\bx, \bz) q(\bz | \bx, \bphi) d\bz = \mathbb{E}_{\bz \sim q(\bz | \bx, \bphi)} f(\bx, \bz)
+			p(\bx | \btheta) &= \int p(\bx, \bz | \btheta) d\bz = \int \left[{\color{teal}\frac{p(\bx, \bz | \btheta)}{q(\bz | \bx, \bphi)}} \right] q(\bz | \bx, \bphi) d\bz \\
+			&= \int {\color{teal}f(\bx, \bz)} q(\bz | \bx, \bphi) d\bz = \mathbb{E}_{\bz \sim q(\bz | \bx, \bphi)} f(\bx, \bz)
 		\end{align*}
 	\end{block}
 	Here $f(\bx, \bz) = \frac{p(\bx, \bz | \btheta)}{q(\bz | \bx, \bphi)}$.
 	\begin{block}{ELBO: derivation 1}
 		\vspace{-0.5cm}
 		\begin{multline*}
-			\log p(\bx | \btheta) = \log \mathbb{E}_{\bz \sim q(\bz | \bx, \bphi)} f(\bx, \bz)
-			\geq \mathbb{E}_{\bz \sim q(\bz | \bx, \bphi)} \log f(\bx, \bz) = \\
+			\log p(\bx | \btheta) = {\color{olive}\log} {\color{violet}\mathbb{E}_{\bz \sim q(\bz | \bx, \bphi)}} f(\bx, \bz)
+			\geq {\color{violet}\mathbb{E}_{\bz \sim q(\bz | \bx, \bphi)}} {\color{olive}\log} f(\bx, \bz) = \\
 			= \mathbb{E}_{\bz \sim q(\bz | \bx, \bphi)} \log \frac{p(\bx, \bz | \btheta)}{q(\bz | \bx, \bphi)} = \mathcal{L}(q, \btheta).
 		\end{multline*}
 	\end{block}
+	$f(\bx, \bz)$ could be any function that satisfies $p(\bx | \btheta)=\mathbb{E}_{\bz \sim q} f(\bx, \bz)$. \\
 	Could we choose better $f(\bx, \bz)$? 
 \end{frame}
 %=======
@@ -305,14 +354,14 @@
 		\log p(\bx | \btheta) \geq \mathcal{L} (q, \btheta)  = \mathbb{E}_{q(\bz | \bx, \bphi)} \log \frac{p(\bx, \bz | \btheta)}{q(\bz| \bx, \bphi)} \rightarrow \max_{q, \btheta}
 		\]
 		\[
-		\mathcal{L} (q, \btheta)  = \mathbb{E}_{\bz_1, \dots, \bz_K \sim q(\bz | \bx, \bphi)} \left( \frac{1}{K} \sum_{k=1}^K \log \frac{p(\bx, \bz_k | \btheta)}{q(\bz_k| \bx, \bphi)} \right) \rightarrow \max_{q, \btheta}.
+		\mathcal{L} (q, \btheta)  = \mathbb{E}_{\bz_1, \dots, \bz_K \sim q(\bz | \bx, \bphi)} \left( {\color{violet}\frac{1}{K}\sum_{k=1}^K} {\color{teal}\log} \frac{p(\bx, \bz_k | \btheta)}{q(\bz_k| \bx, \bphi)} \right) \rightarrow \max_{q, \btheta}.
 		\]
 		\vspace{-0.2cm}
 	\end{block}
 	\begin{block}{IWAE objective}
 		\vspace{-0.2cm}
 		\[
-			\mathcal{L}_K (q, \btheta)  = \mathbb{E}_{\bz_1, \dots, \bz_K \sim q(\bz | \bx, \bphi)} \log \left( \frac{1}{K}\sum_{k=1}^K\frac{p(\bx, \bz_k | \btheta)}{q(\bz_k| \bx, \bphi)} \right) \rightarrow \max_{q, \btheta}.
+			\mathcal{L}_K (q, \btheta)  = \mathbb{E}_{\bz_1, \dots, \bz_K \sim q(\bz | \bx, \bphi)} {\color{teal}\log} \left( {\color{violet}\frac{1}{K}\sum_{k=1}^K}\frac{p(\bx, \bz_k | \btheta)}{q(\bz_k| \bx, \bphi)} \right) \rightarrow \max_{q, \btheta}.
 		\]
 	\end{block}
 	If $K=1$, these objectives coincide.
@@ -345,54 +394,25 @@
 %=======
 \begin{frame}{Importance Weighted Autoencoders (IWAE)}
 	\begin{block}{Objective}
-		\vspace{-0.5cm}
+		\vspace{-0.7cm}
 		\[
 		\mathcal{L}_K (q, \btheta)  = \mathbb{E}_{\bz_1, \dots, \bz_K \sim q(\bz | \bx, \bphi)} \log \left( \frac{1}{K}\sum_{k=1}^K\frac{p(\bx, \bz_k | \btheta)}{q(\bz_k| \bx, \bphi)} \right) \rightarrow \max_{\bphi, \btheta}.
 		\]
-		\vspace{-0.3cm}
-	\end{block}
-	\begin{block}{Gradient}
-		\vspace{-0.3cm}
-		\[
-		\Delta_K = \nabla_{\btheta, \bphi} \log \left( \frac{1}{K}\sum_{k=1}^K\frac{p(\bx, \bz_k | \btheta)}{q(\bz_k| \bx, \bphi)} \right), \quad \bz_k \sim q(\bz | \bx, \bphi).
-		\]
-		\vspace{-0.3cm}
-	\end{block}
-	\begin{block}{Theorem}
-		\vspace{-0.4cm}
-		\[
-			\text{SNR}_K = \frac{\bbE [\Delta_K]}{\sigma(\Delta_K)}; \quad
-			\text{SNR}_K(\btheta) = O(\sqrt{K}); \quad 
-			\text{SNR}_K(\bphi) = O\left(\sqrt{\frac{1}{K}}\right).
-		\]
-		Hence, increasing $K$ vanishes gradient signal of inference network $q(\bz | \bx, \bphi)$.
-	\end{block}
-
-	\myfootnotewithlink{https://arxiv.org/abs/1802.04537}{Rainforth T. et al. Tighter variational bounds are not necessarily better, 2018}
-\end{frame}
-%=======
-\begin{frame}{Importance Weighted Autoencoders (IWAE)}
-	\begin{block}{Theorem}
 		\vspace{-0.5cm}
-		\[
-			\text{SNR}_K = \frac{\bbE [\Delta_K]}{\sigma(\Delta_K)}; \quad
-			\text{SNR}_K(\btheta) = O(\sqrt{K}); \quad 
-			\text{SNR}_K(\bphi) = O\left(\sqrt{\frac{1}{K}}\right).
-		\]
-		\vspace{-0.8cm}
 	\end{block}
-		\begin{minipage}[t]{0.5\columnwidth}
-			\begin{figure}[h]
-				\centering
-				\includegraphics[width=1.\linewidth]{figs/IWAE_SNR_1.png}
-			\end{figure}
-		\end{minipage}%
-		\begin{minipage}[t]{0.5\columnwidth}
-			\begin{figure}[h]
-				\centering
-				\includegraphics[width=1.\linewidth]{figs/IWAE_SNR_2.png}
-			\end{figure}
-		\end{minipage}
+	\begin{block}{Theorem}
+		Gradient signal of $q(\bz | \bx, \bphi)$ vanishes as $K$ increases:
+		\vspace{-0.3cm}
+		\[
+		\Delta_K = \nabla_{\btheta, \bphi} \mathcal{L}_K (q, \btheta); \quad
+		\text{SNR}_K = \frac{\bbE [\Delta_K]}{\sigma(\Delta_K)};
+		\]
+		\vspace{-0.3cm}
+		\[
+			\text{SNR}_K(\btheta) = O(\sqrt{K}); \quad 
+			\text{SNR}_K(\bphi) = O\left(\sqrt{K^{-1}}\right).
+		\]
+	\end{block}
 	\begin{itemize}
 		\item IWAE makes the variational bound tighter and extends the class of variational distributions.
 		\item Gradient signal becomes really small, training is complicated.
@@ -484,6 +504,7 @@
 %=======
 \begin{frame}{Normalizing flows prerequisites}
 	\begin{block}{Jacobian matrix}
+		Let $f: \mathbb{R}^m \rightarrow \mathbb{R}^m$ is a differentiable function.
 		\[
 			\bz = f(\bx), \quad 
 			\bJ =  \frac{\partial \bz}{\partial \bx} =
@@ -493,9 +514,10 @@
 				\frac{\partial z_m}{\partial x_1} & \dots & \frac{\partial z_m}{\partial x_m}
 			\end{pmatrix} \in \bbR^{m \times m}
 		\]
+		\vspace{-0.3cm}
 	\end{block}
 	\begin{block}{Change of variable theorem (CoV)}
-		Let $\bx$ be a random variable with density function $p(\bx)$ and $f: \mathbb{R}^m \rightarrow \mathbb{R}^m$ is a differentiable, invertible function (diffeomorphism). If $\bz = f(\bx)$, $\bx = f^{-1}(\bz) = g(\bz)$, then
+		Let $\bx$ be a random variable with density function $p(\bx)$ and $f: \mathbb{R}^m \rightarrow \mathbb{R}^m$ is a differentiable, \textbf{invertible} function (diffeomorphism). If $\bz = f(\bx)$, $\bx = f^{-1}(\bz) = g(\bz)$, then
 		\begin{align*}
 			p(\bx) &= p(\bz) |\det(\bJ_f)| = p(\bz) \left|\det \left(  \frac{\partial \bz}{\partial \bx} \right) \right| = p(f(\bx)) \left|\det \left(  \frac{\partial f(\bx)}{\partial \bx} \right) \right| \\
 			p(\bz) &= p(\bx) |\det(\bJ_g)|= p(\bx) \left|\det \left(  \frac{\partial \bx}{\partial \bz} \right) \right| = p(g(\bz)) \left|\det \left(  \frac{\partial g(\bz)}{\partial \bz} \right) \right|.
@@ -549,6 +571,8 @@
 %=======
 \begin{frame}{Summary}
 	\begin{itemize}
+		\item Standart VAE has several limitations that we will address later in the course.
+		\vfill
 		\item More powerful decoder in VAE leads to more expressive generative model. However, too expressive decoder could lead to the posterior collapse.
 		\vfill
 		\item The decoder weakening is a set of techniques to avoid the posterior collapse.
