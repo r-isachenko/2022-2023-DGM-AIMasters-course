@@ -192,6 +192,40 @@
 %=======
 \section{Mean field approximation}
 %=======
+\begin{frame}{VAE as Bayesian model}
+	\begin{block}{Posterior distribution}
+		\vspace{-0.2cm}
+		\[
+		p(\btheta | \bX) = \frac{p(\bX | \btheta) p(\btheta)}{p(\bX)}
+		\]
+		\vspace{-0.5cm}
+	\end{block}
+	\begin{block}{ELBO}
+		\vspace{-0.5cm}
+		\begin{align*}
+			\log p(\btheta | \bX) &= {\color{violet}\log p(\bX | \btheta)} + \log p(\btheta) - \log p(\bX) \\
+			&= {\color{violet}\cL(q, \btheta) + KL(q || p)} + \log p(\btheta) - \log p(\bX) \\
+			&\geq \left[ \cL(q, \btheta) + \log p(\btheta) \right] - \log p(\bX) .
+		\end{align*}
+		\vspace{-0.7cm}
+	\end{block}
+	\begin{block}{EM-algorithm}
+		\begin{itemize}
+			\item E-step
+			\vspace{-0.2cm}
+			\[
+			q(\bz) = \argmax_q \mathcal{L} (q, \btheta^*) = \argmin_q KL(q || p) =
+			p(\bz| \bx, \btheta^*);
+			\]
+			\vspace{-0.5cm}
+			\item M-step
+			\[
+			\btheta^* = \argmax_{\btheta} \left[ \mathcal{L} (q, \btheta) + \log p(\btheta) \right].
+			\]
+		\end{itemize}
+	\end{block}
+\end{frame}
+%=======
 \begin{frame}{Bayesian framework}
 	\begin{block}{Bayes theorem}
 		\[
