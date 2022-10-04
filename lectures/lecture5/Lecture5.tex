@@ -132,6 +132,121 @@
 	\tableofcontents
 \end{frame}
 %=======
+\begin{frame}{Jacobian determinant}
+	\begin{block}{Inverse function theorem}
+		If function $f$ is invertible and Jacobian matrix is continuous and non-singular, then
+		\vspace{-0.3cm}
+		\[
+		\bJ_f = \bJ_{g^{-1}} = \bJ_g^{-1}, \quad |\det (\bJ_f)| = \frac{1}{|\det (\bJ_g)|}
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	\begin{minipage}{0.55\columnwidth}
+		\begin{itemize}
+			\item $\bx$ and $\bz$ have the same dimensionality ($\bbR^m$).
+			\vfill
+			\item $f(\bx, \btheta)$ could be parametric function.
+			\vfill
+			\item Determinant  of Jacobian matrix $\mathbf{J} =\frac{\partial f(\bx, \btheta)}{\partial \bx}$ shows how the volume changes under the transorfmation.
+		\end{itemize}
+	\end{minipage}%
+	\begin{minipage}{0.45\columnwidth}
+		\begin{figure}
+			\includegraphics[width=0.8\linewidth]{figs/jacobian_det}
+		\end{figure}
+	\end{minipage}
+	\myfootnotewithlink{https://jmtomczak.github.io/blog/3/3\_flows.html}{https://jmtomczak.github.io/blog/3/3\_flows.html}
+\end{frame}
+%=======
+\begin{frame}{Fitting flows}
+	\begin{block}{MLE problem}
+		\vspace{-0.3cm}
+		\[
+		p(\bx|\btheta) = p(\bz) \left|\det \left(  \frac{\partial \bz}{\partial \bx} \right) \right|  = p(f(\bx, \btheta)) \left|\det \left( \frac{\partial f(\bx, \btheta)}{\partial \bx} \right) \right|
+		\]
+		\[
+		\log p(\bx|\btheta) = \log p(f(\bx, \btheta)) + \log  |\det (\bJ_f) | \rightarrow \max_{\btheta}
+		\]
+	\end{block}
+	\vspace{-0.2cm}
+	\begin{figure}
+		\includegraphics[width=0.85\linewidth]{figs/flows_how2}
+	\end{figure}
+	\myfootnotewithlink{https://arxiv.org/abs/1605.08803}{Dinh L., Sohl-Dickstein J., Bengio S. Density estimation using Real NVP, 2016} 
+\end{frame}
+%=======
+\begin{frame}{Composition of flows}
+	\begin{block}{Theorem}
+		Diffeomorphisms are \textbf{composable} (If $\{f_k\}_{k=1}^K$ satisfy conditions of the change of variable theorem, then $\bz = f(\bx) = f_K \circ \dots \circ f_1(\bx)$ also satisfies it).
+	\end{block}
+	\vspace{-0.5cm}
+	{ \footnotesize
+		\begin{multline*}
+			p(\bx) = p(f(\bx)) \left|\det \left(\frac{\partial f(\bx)}{\partial \bx} \right) \right| =
+			p(f(\bx)) \left|\det \left(\frac{\partial \textbf{f}_K}{\partial \textbf{f}_{K-1}} \dots \frac{\partial \textbf{f}_1}{\partial \bx} \right) \right| = \\ = p(f(\bx)) \prod_{k=1}^K \left|\det \left(\frac{\partial \textbf{f}_{k}}{\partial \textbf{f}_{k-1}} \right) \right|
+			= p(f(\bx)) \prod_{k=1}^K |\det ( \bJ_{f_k}) |
+		\end{multline*}
+	}
+	\vspace{-0.3cm}
+	\begin{figure}
+		\includegraphics[width=0.95\linewidth]{figs/normalizing-flow}
+	\end{figure}
+	\myfootnotewithlink{https://lilianweng.github.io/lil-log/2018/10/13/flow-based-deep-generative-models.html}{https://lilianweng.github.io/lil-log/2018/10/13/flow-based-deep-generative-models.html}
+\end{frame}
+%=======
+\begin{frame}{Flows}
+	\vspace{-0.3cm}
+	\[
+	\log p(\bx|\btheta) = \log p(f(\bx, \btheta)) + \log |\det (\bJ_f)|
+	\]
+	\vspace{-0.4cm}
+	\begin{block}{Definition}
+		Normalizing flow is a \textit{differentiable, invertible} mapping from data $\bx$ to the noise $\bz$. 
+	\end{block}
+	\begin{itemize}
+		\item \textbf{Normalizing} means that the inverse flow takes samples from $\pi(\bx)$ and normalizes them into samples from the density $p(\bz)$.
+		\item \textbf{Flow} refers to the trajectory followed by samples from $p(\bz)$ as they are transformed by the sequence of transformations
+		\[
+		\bz = f_K \circ \dots \circ f_1(\bx); \quad \bx = f_1^{-1} \circ \dots \circ f_K^{-1} (\bz) = g_1 \circ \dots \circ g_K(\bz) 
+		\] 
+		\vspace{-0.4cm}
+		\begin{block}{Log likelihood}
+			\vspace{-0.4cm}
+			\[
+			\log p(\bx | \btheta) = \log p(f_K \circ \dots \circ f_1(\bx)) + \sum_{k=1}^K\log |\det (\bJ_{f_k})|,
+			\]
+			\vspace{-0.4cm} \\
+			where $\bJ_{f_k} = \frac{\partial \mathbf{f}_k}{\partial \mathbf{f}_{k-1}}$.
+		\end{block}
+	\end{itemize}
+\end{frame}
+%=======
+\begin{frame}{Flows}
+	\begin{block}{Example of a 4-step flow}
+		\vspace{-0.2cm}
+		\begin{figure}
+			\includegraphics[width=\linewidth]{figs/flow_4_steps_example.png}
+		\end{figure}
+	\end{block}
+	\vspace{-0.5cm}
+	\begin{block}{Flow log likelihood}
+		\vspace{-0.3cm}
+		\[
+		\log p(\bx|\btheta) = \log p(f(\bx, \btheta)) + \log |\det ( \bJ_f)|
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	What is the complexity of the determinant computation?
+	\begin{block}{What we want}
+		\begin{itemize}
+			\item Efficient computation of the Jacobian matrix $\bJ_f = \frac{\partial f(\bx, \btheta)}{\partial \bx}$;
+			\item Efficient sampling from the base distribution $p(\bz)$;
+			\item Efficient inversion of $f(\bx, \btheta)$.
+		\end{itemize}
+	\end{block}
+	\myfootnotewithlink{https://arxiv.org/abs/1912.02762}{Papamakarios G. et al. Normalizing flows for probabilistic modeling and inference, 2019} 
+\end{frame}
+%=======
 \section{Forward and Reverse KL for Normalizing flows}
 %=======
 \begin{frame}{Forward KL vs Reverse KL}
@@ -344,6 +459,10 @@
 %=======
 \begin{frame}{Summary}
 	\begin{itemize}
+		\item Flow models transform a simple base distribution to a complex one via a sequence of invertible transformations with tractable Jacobian.
+		\vfill
+		\item Flow models have a tractable likelihood that is given by the change of variable theorem.
+		\vfill
 		\item Flows could be fitted using forward and reverse KL minimization. We will consider each of the scenarios later in the course.
 		\vfill 
 		\item Linear flows try to parametrize set of invertible matrices via matrix decompositions.
