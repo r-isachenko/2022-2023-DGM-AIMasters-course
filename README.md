@@ -26,10 +26,10 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 2 | September, 19 | <b>Lecture:</b> Autoregressive models (WaveNet, PixelCNN). Bayesian Framework. Latent Variable Models (LVM). Variational lower bound (ELBO). | [slides](lectures/lecture2/Lecture2.pdf) |
 |  |  | <b>Seminar:</b> MADE theory and practice. PixelCNN implementation hints. | [notebook](seminars/seminar2/seminar2.ipynb) |
 | 3 | September, 26 | <b>Lecture:</b> EM-algorithm, amortized inference. ELBO gradients, reparametrization trick. Variational Autoencoder (VAE). | [slides](lectures/lecture3/Lecture3.pdf) |
-|  |  | <b>Seminar:</b> CNNs. Additional notes on autoregressive models. Latent Variables Models. | [notebook](seminars/seminar3/seminar3.ipynb) [CNNs_note](seminars/seminar3/convolutions.pdf) |
-| 4 | October, 3 | <b>Lecture:</b> VAE limitations. Posterior collapse and decoder weakening. Tighter ELBO (IWAE). Idea of normalizing flows. | [slides](lectures/lecture4/Lecture4.pdf) |
-|  |  | <b>Seminar:</b> EM-algorithm. VAE theory. Automatic differentiation through random graph. | TBA |
-| 5 | October, 10 | <b>Lecture:</b> Flow models definition. Forward and reverse KL divergence. Linear flows (Glow). Residual flows (Planar/Sylvester flows). | TBA |
+|  |  | <b>Seminar:</b> CNNs. Additional notes on autoregressive models. Latent Variable Models. | [notebook](seminars/seminar3/seminar3.ipynb) [CNNs_note](seminars/seminar3/convolutions.pdf) |
+| 4 | October, 3 | <b>Lecture:</b> VAE limitations. Posterior collapse and decoder weakening. Tighter ELBO (IWAE). Normalizing flows prerequisities. | [slides](lectures/lecture4/Lecture4.pdf) |
+|  |  | <b>Seminar:</b> Gaussian Mixture Models (GMM). MLE for GMM, ELBO and EM-algorithm for GMM. VAE basics.  | [notebook](seminars/seminar4/seminar4.ipynb) |
+| 5 | October, 10 | <b>Lecture:</b> Flow models definition. Forward and reverse KL divergence. Linear flows (Glow). Residual flows (Planar/Sylvester flows). | [slides](lectures/lecture5/Lecture5.pdf) |
 |  |  | <b>Seminar:</b> IWAE theory. IWAE variational posterior. VAE vs Normalizing flows. | TBA |
 | 6 | October, 17 | <b>Lecture:</b> Autoregressive flows (MAF/IAF). Coupling layer (RealNVP). | TBA |
 |  |  | <b>Seminar:</b> Planar flows. Forward vs Reverse KL. | TBA |
