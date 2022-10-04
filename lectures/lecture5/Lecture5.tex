@@ -111,25 +111,59 @@
 	\end{block}
 \end{frame}
 %=======
-\begin{frame}{Recap of previous lecture}
-	\begin{block}{MLE problem}
-		\vspace{-0.3cm}
-		\[
-			p(\bx|\btheta) = p(\bz) \left|\det \left(  \frac{\partial \bz}{\partial \bx} \right) \right|  = p(f(\bx, \btheta)) \left|\det \left( \frac{\partial f(\bx, \btheta)}{\partial \bx} \right) \right|
-		\]
-		\[
-			\log p(\bx|\btheta) = \log p(f(\bx, \btheta)) + \log  |\det (\bJ_f) | \rightarrow \max_{\btheta}
-		\]
-	\end{block}
-	\vspace{-0.2cm}
-	\begin{figure}
-		\includegraphics[width=0.85\linewidth]{figs/flows_how2}
-	\end{figure}
-	\myfootnotewithlink{https://arxiv.org/abs/1605.08803}{Dinh L., Sohl-Dickstein J., Bengio S. Density estimation using Real NVP, 2016} 
-\end{frame}
-%=======
 \begin{frame}{Outline}
 	\tableofcontents
+\end{frame}
+%=======
+\section{Normalizing flows}
+%=======
+\begin{frame}{Generative models zoo}
+	\begin{tikzpicture}[
+		basic/.style  = {draw, text width=2cm, drop shadow, rectangle},
+		root/.style   = {basic, rounded corners=2pt, thin, text height=1.1em, text width=7em, align=center, fill=blue!40},
+		level 1/.style={sibling distance=55mm},
+		level 2/.style = {basic, rounded corners=6pt, thin, align=center, fill=blue!20, text height=1.1em, text width=9em, sibling distance=38mm},
+		level 3/.style = {basic, rounded corners=6pt, thin,align=center, fill=blue!20, text width=8.5em},
+		level 4/.style = {basic, thin, align=left, fill=pink!30, text width=7em},
+		level 5/.style = {basic, thin, align=left, fill=pink!90, text width=7em},
+		edge from parent/.style={->,draw},
+		>=latex]
+		
+		% root of the the initial tree, level 1
+		\node[root] {\Large Generative models}
+		% The first level, as children of the initial tree
+		child {node[level 2] (c1) {Likelihood-based}
+			child {node[level 3] (c11) {Tractable density}}
+			child {node[level 3] (c12) {Approximate density}}
+		}
+		child {node[level 2] (c2) {Implicit density}};
+		
+		% The second level, relatively positioned nodes
+		\begin{scope}[every node/.style={level 4}]
+			\node [below of = c11, yshift=-5pt, xshift=10pt] (c111) {Autoregressive models};
+			
+			\node [below of = c12, xshift=10pt] (c121) {VAEs};
+			\node [below of = c121] (c122) {Diffusion models};
+			\node [below of = c2, xshift=10pt] (c21) {GANs};
+			
+		\end{scope}
+		
+		% The second level, relatively positioned nodes
+		\begin{scope}[every node/.style={level 5}]
+			\node [below of = c111, yshift=-5pt] (c112) {Normalizing Flows};
+		\end{scope}
+		
+		
+		% lines from each level 1 node to every one of its "children"
+		\foreach \value in {1,2}
+		\draw[->] (c11.194) |- (c11\value.west);
+		
+		\foreach \value in {1,2}
+		\draw[->] (c12.194) |- (c12\value.west);
+		
+		\draw[->] (c2.194) |- (c21.west);
+		
+	\end{tikzpicture}
 \end{frame}
 %=======
 \begin{frame}{Jacobian determinant}
