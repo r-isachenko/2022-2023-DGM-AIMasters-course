@@ -115,82 +115,10 @@
 	\tableofcontents
 \end{frame}
 %=======
-\section{Autoregressive flows}
-%=======
-\begin{frame}{Gaussian autoregressive model}
-	Consider an autoregressive model
-	\vspace{-0.3cm}
-	{\small
-	\[
-		p(\bx | \btheta) = \prod_{j=1}^m p(x_j | \bx_{1:j - 1}, \btheta), \quad
-		p(x_j | \bx_{1:j - 1}, \btheta) = \mathcal{N} \left(\mu_j(\bx_{1:j-1}), \sigma^2_j (\bx_{1:j-1})\right).
-	\]
-	}
-	\vspace{-0.5cm}
-	\begin{block}{Sampling: reparametrization trick}
-		\[
-			x_j = \sigma_j (\bx_{1:j-1}) \cdot z_j + \mu_j(\bx_{1:j-1}), \quad z_j \sim \mathcal{N}(0, 1).
-		\]
-	\end{block}
-	\begin{block}{Inverse transform}
-		\vspace{-0.3cm}
-		\[
-			z_j = \left(x_j - \mu_j(\bx_{1:j-1}) \right) \cdot \frac{1}{\sigma_j (\bx_{1:j-1}) }.
-		\]
-		\vspace{-0.3cm}
-	\end{block}
-	We have got an invertible and differentiable transform (it is an autoregressive flow with base distribution $\bz = \cN(0, 1)$!).
-	\myfootnotewithlink{https://arxiv.org/abs/1606.04934}{Kingma D. P. et al. Improving Variational Inference with Inverse Autoregressive Flow, 2016} 
-\end{frame}
-%=======
-\begin{frame}{Gaussian autoregressive flow}
-	\vspace{-0.2cm}
-	\begin{align*}
-		\bx &= g(\bz, \btheta) \quad \Rightarrow \quad x_j = \sigma_j (\bx_{1:j-1}) \cdot z_j + \mu_j(\bx_{1:j-1}). \\
-		\bz &= f(\bx, \btheta) \quad \Rightarrow \quad z_j = \left(x_j - \mu_j(\bx_{1:j-1}) \right) \cdot \frac{1}{ \sigma_j (\bx_{1:j-1})}.
-	\end{align*}
-	Generation function $g(\bz, \btheta)$ is \textbf{sequential}. Inference function $f(\bx, \btheta)$ is \textbf{not sequential}.
-	\begin{block}{Forward KL for flow model}
-		\vspace{-0.2cm}
-		\[
-		\log p(\bx|\btheta) = \log p(f(\bx, \btheta)) + \log  \left|\det \left( \frac{\partial f(\bx, \btheta)}{\partial \bx} \right) \right|
-		\]
-		\vspace{-0.2cm}
-		\begin{itemize}
-			\item We need to be able to compute $f(\bx, \btheta)$ and its Jacobian.
-			\item We need to be able to compute the density $p(\bz)$.
-			\item We don’t need to think about computing the function $g(\bz, \btheta) = f^{-1}(\bz, \btheta)$ until we want to sample from the flow.
-		\end{itemize}
-	\end{block}
-	\myfootnotewithlink{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} 
-\end{frame}
-%=======
-\begin{frame}{Masked autoregressive flow (MAF)}
-	\begin{block}{Gaussian autoregressive model}
-		\vspace{-0.7cm}
-		\[
-			p(\bx | \btheta) = \prod_{j=1}^m p(x_j | \bx_{1:j - 1}, \btheta) = \prod_{j=1}^m \mathcal{N} \left(x_j | \mu_j(\bx_{1:j-1}), \sigma^2_j (\bx_{1:j-1})\right).
-		\]
-		\vspace{-0.5cm}
-	\end{block}
-	We could use MADE for the conditionals. 
-	Samples from the base distribution could be an indicator of how good the flow was fitted. 
-	\vspace{-0.3cm}
-	\begin{figure}
-		\includegraphics[width=0.95\linewidth]{figs/maf1.png}
-	\end{figure}
-	MAF is just a stacked MADE model with different ordering.
-	\begin{itemize}
-		\item Parallel density estimation.
-		\item Sequential sampling.
-	\end{itemize}
-	\myfootnotewithlink{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} 
-\end{frame}
-%=======
 \begin{frame}{Autoregressive flows}
 	\vspace{-0.3cm}
 	\[
-		x_j = \tau (z_j, c(\bz_{1:j-1})) \quad \Leftrightarrow \quad z_j = \tau^{-1} (x_j, c(\bz_{1:j-1}))
+	x_j = \tau (z_j, c(\bz_{1:j-1})) \quad \Leftrightarrow \quad z_j = \tau^{-1} (x_j, c(\bz_{1:j-1}))
 	\]
 	\vspace{-0.3cm}
 	\begin{itemize}
@@ -207,7 +135,7 @@
 	\begin{block}{Jacobian}
 		\vspace{-0.3cm}
 		\[
-			\det \left( \frac{\partial \bx}{\partial \bz} \right) = \prod_{j=1}^m \frac{\partial x_j}{\partial z_j} = \prod_{j=1}^m \frac{\partial \tau (z_j, c(\bz_{1:j-1})) }{\partial z_j}
+		\det \left( \frac{\partial \bx}{\partial \bz} \right) = \prod_{j=1}^m \frac{\partial x_j}{\partial z_j} = \prod_{j=1}^m \frac{\partial \tau (z_j, c(\bz_{1:j-1})) }{\partial z_j}
 		\]
 		\vspace{-0.3cm}
 	\end{block}
@@ -218,7 +146,7 @@
 \begin{frame}{Autoregressive flows}
 	\begin{block}{Forward and inverse transforms}
 		\[
-			x_j = \tau (z_j, c(\bz_{1:j-1})) \quad \Leftrightarrow \quad z_j = \tau^{-1} (x_j, c(\bz_{1:j-1}))
+		x_j = \tau (z_j, c(\bz_{1:j-1})) \quad \Leftrightarrow \quad z_j = \tau^{-1} (x_j, c(\bz_{1:j-1}))
 		\]
 		\begin{figure}
 			\includegraphics[width=\linewidth]{figs/autoregressive_flow}
@@ -228,127 +156,8 @@
 		\item Forward transform is \textbf{not sequential}.
 		\item Inverse transform is \textbf{sequential}.
 	\end{itemize}
-		
+	
 	\myfootnotewithlink{https://arxiv.org/abs/1912.02762}{Papamakarios G. et al. Normalizing flows for probabilistic modeling and inference, 2019} 
-\end{frame}
-%=======
-\section{Inverse autoregressive flows}
-%=======
-\begin{frame}{Inverse autoregressive flow (IAF)}
-	Let use the following reparametrization:
-	$\tilde{\bsigma} = \frac{1}{\bsigma}$; $ \tilde{\bmu} = - \frac{\bmu}{\bsigma}$.
-	
-	\begin{block}{Gaussian autoregressive flow}
-		\vspace{-0.5cm}
-		\begin{align*}
-			x_j &= \sigma_j (\bx_{1:j-1}) \cdot z_j + \mu_j(\bx_{1:j-1}) =  \left( z_j - \tilde{\mu}_j(\bx_{1:j-1})\right) \cdot \frac{1}{\tilde{\sigma}_j (\bx_{1:j-1}) }\\
-			z_j &= \left(x_j - \mu_j(\bx_{1:j-1}) \right) \cdot \frac{1}{ \sigma_j (\bx_{1:j-1})} = \tilde{\sigma}_j (\bx_{1:j-1}) \cdot x_j + \tilde{\mu}_j(\bx_{1:j-1}).
-		\end{align*}
-		\vspace{-0.3cm}
-	\end{block}
-	Let just swap $\bz$ and $\bx$. 
-	
-	\begin{block}{Inverse autoregressive flow}
-		\vspace{-0.5cm}
-		\begin{align*}
-			\bx &= g(\bz, \btheta) \quad \Rightarrow \quad x_j = \tilde{\sigma}_j (\bz_{1:j-1}) \cdot z_j + \tilde{\mu}_j(\bz_{1:j-1}) \\
-			\bz &= f(\bx, \btheta) \quad \Rightarrow \quad z_j = \left( x_j - \tilde{\mu}_j(\bz_{1:j-1})\right) \cdot \frac{1}{\tilde{\sigma}_j (\bz_{1:j-1}) }.
-		\end{align*}
-		\vspace{-0.3cm}
-	\end{block}
-	
-	\myfootnotewithlink{https://arxiv.org/abs/1606.04934}{Kingma D. P. et al. Improving Variational Inference with Inverse Autoregressive Flow, 2016} 
-\end{frame}
-%=======
-\begin{frame}{Inverse autoregressive flow (IAF)}
-	
-	\begin{minipage}[t]{0.65\columnwidth}
-		\begin{block}{Gaussian autoregressive flow: $f(\bx, \btheta)$}
-			\[
-				x_j = \sigma_j (\bx_{1:j-1}) \cdot z_j + \mu_j(\bx_{1:j-1}).
-			\]
-		\end{block}
-	\end{minipage}%
-	\begin{minipage}[t]{0.35\columnwidth}
-		\begin{figure}[h]
-			\centering
-			\includegraphics[width=.9\linewidth]{figs/maf_iaf_explained_1.png}
-		\end{figure}
-	\end{minipage} \\
-	
-	\begin{minipage}[t]{0.65\columnwidth}
-		\begin{block}{Inverse transform: $g(\bz, \btheta)$}
-			\vspace{-0.5cm}
-			\begin{align*}
-				z_j &= (x_j - \mu_j(\bx_{1:j-1})) \cdot \frac{1}{\sigma_j (\bx_{1:j-1}) }; \\
-				z_j &= \tilde{\sigma}_j (\bx_{1:j-1}) \cdot x_j + \tilde{\mu}_j(\bx_{1:j-1}).
-			\end{align*}
-			\vspace{-0.4cm}
-		\end{block}
-	\end{minipage}% 
-	\begin{minipage}[t]{0.35\columnwidth}
-		\begin{figure}[h]
-			\centering
-			\includegraphics[width=.9\linewidth]{figs/maf_iaf_explained_2.png}
-		\end{figure}
-	\end{minipage}\\
-	\vspace{0.1cm}
-	
-	\begin{minipage}[t]{0.65\columnwidth}
-		\begin{block}{Inverse autoregressive flow: $f(\bx, \btheta)$}
-			\[
-			x_j = \tilde{\sigma}_j (\bz_{1:j-1}) \cdot z_j + \tilde{\mu}_j(\bz_{1:j-1}).
-			\]
-		\end{block}
-	\end{minipage}%
-	\begin{minipage}[t]{0.35\columnwidth}
-		\begin{figure}[h]
-			\centering
-			\includegraphics[width=.9\linewidth]{figs/maf_iaf_explained_3.png}
-		\end{figure}
-	\end{minipage}
-	
-	\myfootnotewithlink{https://blog.evjang.com/2018/01/nf2.html}{image credit: https://blog.evjang.com/2018/01/nf2.html}
-\end{frame}
-%=======
-\begin{frame}{Autoregressive flows}
-	\begin{block}{Forward and inverse transforms in MAF}
-		\vspace{-0.6cm}
-		\begin{align*}
-			\bx &= g(\bz, \btheta) \quad \Rightarrow \quad x_j = \sigma_j (\bx_{1:j-1}) \cdot z_j + \mu_j(\bx_{1:j-1}). \\
-			\bz &= f(\bx, \btheta) \quad \Rightarrow \quad z_j = \left(x_j - \mu_j(\bx_{1:j-1}) \right) \cdot \frac{1}{\sigma_j (\bx_{1:j-1}) }.
-		\end{align*}
-		\vspace{-0.6cm}
-		\begin{itemize}
-			\item Sampling is sequential.
-			\item Density estimation is parallel.
-		\end{itemize}
-	\end{block}
-	\begin{block}{Forward and inverse transforms in IAF}
-		\vspace{-0.6cm}
-		\begin{align*}
-			\bx &= g(\bz, \btheta) \quad \Rightarrow \quad x_j = \tilde{\sigma}_j (\bz_{1:j-1}) \cdot z_j + \tilde{\mu}_j(\bz_{1:j-1}). \\
-			\bz &= f(\bx, \btheta) \quad \Rightarrow \quad z_j = \left(x_j - \tilde{\mu}_j(\bz_{1:j-1}) \right) \cdot \frac{1}{\tilde{\sigma}_j (\bz_{1:j-1})}.
-		\end{align*}
-		\vspace{-0.6cm}
-		\begin{itemize}
-			\item Sampling is parallel.
-			\item Density estimation is sequential.
-		\end{itemize}
-	\end{block}
-	\myfootnotewithlink{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} 
-\end{frame}
-%=======
-\begin{frame}{Autoregressive flows}
-	\begin{figure}
-		\includegraphics[width=0.8\linewidth]{figs/flows_how2.png}
-	\end{figure}
-	\begin{itemize}	
-		\item MAF performs parallel inference that is useful for density estimation tasks (forward KL or MLE).
-		\item IAF performs parallel generation that is useful for optimization of reverse KL.
-	\end{itemize}
-	
-	\myfootnotewithlink{https://arxiv.org/abs/1605.08803}{Dinh L., Sohl-Dickstein J., Bengio S. Density estimation using Real NVP, 2016} 
 \end{frame}
 %=======
 \section{RealNVP: coupling layer}
@@ -399,8 +208,8 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1605.08803}{Dinh L., Sohl-Dickstein J., Bengio S. Density estimation using Real NVP, 2016} 
 \end{frame}
 %=======
-\begin{frame}{MAF vs IAF vs RealNVP}
-	\begin{block}{MADE/MAF}
+\begin{frame}{AF vs IAF vs RealNVP}
+	\begin{block}{MADE/AF}
 		\vspace{-0.5cm}
 		\[
 		\bx = \bsigma (\bx) \odot \bz + \bmu(\bx).
@@ -428,7 +237,7 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} 
 \end{frame}
 %=======
-\begin{frame}{MAF vs IAF vs RealNVP}
+\begin{frame}{AF vs IAF vs RealNVP}
 	\begin{block}{RealNVP}
 		\vspace{-0.3cm}
 		\[
@@ -444,8 +253,8 @@
 		\item Sampling - 1 pass.
 	\end{itemize}
 	
-	RealNVP is a special case of MAF and IAF:
-	\begin{block}{MAF}
+	RealNVP is a special case of AF and IAF:
+	\begin{block}{AF}
 		\vspace{-0.5cm}
 		\begin{equation*}
 			\begin{cases}
@@ -512,11 +321,7 @@
 %=======
 \begin{frame}{Summary}
 	\begin{itemize}
-		\item Gaussian autoregressive model is an autoregressive flow with triangular Jacobian.
-		\vfill
-		\item Inverse autoregressive flow is able to sample fast, but the inference is slow.
-		\vfill
-		\item MAF/IAF is a special case of autoregressive flows.
+		\item AF/IAF is a special case of autoregressive flows.
 		\vfill
 		\item The RealNVP is an effective type of flow (special case of AR flows) that uses coupling layer.
 	\end{itemize}

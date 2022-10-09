@@ -838,6 +838,79 @@
 	\end{itemize}
 \end{frame}
 %=======
+\section{Residual Flows (planar flows)}
+\begin{frame}{Residual Flows}
+	\begin{block}{Matrix determinant lemma}
+		\vspace{-0.5cm}
+		\[
+		\det \left( \bI_m + \bV \bW^T \right) = \det ( \bI_d + \bW^T \bV ), \quad \text{where } \bV, \bW \in \bbR^{m \times d}.
+		\]
+		\vspace{-0.5cm}
+	\end{block}
+	\begin{block}{Planar flow}
+		\vspace{-0.2cm}
+		\[
+		\bx = g(\bz, \btheta) = \bz + \bv \, \sigma(\bw^T\bz + b).
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	Here $\btheta = \{\bv, \bw, b\}$, $\sigma(\cdot)$ is a smooth element-wise non-linearity.
+	{\small
+		\[
+		\left| \det \left( \frac{\partial g(\bz, \btheta)}{\partial \bz} \right)\right| = \left| \det \left( \bI + \sigma'(\bw^T \bz + b) \bv \bw^T\right) \right| = \left| 1 + \sigma'(\bw^T \bz + b) \bw^T \bv \right|
+		\]}
+	The transformation is invertible, for example, if
+	\[
+	\sigma = \tanh; \quad \sigma'(\bw^T \bz + b) \bw^T \bv \geq -1.
+	\]
+	\myfootnotewithlink{https://arxiv.org/abs/1505.05770}{Rezende D. J., Mohamed S. Variational Inference with Normalizing Flows, 2015} 
+\end{frame}
+%=======
+\begin{frame}{Residual Flows}
+	\begin{block}{Expressiveness of planar flows}
+		\vspace{-0.5cm}
+		\[
+		\bz_K = g_1 \circ \dots \circ g_K (\bz); \quad g_k = g(\bz_k, \btheta_k) = \bz_k + \bv_k\, \sigma(\bw_k^T\bz_k + b_k).
+		\]
+		\vspace{-0.8cm}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.7\linewidth]{figs/planar_flows.png}
+		\end{figure}
+		\vspace{-0.5cm}
+	\end{block}
+	\begin{block}{Sylvester flow: planar flow extension}
+		\vspace{-0.3cm}
+		\[
+		g(\bz, \btheta) = \bz + \bV \, \sigma(\bW^T\bz + \mathbf{b}).
+		\]
+	\end{block}
+	\myfootnote{\href{https://arxiv.org/abs/1505.05770}{Rezende D. J., Mohamed S. Variational Inference with Normalizing Flows, 2015}\\
+		\href{https://arxiv.org/abs/1803.05649}{Berg R. et al. Sylvester normalizing flows for variational inference, 2018}}
+\end{frame}
+%=======
+\begin{frame}{Masked autoregressive flow (MAF)}
+	\begin{block}{Gaussian autoregressive model}
+		\vspace{-0.7cm}
+		\[
+		p(\bx | \btheta) = \prod_{j=1}^m p(x_j | \bx_{1:j - 1}, \btheta) = \prod_{j=1}^m \mathcal{N} \left(x_j | \mu_j(\bx_{1:j-1}), \sigma^2_j (\bx_{1:j-1})\right).
+		\]
+		\vspace{-0.5cm}
+	\end{block}
+	We could use MADE for the conditionals. 
+	Samples from the base distribution could be an indicator of how good the flow was fitted. 
+	\vspace{-0.3cm}
+	\begin{figure}
+		\includegraphics[width=0.95\linewidth]{figs/maf1.png}
+	\end{figure}
+	MAF is just a stacked MADE model with different ordering.
+	\begin{itemize}
+		\item Parallel density estimation.
+		\item Sequential sampling.
+	\end{itemize}
+	\myfootnotewithlink{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} 
+\end{frame}
+%=======
 \section{Parallel WaveNet}
 %=======
 \begin{frame}{MAF/IAF pros and cons}
