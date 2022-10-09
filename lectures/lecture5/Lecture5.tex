@@ -120,7 +120,7 @@
 	\tableofcontents
 \end{frame}
 %=======
-\section{Normalizing flows}
+\section{Normalizing flows (NF)}
 %=======
 \begin{frame}{Generative models zoo}
 	\begin{tikzpicture}[
@@ -197,7 +197,7 @@
 	\myfootnotewithlink{https://jmtomczak.github.io/blog/3/3\_flows.html}{https://jmtomczak.github.io/blog/3/3\_flows.html}
 \end{frame}
 %=======
-\begin{frame}{Fitting flows}
+\begin{frame}{Fitting normalizing flows}
 	\begin{block}{MLE problem}
 		\vspace{-0.3cm}
 		\[
@@ -214,7 +214,7 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1605.08803}{Dinh L., Sohl-Dickstein J., Bengio S. Density estimation using Real NVP, 2016} 
 \end{frame}
 %=======
-\begin{frame}{Composition of flows}
+\begin{frame}{Composition of normalizing flows}
 	\begin{block}{Theorem}
 		Diffeomorphisms are \textbf{composable} (If $\{f_k\}_{k=1}^K$ satisfy conditions of the change of variable theorem, then $\bz = f(\bx) = f_K \circ \dots \circ f_1(\bx)$ also satisfies it).
 	\end{block}
@@ -233,7 +233,7 @@
 	\myfootnotewithlink{https://lilianweng.github.io/lil-log/2018/10/13/flow-based-deep-generative-models.html}{https://lilianweng.github.io/lil-log/2018/10/13/flow-based-deep-generative-models.html}
 \end{frame}
 %=======
-\begin{frame}{Flows}
+\begin{frame}{Normalizing flows (NF)}
 	\vspace{-0.3cm}
 	\[
 	\log p(\bx|\btheta) = \log p(f(\bx, \btheta)) + \log |\det (\bJ_f)|
@@ -258,9 +258,10 @@
 			where $\bJ_{f_k} = \frac{\partial \mathbf{f}_k}{\partial \mathbf{f}_{k-1}}$.
 		\end{block}
 	\end{itemize}
+	\textbf{Note:} Here we consider only \textbf{continuous} random variables.
 \end{frame}
 %=======
-\begin{frame}{Flows}
+\begin{frame}{Normalizing flows}
 	\begin{block}{Example of a 4-step flow}
 		\vspace{-0.2cm}
 		\begin{figure}
@@ -286,7 +287,7 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1912.02762}{Papamakarios G. et al. Normalizing flows for probabilistic modeling and inference, 2019} 
 \end{frame}
 %=======
-\section{Forward and Reverse KL for Normalizing flows}
+\section{Forward and Reverse KL for NF}
 %=======
 \begin{frame}{Forward KL vs Reverse KL}
 	\begin{block}{Forward KL}
@@ -297,7 +298,7 @@
 		\end{align*}
 		Maximum likelihood estimation is equivalent to minimization of the Monte-Carlo estimation of forward KL.
 	\end{block}
-	\begin{block}{Forward KL for flow model}
+	\begin{block}{Forward KL for NF model}
 	    \vspace{-0.1cm}
 		\[
 			\log p(\bx|\btheta) = \log p(f(\bx, \btheta)) + \log  |\det (\bJ_f)|
@@ -320,7 +321,7 @@
 			\end{align*}
 		\vspace{-0.7cm}
 	\end{block}
-	\begin{block}{Reverse KL for flow model (LOTUS trick)}
+	\begin{block}{Reverse KL for NF model (LOTUS trick)}
   		\vspace{-0.3cm}
 		\[
 			 \log p(\bx | \btheta) = \log p(\bz) +  \log  |\det (\bJ_f)| = \log p(\bz) - \log |\det (\bJ_g)| 
@@ -339,7 +340,7 @@
 %=======
 \begin{frame}{Flow KL duality}
 	\begin{block}{Theorem}
-		Fitting flow model $p(\bx| \btheta)$ to the target distribution $\pi(\bx)$ using forward KL (MLE) is equivalent to fitting the induced distribution $p(\bz| \btheta)$ to the base $p(\bz)$ using reverse KL:
+		Fitting NF model $p(\bx| \btheta)$ to the target distribution $\pi(\bx)$ using forward KL (MLE) is equivalent to fitting the induced distribution $p(\bz| \btheta)$ to the base $p(\bz)$ using reverse KL:
 		\vspace{-0.2cm}
 		\[
 			\argmin_{\btheta} KL(\pi(\bx) || p(\bx | \btheta)) = \argmin_{\btheta} KL(p(\bz | \btheta) || p(\bz)).
@@ -381,7 +382,9 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} 
 \end{frame}
 %=======
-\section{Linear flows}
+\section{Normalizing flows types}
+%=======
+\subsection{Linear flows}
 %=======
 \begin{frame}{Jacobian structure}
 	\begin{block}{Flow log-likelihood}
@@ -390,17 +393,17 @@
 		\]
 	\end{block}
 	The main challenge is a determinant of the Jacobian matrix.
-	\begin{enumerate}
-		\begin{block}{What is the $det(\bJ)$ in the following cases?}
-			\item Consider a linear layer $\bz = \bW \bx$, $\bW \in \bbR^{m \times m}$.
+	\begin{block}{What is the $det(\bJ)$ in the following cases?}
+		Consider a linear layer $\bz = \bW \bx$, $\bW \in \bbR^{m \times m}$.
+		\begin{enumerate}
 			\item Let $\bz$ be a permutation of $\bx$. 
 			\item Let $z_j$ depend only on $x_j$. 
 			\[
 				\log \left|\det \left( \frac{\partial f(\bx, \btheta)}{\partial \bx} \right) \right| = \log \left| \prod_{j=1}^m \frac{\partial f_j'(x_j, \btheta)}{\partial x_j} \right| = \sum_{j=1}^m \log \left|  \frac{\partial f_j'(x_j, \btheta)}{\partial x_j} \right|.
 			\]
 			\item Let $z_j$ depend only on $\bx_{1:j}$ (autoregressive dependency). 
-		\end{block}
-	\end{enumerate}
+		\end{enumerate}
+	\end{block}
 \end{frame}
 %=======
 \begin{frame}{Linear flows}
@@ -426,19 +429,19 @@
 \end{frame}
 %=======
 \begin{frame}{Linear flows}
-	\vspace{-0.3cm}
+	\vspace{-0.5cm}
 	\[
 		\bz = f(\bx, \btheta) = \bW \bx, \quad \bW \in \bbR^{m \times m}, \quad \btheta = \bW, \quad \bJ_f = \bW
 	\]
-	\vspace{-0.3cm}
+	\vspace{-0.7cm}
 	\begin{block}{Matrix decompositions}
 		\begin{itemize}
-			\item LU-decomposition
+			\item \textbf{LU-decomposition}
 			\[
 				\bW = \mathbf{P} \bL \bU,
 			\]
 			where $\mathbf{P}$ is a permutation matrix, $\mathbf{L}$ is lower triangular with positive diagonal, $\mathbf{U}$ is upper triangular with positive diagonal.
-			\item QR-decomposition
+			\item \textbf{QR-decomposition}
 			\[
 				\bW = \bQ \mathbf{R},
 			\]
@@ -446,12 +449,14 @@
 		\end{itemize}
 	\end{block}
 
+	Decomposition should be done only once in the beggining. Next, we fit decomposed matrices ($\bP/\bL/\bU$ or $\bQ/\bR$).
+
 	\myfootnote{\href{https://arxiv.org/abs/1807.03039}{Kingma D. P., Dhariwal P. Glow: Generative Flow with Invertible 1x1 Convolutions, 2018}  \\
-	\href{https://arxiv.org/abs/1901.11137}{Hoogeboom E., Van Den Berg R., and Welling M. Emerging convolutions for generative normalizing flows, 2019}
+	\href{https://arxiv.org/abs/1901.11137}{Hoogeboom E., et al. Emerging convolutions for generative normalizing flows, 2019}
 	}
 \end{frame}
 %=======
-\section{Autoregressive flows}
+\subsection{Gaussian autoregressive flows}
 %=======
 \begin{frame}{Gaussian autoregressive model}
 	Consider an autoregressive model
@@ -464,18 +469,24 @@
 	}
 	\vspace{-0.5cm}
 	\begin{block}{Sampling: reparametrization trick}
+		\vspace{-0.3cm}
 		\[
-		x_j = \sigma_j (\bx_{1:j-1}) \cdot z_j + \mu_j(\bx_{1:j-1}), \quad z_j \sim \mathcal{N}(0, 1).
+			x_j = \sigma_j (\bx_{1:j-1}) \cdot z_j + \mu_j(\bx_{1:j-1}), \quad z_j \sim \mathcal{N}(0, 1).
 		\]
+		\vspace{-0.7cm}
 	\end{block}
 	\begin{block}{Inverse transform}
 		\vspace{-0.3cm}
 		\[
-		z_j = \left(x_j - \mu_j(\bx_{1:j-1}) \right) \cdot \frac{1}{\sigma_j (\bx_{1:j-1}) }.
+			z_j = \left(x_j - \mu_j(\bx_{1:j-1}) \right) \cdot \frac{1}{\sigma_j (\bx_{1:j-1}) }.
 		\]
-		\vspace{-0.3cm}
+		\vspace{-0.4cm}
 	\end{block}
-	We have got an invertible and differentiable transform (it is an autoregressive flow with base distribution $\bz = \cN(0, 1)$!).
+	\begin{itemize}
+		\item We have an \textbf{invertible} and \textbf{differentiable} transformation from $p(\bz)$ to $p(\bx | \btheta)$.
+		\item It is an autoregressive (AR) flow with the base distribution $p(\bz) = \cN(0, 1)$!
+		\item How to derive a linear flow from this AR model?
+	\end{itemize}
 	\myfootnotewithlink{https://arxiv.org/abs/1606.04934}{Kingma D. P. et al. Improving Variational Inference with Inverse Autoregressive Flow, 2016} 
 \end{frame}
 %=======
@@ -485,8 +496,8 @@
 		\bx &= g(\bz, \btheta) \quad \Rightarrow \quad x_j = \sigma_j (\bx_{1:j-1}) \cdot z_j + \mu_j(\bx_{1:j-1}). \\
 		\bz &= f(\bx, \btheta) \quad \Rightarrow \quad z_j = \left(x_j - \mu_j(\bx_{1:j-1}) \right) \cdot \frac{1}{ \sigma_j (\bx_{1:j-1})}.
 	\end{align*}
-	Generation function $g(\bz, \btheta)$ is \textbf{sequential}. Inference function $f(\bx, \btheta)$ is \textbf{not sequential}.
-	\begin{block}{Forward KL for flow model}
+	Generation function $g(\bz, \btheta)$ is \textbf{sequential}. \\ Inference function $f(\bx, \btheta)$ is \textbf{not sequential}.
+	\begin{block}{Forward KL for NF model}
 		\vspace{-0.2cm}
 		\[
 		\log p(\bx|\btheta) = \log p(f(\bx, \btheta)) + \log  \left|\det \left( \frac{\partial f(\bx, \btheta)}{\partial \bx} \right) \right|
@@ -501,9 +512,9 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} 
 \end{frame}
 %=======
-\section{Inverse autoregressive flows}
+\subsection{Inverse gaussian autoregressive flows}
 %=======
-\begin{frame}{Inverse autoregressive flow (IAF)}
+\begin{frame}{Inverse gaussian autoregressive flow (IAF)}
 	Let use the following reparametrization:
 	$\tilde{\bsigma} = \frac{1}{\bsigma}$; $ \tilde{\bmu} = - \frac{\bmu}{\bsigma}$.
 	
@@ -517,7 +528,7 @@
 	\end{block}
 	Let just swap $\bz$ and $\bx$. 
 	
-	\begin{block}{Inverse autoregressive flow}
+	\begin{block}{Inverse gaussian autoregressive flow}
 		\vspace{-0.5cm}
 		\begin{align*}
 			\bx &= g(\bz, \btheta) \quad \Rightarrow \quad x_j = \tilde{\sigma}_j (\bz_{1:j-1}) \cdot z_j + \tilde{\mu}_j(\bz_{1:j-1}) \\
@@ -529,7 +540,7 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1606.04934}{Kingma D. P. et al. Improving Variational Inference with Inverse Autoregressive Flow, 2016} 
 \end{frame}
 %=======
-\begin{frame}{Inverse autoregressive flow (IAF)}
+\begin{frame}{Inverse gaussian autoregressive flow (IAF)}
 	
 	\begin{minipage}[t]{0.65\columnwidth}
 		\begin{block}{Gaussian autoregressive flow: $f(\bx, \btheta)$}
@@ -564,9 +575,10 @@
 	\vspace{0.1cm}
 	
 	\begin{minipage}[t]{0.65\columnwidth}
-		\begin{block}{Inverse autoregressive flow: $f(\bx, \btheta)$}
+		\begin{block}{Inverse gaussian autoregressive flow: $f(\bx, \btheta)$}
+			\vspace{-0.3cm}
 			\[
-			x_j = \tilde{\sigma}_j (\bz_{1:j-1}) \cdot z_j + \tilde{\mu}_j(\bz_{1:j-1}).
+				x_j = \tilde{\sigma}_j (\bz_{1:j-1}) \cdot z_j + \tilde{\mu}_j(\bz_{1:j-1}).
 			\]
 		\end{block}
 	\end{minipage}%
@@ -580,8 +592,8 @@
 	\myfootnotewithlink{https://blog.evjang.com/2018/01/nf2.html}{image credit: https://blog.evjang.com/2018/01/nf2.html}
 \end{frame}
 %=======
-\begin{frame}{Autoregressive flows}
-	\begin{block}{Forward and inverse transforms in MAF}
+\begin{frame}{Gaussian autoregressive NF}
+	\begin{block}{Forward and inverse transforms in gaussian AR NF}
 		\vspace{-0.6cm}
 		\begin{align*}
 			\bx &= g(\bz, \btheta) \quad \Rightarrow \quad x_j = \sigma_j (\bx_{1:j-1}) \cdot z_j + \mu_j(\bx_{1:j-1}). \\
@@ -593,7 +605,7 @@
 			\item Density estimation is parallel.
 		\end{itemize}
 	\end{block}
-	\begin{block}{Forward and inverse transforms in IAF}
+	\begin{block}{Forward and inverse transforms in inverse gaussian AR NF}
 		\vspace{-0.6cm}
 		\begin{align*}
 			\bx &= g(\bz, \btheta) \quad \Rightarrow \quad x_j = \tilde{\sigma}_j (\bz_{1:j-1}) \cdot z_j + \tilde{\mu}_j(\bz_{1:j-1}). \\
@@ -608,18 +620,6 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} 
 \end{frame}
 %=======
-\begin{frame}{Autoregressive flows}
-	\begin{figure}
-		\includegraphics[width=0.8\linewidth]{figs/flows_how2.png}
-	\end{figure}
-	\begin{itemize}	
-		\item AF performs parallel inference that is useful for density estimation tasks (forward KL or MLE).
-		\item IAF performs parallel generation that is useful for optimization of reverse KL.
-	\end{itemize}
-	
-	\myfootnotewithlink{https://arxiv.org/abs/1605.08803}{Dinh L., Sohl-Dickstein J., Bengio S. Density estimation using Real NVP, 2016} 
-\end{frame}
-%=======
 \begin{frame}{Summary}
 	\begin{itemize}
 		\item Flow models transform a simple base distribution to a complex one via a sequence of invertible transformations with tractable Jacobian.
@@ -632,7 +632,7 @@
 		\vfill
 		\item Gaussian autoregressive flow is an autoregressive model with triangular Jacobian.
 		\vfill
-		\item Inverse autoregressive flow is able to sample fast, but the inference is slow.
+		\item Inverse gaussian autoregressive flow generate new saamples fast, but the inference is slow.
 	\end{itemize}
 \end{frame}
 \end{document} 
