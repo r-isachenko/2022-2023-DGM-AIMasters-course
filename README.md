@@ -29,7 +29,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 |  |  | <b>Seminar:</b> CNNs. Additional notes on autoregressive models. Latent Variable Models. | [notebook](seminars/seminar3/seminar3.ipynb) [CNNs_note](seminars/seminar3/convolutions.pdf) |
 | 4 | October, 3 | <b>Lecture:</b> VAE limitations. Posterior collapse and decoder weakening. Tighter ELBO (IWAE). Normalizing flows prerequisities. | [slides](lectures/lecture4/Lecture4.pdf) |
 |  |  | <b>Seminar:</b> Gaussian Mixture Models (GMM). MLE for GMM, ELBO and EM-algorithm for GMM. VAE basics.  | [notebook](seminars/seminar4/seminar4.ipynb) |
-| 5 | October, 10 | <b>Lecture:</b> Normalizing flows. Forward and reverse KL divergence. Linear flows (Glow). Residual flows (Planar/Sylvester flows). | [slides](lectures/lecture5/Lecture5.pdf) |
+| 5 | October, 10 | <b>Lecture:</b> 5. Normalizing Flow (NF) intuition and definition. Forward and reverse KL divergence for NF. Linear flows. | [slides](lectures/lecture5/Lecture5.pdf) |
 |  |  | <b>Seminar:</b> VAE implementation hints. IWAE variational posterior. | TBA |
 | 6 | October, 17 | <b>Lecture:</b> Autoregressive flows (MAF/IAF). Coupling layer (RealNVP). | TBA |
 |  |  | <b>Seminar:</b> Planar flows. Forward vs Reverse KL. VAE vs Normalizing flows. | TBA |

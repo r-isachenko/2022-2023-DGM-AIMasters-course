@@ -12,6 +12,62 @@
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
+Images are discrete data, flow is a continuous model.
+We need to convert a discrete data distribution to a continuous one.
+
+\begin{block}{Uniform dequantization bound}
+	\vspace{-0.5cm}
+	\[
+	\bx \sim \text{Categorical}(\bpi), \quad 
+	\bu \sim U[0, 1], \quad 
+	\by = \bx + \bu \sim \text{Continuous} 
+	\]
+	\vspace{-0.4cm}
+	\[
+	\log P(\bx | \btheta) \geq \int_{U[0, 1]} \log p(\bx + \bu | \btheta) d \bu.
+	\]
+\end{block}
+\vspace{-0.2cm}
+\begin{block}{Variational dequantization bound}
+	Introduce variational dequantization noise distribution $q(\bu | \bx)$ and treat it as an approximate posterior. 
+	\vspace{-0.2cm}
+	\[
+	\log P(\bx | \btheta) \geq  \int q(\bu | \bx) \log \frac{p(\bx + \bu | \btheta)}{q(\bu | \bx)} d \bu = \mathcal{L}(q, \btheta).
+	\]
+\end{block}
+\myfootnotewithlink{https://arxiv.org/abs/1902.00275}{Ho J. et al. Flow++: Improving Flow-Based Generative Models with Variational Dequantization and Architecture Design, 2019}
+\end{frame}
+%=======
+\begin{frame}{Recap of previous lecture}
+
+\begin{minipage}[t]{0.5\columnwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=1.0\linewidth]{figs/uniform_dequantization.png}
+	\end{figure}
+\end{minipage}%
+\begin{minipage}[t]{0.5\columnwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=1.0\linewidth]{figs/variational_dequantization.png}
+	\end{figure}
+\end{minipage}
+\begin{block}{Flow model for dequantization}
+	\vspace{-0.3cm}
+	\[
+	q(\bu | \bx) = p(g^{-1}(\bu, \bx, \blambda)) \cdot \left| \det \left( \frac{\partial g^{-1}(\bu, \bx, \blambda)}{\partial \bu} \right) \right|.
+	\]
+	\vspace{-0.3cm}
+\end{block}
+\begin{block}{Variational dequantization bound}
+	\[
+	\mathcal{L}(q, \btheta) = \int q(\bu | \bx) \log \frac{p(\bx + \bu | \btheta)}{q(\bu | \bx)} d \bu.
+	\]
+\end{block}
+\myfootnotewithlink{https://arxiv.org/abs/1902.00275}{Ho J. et al. Flow++: Improving Flow-Based Generative Models with Variational Dequantization and Architecture Design, 2019}
+\end{frame}
+%=======
+\begin{frame}{Recap of previous lecture}
 	\begin{block}{Theorem}
 		\vspace{-0.3cm}
 		\[
