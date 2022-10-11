@@ -30,7 +30,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 4 | October, 3 | <b>Lecture:</b> VAE limitations. Posterior collapse and decoder weakening. Tighter ELBO (IWAE). Normalizing flows prerequisities. | [slides](lectures/lecture4/Lecture4.pdf) |
 |  |  | <b>Seminar:</b> Gaussian Mixture Models (GMM). MLE for GMM, ELBO and EM-algorithm for GMM. VAE basics.  | [notebook](seminars/seminar4/seminar4.ipynb) |
 | 5 | October, 10 | <b>Lecture:</b> 5. Normalizing Flow (NF) intuition and definition. Forward and reverse KL divergence for NF. Linear flows. | [slides](lectures/lecture5/Lecture5.pdf) |
-|  |  | <b>Seminar:</b> VAE implementation hints. IWAE variational posterior. | TBA |
+|  |  | <b>Seminar:</b> VAE implementation hints. IWAE model. | [notebook](seminars/seminar5/seminar5.ipynb) |
 | 6 | October, 17 | <b>Lecture:</b> Autoregressive flows (MAF/IAF). Coupling layer (RealNVP). | TBA |
 |  |  | <b>Seminar:</b> Planar flows. Forward vs Reverse KL. VAE vs Normalizing flows. | TBA |
 | 7 | October, 24 | <b>Lecture:</b> Uniform and variational dequantization. ELBO surgery and optimal VAE prior. Flows-based VAE posterior vs flow-based VAE prior. | TBA |
