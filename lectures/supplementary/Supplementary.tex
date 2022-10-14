@@ -911,6 +911,53 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} 
 \end{frame}
 %=======
+\section{Autoregressive flows}
+%=======
+\begin{frame}{Autoregressive flows}
+	\vspace{-0.3cm}
+	\[
+	x_j = \tau (z_j, c(\bz_{1:j-1})) \quad \Leftrightarrow \quad z_j = \tau^{-1} (x_j, c(\bz_{1:j-1}))
+	\]
+	\vspace{-0.3cm}
+	\begin{itemize}
+		\item $\tau (\cdot, \cdot)$ -- coupling law (invertible by first argument, differentiable).
+		\item $c(\cdot)$ -- coupling function (do not need to be invertible, could be neural network).
+	\end{itemize}
+	\begin{block}{Coupling law $\tau(\cdot, \cdot)$}
+		\begin{itemize}
+			\item $\tau(x, c) = x + c$ -- additive;
+			\item $\tau(x, c) = x \odot c_1 + c_2$ -- affine.
+		\end{itemize}
+	\end{block}
+	What is the Jacobian for the additive/affine coupling law? 
+	\begin{block}{Jacobian}
+		\vspace{-0.3cm}
+		\[
+		\det \left( \frac{\partial \bx}{\partial \bz} \right) = \prod_{j=1}^m \frac{\partial x_j}{\partial z_j} = \prod_{j=1}^m \frac{\partial \tau (z_j, c(\bz_{1:j-1})) }{\partial z_j}
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	
+	\myfootnotewithlink{https://arxiv.org/abs/1912.02762}{Papamakarios G. et al. Normalizing flows for probabilistic modeling and inference, 2019} 
+\end{frame}
+%=======
+\begin{frame}{Autoregressive flows}
+	\begin{block}{Forward and inverse transforms}
+		\[
+		x_j = \tau (z_j, c(\bz_{1:j-1})) \quad \Leftrightarrow \quad z_j = \tau^{-1} (x_j, c(\bz_{1:j-1}))
+		\]
+		\begin{figure}
+			\includegraphics[width=\linewidth]{figs/autoregressive_flow}
+		\end{figure}
+	\end{block}
+	\begin{itemize}
+		\item Forward transform is \textbf{not sequential}.
+		\item Inverse transform is \textbf{sequential}.
+	\end{itemize}
+	
+	\myfootnotewithlink{https://arxiv.org/abs/1912.02762}{Papamakarios G. et al. Normalizing flows for probabilistic modeling and inference, 2019} 
+\end{frame}
+%=======
 \section{Parallel WaveNet}
 %=======
 \begin{frame}{MAF/IAF pros and cons}
@@ -944,6 +991,100 @@
 		\end{figure}
 	\end{block}
 	\myfootnotewithlink{https://arxiv.org/abs/1609.03499}{Oord A. et al. Wavenet: A generative model for raw audio, 2016}
+\end{frame}
+%=======
+\begin{frame}{AF vs IAF vs RealNVP}
+	\begin{block}{MADE/AF}
+		\vspace{-0.5cm}
+		\[
+		\bx = \bsigma (\bx) \odot \bz + \bmu(\bx).
+		\]
+		Estimating the density $p(\bx | \btheta)$ - 1 pass, sampling - $m$ passes.
+	\end{block}
+	\begin{block}{IAF}
+		\vspace{-0.5cm}
+		\[
+		\bx = \tilde{\bsigma} (\bz) \odot \bz + \tilde{\bmu}(\bz).
+		\]
+		Estimating the density $p(\bx | \btheta)$ - $m$ passes, sampling - 1 pass.
+	\end{block}
+	\begin{block}{RealNVP}
+		\vspace{-0.2cm}
+		\[
+		\begin{cases}
+			\bx_{1:d} &= \bz_{1:d}; \\ 
+			\bx_{d:m} &= \bz_{d:m} \odot c_1(\bz_{1:d}, \btheta) + c_2(\bz_{1:d}, \btheta).
+		\end{cases}
+		\]
+		\vspace{-0.5cm}
+	\end{block}
+	\myfootnotewithlink{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} 
+\end{frame}
+%=======
+\begin{frame}{AF vs IAF vs RealNVP}
+	\begin{block}{RealNVP}
+		\vspace{-0.3cm}
+		\[
+		\begin{cases}
+			\bx_{1:d} &= \bz_{1:d}; \\ 
+			\bx_{d:m} &= \bz_{d:m} \odot c_1(\bz_{1:d}, \btheta) + c_2(\bz_{1:d}, \btheta).
+		\end{cases}
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	\begin{itemize}
+		\item Calculating the density $p(\bx | \btheta)$ - 1 pass.
+		\item Sampling - 1 pass.
+	\end{itemize}
+	
+	RealNVP is a special case of AF and IAF:
+	\begin{block}{AF}
+		\vspace{-0.5cm}
+		\begin{equation*}
+			\begin{cases}
+				\mu_j  = 0, \sigma_j = 1, \, j = 1, \dots, d; \\
+				\mu_j, \sigma_j \text{ -- functions of } \bx_{1:d}, \, j = d+1, \dots, m.
+			\end{cases}
+		\end{equation*}
+		\vspace{-0.3cm}
+	\end{block}
+	\begin{block}{IAF}
+		\vspace{-0.3cm}
+		\begin{equation*}
+			\begin{cases}
+				\tilde{\mu}_j = 0, \tilde{\sigma}_j = 1, \, j = 1, \dots, d; \\
+				\tilde{\mu}_j, \tilde{\sigma}_j \text{ -- functions of } \bz_{1:d}, \, j = d+1, \dots, m.
+			\end{cases}
+		\end{equation*}
+	\end{block}
+	\myfootnotewithlink{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} 
+\end{frame}
+%=======
+\begin{frame}{Linear flows}
+	\begin{block}{RealNVP}
+		\vspace{-0.5cm}
+		\begin{equation*}
+			\begin{cases} \bz_{1:d} = \bx_{1:d}; \\ \bz_{d:m} = \tau (\bx_{d:m}, c(\bx_{1:d}));\end{cases} 
+			\quad \Leftrightarrow \quad 
+			\begin{cases} \bx_{1:d} = \bz_{1:d}; \\ \bx_{d:m} = \tau^{-1} (\bz_{d:m}, c(\bz_{1:d})).\end{cases}
+		\end{equation*}
+		\vspace{-0.2cm}
+	\end{block}
+	\begin{itemize}
+		\item First step is a \textbf{split} operator which decouples a variable into 2 subparts: $\bx_1$ and $\bx_2$ (usualy channel-wise).
+		\item We should \textbf{permute} components between different layers.
+	\end{itemize}
+	\[
+	\bz = \bW \bx, \quad \bW \in \bbR^{m \times m}
+	\]
+	In general, we need $O(m^3)$ to invert matrix.
+	\begin{block}{Invertibility}
+		\begin{itemize}
+			\item Diagonal matrix $O(m)$.
+			\item Triangular matrix $O(m^2)$.
+			\item It is impossible to parametrize all invertible matrices.
+		\end{itemize}
+	\end{block}
 \end{frame}
 %=======
 \begin{frame}{Parallel WaveNet}
