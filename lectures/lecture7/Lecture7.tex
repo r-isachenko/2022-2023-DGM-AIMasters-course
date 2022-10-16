@@ -9,45 +9,83 @@
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
-	\begin{block}{Gaussian autoregressive flow (MAF)}
-		\vspace{-0.8cm}
+	\begin{block}{Gaussian AR NF}
+		\vspace{-0.6cm}
 		\begin{align*}
-			\bx &= g(\bz, \btheta) \quad \Rightarrow \quad x_i = \sigma_i (\bx_{1:i-1}) \cdot z_i + \mu_i(\bx_{1:i-1}). \\
-			\bz &= f(\bx, \btheta) \quad \Rightarrow \quad z_i = \left(x_i - \mu_i(\bx_{1:i-1}) \right) \cdot \frac{1}{ \sigma_i (\bx_{1:i-1})}.
+			\bx &= g(\bz, \btheta) \quad \Rightarrow \quad {\color{violet}x_j} = \sigma_j ({\color{violet}\bx_{1:j-1}}) \cdot {\color{teal} z_j} + \mu_j({\color{violet}\bx_{1:j-1}}). \\
+			\bz &= f(\bx, \btheta) \quad \Rightarrow \quad {\color{teal} z_j} = \left({\color{violet} x_j} - \mu_j({\color{violet}\bx_{1:j-1}}) \right) \cdot \frac{1}{\sigma_j ({\color{violet} \bx_{1:j-1}}) }.
 		\end{align*}
-		Generation function $g(\bz, \btheta)$ is \textbf{sequential}. Inference function $f(\bx, \btheta)$ is \textbf{not sequential}.
+		\vspace{-0.6cm}
+		\begin{itemize}
+			\item Sampling is sequential, density estimation is parallel.
+			\item Forward KL is a natural loss.
+		\end{itemize}
 	\end{block}
-	\begin{block}{Inverse autoregressive flow (IAF)}
-		\vspace{-0.5cm}
+	\begin{block}{Inverse gaussian AR NF}
+		\vspace{-0.6cm}
 		\begin{align*}
-			\bx &= g(\bz, \btheta) \quad \Rightarrow \quad x_i = \tilde{\sigma}_i (\bz_{1:i-1}) \cdot z_i + \tilde{\mu}_i(\bz_{1:i-1}) \\
-			\bz &= f(\bx, \btheta) \quad \Rightarrow \quad z_i = \left( x_i - \tilde{\mu}_i(\bz_{1:i-1})\right) \cdot \frac{1}{\tilde{\sigma}_i (\bz_{1:i-1}) }.
+			\bx &= g(\bz, \btheta) \quad \Rightarrow \quad {\color{violet} x_j} = \tilde{\sigma}_j ({\color{teal}\bz_{1:j-1}}) \cdot {\color{teal} z_j} + \tilde{\mu}_j({\color{teal}\bz_{1:j-1}}) \\
+			\bz &= f(\bx, \btheta) \quad \Rightarrow \quad {\color{teal}z_j} = \left( {\color{violet} x_j} - \tilde{\mu}_j({\color{teal}\bz_{1:j-1}})\right) \cdot \frac{1}{\tilde{\sigma}_j ({\color{teal}\bz_{1:j-1}}) }.
 		\end{align*}
-		\vspace{-0.3cm}
+		\vspace{-0.6cm}
+		\begin{itemize}
+			\item Sampling is parallel, density estimation is sequential.
+			\item Reverse KL is a natural loss.
+		\end{itemize}
 	\end{block}
-	
-	\myfootnote{
-		\href{https://arxiv.org/abs/1705.07057}{Papamakarios G., Pavlakou T., Murray I. Masked Autoregressive Flow for Density Estimation, 2017} \\
-		\href{https://arxiv.org/abs/1606.04934}{Kingma D. P. et al. Improving Variational Inference with Inverse Autoregressive Flow, 2016} } 
+	\myfootnotewithlink{https://arxiv.org/abs/1606.04934}{Kingma D. P. et al. Improving Variational Inference with Inverse Autoregressive Flow, 2016} 
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
-	\begin{block}{Autoregressive flows}
-		\begin{figure}
-			\includegraphics[width=0.9\linewidth]{figs/autoregressive_flow}
-		\end{figure}
-	\end{block}
-	\begin{block}{RealNVP: Affine coupling law}
-		\vspace{-0.7cm}
+	Let split $\bx$ and $\bz$ in two parts: 
+	\[
+	\bx = [\bx_1, \bx_2] = [\bx_{1:d}, \bx_{d+1:m}]; \quad \bz = [\bz_1, \bz_2] = [\bz_{1:d}, \bz_{d+1:m}].
+	\]
+	\vspace{-0.5cm}
+	\begin{block}{Coupling layer}
+		\vspace{-0.5cm}
 		\[
-			\begin{cases} \bz_{1:d} = \bx_{1:d}; \\ \bz_{d:m} = \tau (\bx_{d:m}, c(\bx_{1:d}));\end{cases} 
-			\quad \Leftrightarrow \quad 
-			\begin{cases} \bx_{1:d} = \bz_{1:d}; \\ \bx_{d:m} = \tau^{-1} (\bz_{d:m}, c(\bz_{1:d})).\end{cases}
+		\begin{cases} {\color{violet}\bx_1} = {\color{teal}\bz_1}; \\ {\color{violet}\bx_2} = {\color{teal}\bz_2} \odot \bsigma({\color{teal}\bz_1}, \btheta) + \bmu({\color{teal}\bz_1}, \btheta).\end{cases}  
+		\begin{cases} {\color{teal}\bz_1} ={\color{violet} \bx_1}; \\ {\color{teal}\bz_2} = \left({\color{violet}\bx_2} - \bmu({\color{violet}\bx_1}, \btheta) \right) \odot \frac{1}{\bsigma({\color{violet}\bx_1}, \btheta)}.\end{cases}
+		\]
+		Estimating the density takes 1 pass, sampling takes 1 pass!
+	\end{block}
+	\begin{block}{Jacobian}
+		\vspace{-0.3cm}
+		\[
+		\det \left( \frac{\partial \bz}{\partial \bx} \right) = \det 
+		\begin{pmatrix}
+			\bI_d & 0_{d \times m - d} \\
+			\frac{\partial \bz_2}{\partial \bx_1} & \frac{\partial \bz_2}{\partial \bx_2}
+		\end{pmatrix} = \prod_{j=1}^{m - d} \frac{1}{\sigma_j(\bx_1, \btheta)}.
 		\]
 	\end{block}
-	\myfootnote{
-	\href{https://arxiv.org/abs/1410.8516}{Dinh L., Krueger D., Bengio Y. NICE: Non-linear Independent Components Estimation, 2014} \\
-	\href{https://arxiv.org/abs/1605.08803}{Dinh L., Sohl-Dickstein J., Bengio S. Density estimation using Real NVP, 2016}}
+	Coupling layer is a special case of autoregressive flow.
+	
+	\myfootnotewithlink{https://arxiv.org/abs/1605.08803}{Dinh L., Sohl-Dickstein J., Bengio S. Density estimation using Real NVP, 2016} 
+\end{frame}
+%=======%=======
+\begin{frame}{Recap of previous lecture}
+	\begin{table}[]
+		\begin{tabular}{l|c|c}
+			& \textbf{VAE} & \textbf{NF} \\ \hline
+			\textbf{Objective} & ELBO $\cL$ & Forward KL/MLE \\ \hline
+			\textbf{Encoder} & \shortstack{stochastic \\ $\bz \sim q (\bz | \bx, \bphi)$} &  \shortstack{\\ deterministic \\ $\bz = f(\bx | \btheta)$ \\ $q(\bz | \bx, \btheta) = \delta(\bz - f(\bx, \btheta))$}  \\ \hline
+			\textbf{Decoder} & \shortstack{stochastic \\ $\bx \sim p (\bx | \bz, \btheta)$} & \shortstack{\\ deterministic \\ $\bx = g(\bz | \btheta)$ \\ $ p(\bx | \bz, \btheta) = \delta(\bx - g(\bz, \btheta))$} \\ \hline
+			\textbf{Parameters}  & $\bphi, \btheta$ & $\btheta \equiv \bphi$\\ 
+		\end{tabular}
+	\end{table}
+	\begin{block}{Theorem}
+		MLE for normalizing flow is equivalent to maximization of ELBO for VAE model with deterministic encoder and decoder:
+		\vspace{-0.3cm}
+		\[
+		p(\bx | \bz, \btheta) = \delta (\bx - f^{-1}(\bz, \btheta)) = \delta (\bx - g(\bz, \btheta));
+		\]
+		\[
+		q(\bz | \bx, \btheta) = p(\bz | \bx, \btheta) = \delta (\bz - f(\bx, \btheta)).
+		\]
+	\end{block}
+	\myfootnotewithlink{https://arxiv.org/abs/2007.02731}{Nielsen D., et al. SurVAE Flows: Surjections to Bridge the Gap between VAEs and Flows, 2020}
 \end{frame}
 %=======
 \begin{frame}{Outline}
@@ -55,10 +93,25 @@
 \end{frame}
 %=======
 \section{Discrete data vs continuous model}
+\begin{frame}{Discrete data}
+	Images {\color{gray}(and not only images)} are discrete data, pixels lie in the integer domain (\{0, 255\}). 
+	\begin{block}{How to deal with discrete data?}
+		\begin{itemize}
+			\item Use \textbf{discrete} model (e.x. $P(\bx | \btheta) = \text{Cat}(\bpi(\btheta))$). However, NF works only with continuous data $\bx$ (there are discrete NF, see links below).
+			\item Use \textbf{continuous} model (e.x. $p(\bx | \btheta) = \cN(\bmu_{\btheta}(\bx), \bsigma_{\btheta}^2(\bx))$), but
+			\begin{itemize}
+				\item \textbf{discretize} the model output (make the model outputs discrete);
+				\item \textbf{dequantize} data (make the data continuous).
+			\end{itemize}
+		\end{itemize}
+	\end{block}
+	\myfootnote{\href{https://arxiv.org/abs/1905.07376}{Hoogeboom E. et al. Integer discrete flows and lossless compression} \\
+	\href{https://arxiv.org/abs/1905.10347}{Tran D. et al. Discrete flows: Invertible generative models of discrete data}}
+\end{frame}
 %=======
 \subsection{Discretization of continuous distribution}
 %=======
-\begin{frame}{PixelCNN++}
+\begin{frame}{Continuous model}
 	\begin{block}{CIFAR-10 pixel values distribution}
 		\begin{figure}
 			\includegraphics[width=0.3\linewidth]{figs/pixelcnn++_pixels_distr}
@@ -99,10 +152,6 @@
 \subsection{Dequantization}
 %=======
 \begin{frame}{Dequantization}
-	\begin{itemize}
-		\item Images are discrete data, pixels lie in the \{0, 255\} integer domain (the model is $P(\bx | \btheta) = \text{Categorical}(\bpi(\btheta))$).
-		\item Flow is a continuous model (it works with continuous data $\bx$).
-	\end{itemize}
 	By fitting a continuous density model to discrete data, one can produce a degenerate solution with all probability mass on discrete values. \\
 	How to convert a discrete data distribution to a continuous one?
 	
@@ -169,12 +218,8 @@
 	How to perform the smooth dequantization? \\
 \end{frame}
 %=======
-\begin{frame}{Flow++}
-	\vspace{-0.3cm}
-	\begin{block}{Variational dequantization}
-		Introduce variational dequantization noise distribution $q(\bu | \bx)$ and treat it as an approximate posterior. 
-	\end{block}
-	\vspace{-0.3cm}
+\begin{frame}{Variational dequantization}
+	Introduce variational dequantization noise distribution $q(\bu | \bx)$ and treat it as an approximate posterior. 
 	\begin{block}{Variational lower bound}
 		\vspace{-0.7cm}
 		\begin{multline*}
@@ -220,38 +265,7 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1902.00275}{Ho J. et al. Flow++: Improving Flow-Based Generative Models with Variational Dequantization and Architecture Design, 2019}
 \end{frame}
 %=======
-\begin{frame}{Flow++}
-	\begin{block}{Flow-based variational dequantization}
-		\vspace{-0.3cm}
-		\[
-		\log P(\bx | \btheta) \geq \int p(\bepsilon)\log \left( \frac{p(\bx + g(\bepsilon, \bx, \blambda))}{p(\bepsilon) \cdot \left| \det \bJ_g\right|^{-1}} \right) d\bepsilon.
-		\]
-	\end{block}
-	\begin{figure}
-		\centering
-		\includegraphics[width=\linewidth]{figs/flow++1.png}
-	\end{figure}
-	\vspace{-0.1cm}
-	\myfootnotewithlink{https://arxiv.org/abs/1902.00275}{Ho J. et al. Flow++: Improving Flow-Based Generative Models with Variational Dequantization and Architecture Design, 2019}
-\end{frame}
-%=======
 \section{ELBO surgery}
-%=======
-\begin{frame}{Likelihood-based models}
-\begin{block}{Exact likelihood evaluation}
-	\begin{itemize}
-		\item Autoregressive models (WaveNet, PixelCNN, PixelCNN++);
-		\item Flow models (RealNVP, IAF, Glow).
-	\end{itemize}
-\end{block}
-\begin{block}{Approximate likelihood evaluation}
-	\begin{itemize}
-		\item Latent variable models (VAE).
-	\end{itemize}
-\end{block}
-What are the pros and cons of each of them? \\
-\vspace{0.2cm}
-\end{frame}
 %=======
 \begin{frame}{VAE limitations}
 	\begin{itemize}
@@ -277,18 +291,18 @@ What are the pros and cons of each of them? \\
 \begin{frame}{ELBO surgery}
 	\vspace{-0.3cm}
 	\[
-	    \frac{1}{n} \sum_{i=1}^n \mathcal{L}_i(q, \btheta) = \frac{1}{n} \sum_{i=1}^n \left[ \mathbb{E}_{q(\bz | \bx_i)} \log p(\bx_i | \bz, \btheta) - KL(q(\bz | \bx_i) || p(\bz)) \right].
+	    \frac{1}{n} \sum_{i=1}^n \mathcal{L}_i(q, \btheta) = \frac{1}{n} \sum_{i=1}^n \Bigl[ \mathbb{E}_{q(\bz | \bx_i)} \log p(\bx_i | \bz, \btheta) - KL(q(\bz | \bx_i) || p(\bz)) \Bigr].
 	\]
 	\vspace{-0.3cm}
 	\begin{block}{Theorem}
 		\[
-		    \frac{1}{n} \sum_{i=1}^n KL(q(\bz | \bx_i) || p(\bz)) = KL(q_{\text{agg}}(\bz) || p(\bz)) + \bbI_{q} [\bx, \bz],
+		    \frac{1}{n} \sum_{i=1}^n KL(q(\bz | \bx_i) || p(\bz)) = {\color{violet} KL(q_{\text{agg}}(\bz) || p(\bz))} + {\color{teal}\bbI_{q} [\bx, \bz]}
 		\]
 		\begin{itemize}
 			\item $q_{\text{agg}}(\bz) = \frac{1}{n} \sum_{i=1}^n q(\bz | \bx_i)$ -- \textbf{aggregated} posterior distribution.
 			\item $\bbI_{q} [\bx, \bz]$ -- mutual information between $\bx$ and $\bz$ under empirical data distribution and distribution $q(\bz | \bx)$.
-			\item First term pushes $q_{\text{agg}}(\bz)$ towards the prior $p(\bz)$.
-			\item Second term reduces the amount of	information about $\bx$ stored in $\bz$. 
+			\item  {\color{violet} First term} pushes $q_{\text{agg}}(\bz)$ towards the prior $p(\bz)$.
+			\item {\color{teal}Second term} reduces the amount of	information about $\bx$ stored in $\bz$. 
 		\end{itemize}
 	\end{block}
 	\myfootnotewithlink{http://approximateinference.org/accepted/HoffmanJohnson2016.pdf}{Hoffman M. D., Johnson M. J. ELBO surgery: yet another way to carve up the variational evidence lower bound, 2016}
@@ -307,9 +321,9 @@ What are the pros and cons of each of them? \\
 		{\footnotesize
 		\begin{multline*}
 		    \frac{1}{n} \sum_{i=1}^n KL(q(\bz | \bx_i) || p(\bz)) = \frac{1}{n} \sum_{i=1}^n \int q(\bz | \bx_i) \log \frac{q(\bz | \bx_i)}{p(\bz)} d \bz = \\
-		    = \frac{1}{n} \sum_{i=1}^n \int q(\bz | \bx_i) \log \frac{q_{\text{agg}}(\bz) q(\bz | \bx_i)}{p(\bz)q_{\text{agg}}(\bz)} d \bz 
-		    = \int \frac{1}{n} \sum_{i=1}^n  q(\bz | \bx_i) \log \frac{q_{\text{agg}}(\bz)}{p(\bz)} d \bz + \\ 
-		    + \frac{1}{n}\sum_{i=1}^n \int q(\bz | \bx_i) \log \frac{q(\bz | \bx_i)}{q_{\text{agg}}(\bz)} d \bz = 
+		    = \frac{1}{n} \sum_{i=1}^n \int q(\bz | \bx_i) \log \frac{{\color{violet}q_{\text{agg}}(\bz)} {\color{teal}q(\bz | \bx_i)}}{{\color{violet}p(\bz)} {\color{teal}q_{\text{agg}}(\bz)}} d \bz 
+		    = \int \frac{1}{n} \sum_{i=1}^n  q(\bz | \bx_i) \log {\color{violet}\frac{q_{\text{agg}}(\bz)}{p(\bz)}} d \bz + \\ 
+		    + \frac{1}{n}\sum_{i=1}^n \int q(\bz | \bx_i) \log {\color{teal}\frac{q(\bz | \bx_i)}{q_{\text{agg}}(\bz)}} d \bz = 
 		     KL (q_{\text{agg}}(\bz) || p(\bz)) + \frac{1}{n}\sum_{i=1}^n KL(q(\bz | \bx_i) || q_{\text{agg}}(\bz))
 		\end{multline*}
 		}
@@ -339,7 +353,7 @@ What are the pros and cons of each of them? \\
 	  		KL(q_{\text{agg}}(\bz) || p(\bz)) = 0 \quad \Leftrightarrow \quad p (\bz) = q_{\text{agg}}(\bz) = \frac{1}{n} \sum_{i=1}^n q(\bz | \bx_i).
 		\]
 		\vspace{-0.4cm} \\
-		The optimal prior $p(\bz)$ is the aggregated posterior $q_{\text{agg}}(\bz)$.
+		The optimal prior $p(\bz)$ is the aggregated posterior $q_{\text{agg}}(\bz)$!
 	\end{block}
 	
 	\myfootnotewithlink{http://approximateinference.org/accepted/HoffmanJohnson2016.pdf}{Hoffman M. D., Johnson M. J. ELBO surgery: yet another way to carve up the variational evidence lower bound, 2016}
@@ -401,28 +415,28 @@ What are the pros and cons of each of them? \\
 	\myfootnotewithlink{https://arxiv.org/abs/1611.02731}{Chen X. et al. Variational Lossy Autoencoder, 2016}
 \end{frame}
 %=======
+\section{VAE posterior}
+%=======
 \begin{frame}{VAE limitations}
 	\begin{itemize}
 		\item Poor generative distribution (decoder)
 		\[
-			p(\bx | \bz, \btheta) = \mathcal{N}(\bx| \bmu_{\btheta}(\bz), \bsigma^2_{\btheta}(\bz)) \quad \text{or } = \text{Softmax}(\bpi_{\btheta}(\bz)).
+		p(\bx | \bz, \btheta) = \mathcal{N}(\bx| \bmu_{\btheta}(\bz), \bsigma^2_{\btheta}(\bz)) \quad \text{or } = \text{Softmax}(\bpi_{\btheta}(\bz)).
 		\]
 		\item Loose lower bound
 		\[
-			\log p(\bx | \btheta) - \mathcal{L}(q, \btheta) = (?).
+		\log p(\bx | \btheta) - \mathcal{L}(q, \btheta) = (?).
 		\]
 		\item Poor prior distribution
 		\[
-			p(\bz) = \mathcal{N}(0, \mathbf{I}).
+		p(\bz) = \mathcal{N}(0, \mathbf{I}).
 		\]
 		\item \textbf{Poor variational posterior distribution (encoder)}
 		\[
-			q(\bz | \bx, \bphi) = \mathcal{N}(\bz| \bmu_{\bphi}(\bx), \bsigma^2_{\bphi}(\bx)).
+		q(\bz | \bx, \bphi) = \mathcal{N}(\bz| \bmu_{\bphi}(\bx), \bsigma^2_{\bphi}(\bx)).
 		\]
 	\end{itemize}
 \end{frame}
-%=======
-\section{VAE posterior}
 %=======
 \begin{frame}{Variational posterior}
 	\begin{block}{ELBO}
