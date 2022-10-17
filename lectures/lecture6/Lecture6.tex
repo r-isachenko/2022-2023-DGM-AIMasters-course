@@ -183,7 +183,7 @@
 \begin{frame}{Inverse gaussian autoregressive flow (IAF)}
 	
 	\begin{minipage}[t]{0.65\columnwidth}
-		\begin{block}{Gaussian autoregressive flow: $f(\bx, \btheta)$}
+		\begin{block}{Gaussian autoregressive flow: $g(\bz, \btheta)$}
 			\[
 			x_j = \sigma_j (\bx_{1:j-1}) \cdot z_j + \mu_j(\bx_{1:j-1}).
 			\]
@@ -197,7 +197,7 @@
 	\end{minipage} \\
 	
 	\begin{minipage}[t]{0.65\columnwidth}
-		\begin{block}{Inverse transform: $g(\bz, \btheta)$}
+		\begin{block}{Inverse transform: $f(\bx, \btheta)$}
 			\vspace{-0.5cm}
 			\begin{align*}
 				z_j &= (x_j - \mu_j(\bx_{1:j-1})) \cdot \frac{1}{\sigma_j (\bx_{1:j-1}) }; \\
@@ -215,7 +215,7 @@
 	\vspace{0.1cm}
 	
 	\begin{minipage}[t]{0.65\columnwidth}
-		\begin{block}{Inverse gaussian autoregressive flow: $f(\bx, \btheta)$}
+		\begin{block}{Inverse gaussian autoregressive flow: $g(\bz, \btheta)$}
 			\vspace{-0.3cm}
 			\[
 			x_j = \tilde{\sigma}_j (\bz_{1:j-1}) \cdot z_j + \tilde{\mu}_j(\bz_{1:j-1}).
@@ -391,8 +391,8 @@
 		\begin{tabular}{l|c|c}
 			& \textbf{VAE} & \textbf{NF} \\ \hline
 			\textbf{Objective} & ELBO $\cL$ & Forward KL/MLE \\ \hline
-			\textbf{Encoder} & \shortstack{stochastic \\ $\bz \sim q (\bz | \bx, \bphi)$} &  \shortstack{\\ deterministic \\ $\bz = f(\bx | \btheta)$ \\ $q(\bz | \bx, \btheta) = \delta(\bz - f(\bx, \btheta))$}  \\ \hline
-			\textbf{Decoder} & \shortstack{stochastic \\ $\bx \sim p (\bx | \bz, \btheta)$} & \shortstack{\\ deterministic \\ $\bx = g(\bz | \btheta)$ \\ $ p(\bx | \bz, \btheta) = \delta(\bx - g(\bz, \btheta))$} \\ \hline
+			\textbf{Encoder} & \shortstack{stochastic \\ $\bz \sim q (\bz | \bx, \bphi)$} &  \shortstack{\\ deterministic \\ $\bz = f(\bx, \btheta)$ \\ $q(\bz | \bx, \btheta) = \delta(\bz - f(\bx, \btheta))$}  \\ \hline
+			\textbf{Decoder} & \shortstack{stochastic \\ $\bx \sim p (\bx | \bz, \btheta)$} & \shortstack{\\ deterministic \\ $\bx = g(\bz, \btheta)$ \\ $ p(\bx | \bz, \btheta) = \delta(\bx - g(\bz, \btheta))$} \\ \hline
 			\textbf{Parameters}  & $\bphi, \btheta$ & $\btheta \equiv \bphi$\\ 
 		\end{tabular}
 	\end{table}
@@ -414,18 +414,18 @@
 		\begin{enumerate}
 			\item Dirac delta function property 
 			\[
-				\bbE_{\delta(\bx - \by)} f(\bx) d \bx = \int \delta(\bx - \by) f(\bx) = f(\by)
+				\bbE_{\delta(\bx - \by)} f(\bx) d \bx = \int \delta(\bx - \by) f(\bx) d \bx = f(\by).
 			\]
 			\item CoV theorem and Bayes theorem:
 			\[
-				p(\bx | \btheta) = p(\bz) |\det (\bJ_f)|
+				p(\bx | \btheta) = p(\bz) |\det (\bJ_f)|;
 			\]
 			\[
-				p(\bz | \bx, \btheta) = \frac{p(\bx | \bz, \btheta) p(\bz)}{p(\bx | \btheta)}; \quad \Rightarrow \quad p(\bx | \bz, \btheta) = p(\bz | \bx, \btheta) |\det (\bJ_f)|
+				p(\bz | \bx, \btheta) = \frac{p(\bx | \bz, \btheta) p(\bz)}{p(\bx | \btheta)}; \quad \Rightarrow \quad p(\bx | \bz, \btheta) = p(\bz | \bx, \btheta) |\det (\bJ_f)|.
 			\]
 			\item Log-likelihood decomposition
 			\[
-				\log p(\bx | \btheta) = \cL(\bphi, \btheta) + {\color{olive}KL(q(\bz | \bx, \bphi) || p(\bz | \bx, \btheta))}
+				\log p(\bx | \btheta) = \cL(\btheta) + {\color{olive}KL(q(\bz | \bx, \btheta) || p(\bz | \bx, \btheta))} = \cL(\btheta).
 			\]
 		\end{enumerate}
 	\end{block}
@@ -445,19 +445,21 @@
 			\item  Dirac delta function property:
 			\vspace{-0.3cm}
 			\[
-				{\color{teal}\bbE_{q(\bz | \bx)} \log p(\bz)} = \int \delta (\bz - f(\bx)) p(\bz) d \bz = \log p(f(\bx)).
+				{\color{teal}\bbE_{q(\bz | \bx, \btheta)} \log p(\bz)} = \int \delta (\bz - f(\bx, \btheta)) \log p(\bz) d \bz = \log p(f(\bx, \btheta)).
 			\]
 			\vspace{-0.6cm}
 			\item CoV theorem and Bayes theorem:
 			\vspace{-0.2cm}
+			{ \small
 			\[ 
-				{\color{violet}\bbE_{q(\bz | \bx, \bphi)} \log \frac{p(\bx | \bz, \btheta)}{q(\bz | \bx, \bphi)}} = \bbE_{q(\bz | \bx, \bphi)} \log \frac{p(\bz | \bx) |\det (\bJ_f)|}{q(\bz | \bx, \bphi)} = \log |\det \bJ_f|.
+				{\color{violet}\bbE_{q(\bz | \bx, \btheta)} \log \frac{p(\bx | \bz, \btheta)}{q(\bz | \bx, \btheta)}} = \bbE_{q(\bz | \bx, \btheta)} \log \frac{p(\bz | \bx, \btheta) |\det (\bJ_f)|}{q(\bz | \bx, \btheta)} = \log |\det \bJ_f|.
 			\]
+			}
 			\vspace{-0.6cm}
 			\item Log-likelihood decomposition
 			\vspace{-0.3cm}
 			\[
-				\log p(\bx | \btheta) = \cL(\btheta) = \log p(f(\bx)) +  \log |\det \bJ_f|.
+				\log p(\bx | \btheta) = \cL(\btheta) = \log p(f(\bx, \btheta)) +  \log |\det \bJ_f|.
 			\]
 		\end{enumerate}
 	\end{block}
@@ -466,9 +468,9 @@
 %=======
 \begin{frame}{Summary}
 	\begin{itemize}
-		\item Gaussian autoregressive flow is an autoregressive model with triangular Jacobian. It has fast inference function and slow generation function.
+		\item Gaussian autoregressive flow is an autoregressive model with triangular Jacobian. It has fast inference function and slow generation function. Forward KL is a natural loss function.
 		\vfill
-		\item Inverse gaussian autoregressive flow generate new samples fast, but the inference is slow.
+		\item Inverse gaussian autoregressive flow generate new samples fast, but the inference is slow. Reverse KL is a natural loss function.
 		\vfill
 		\item The RealNVP coupling layer is an effective type of flow (special case of AR flows) that has fast inference and generation modes.
 		\vfill
