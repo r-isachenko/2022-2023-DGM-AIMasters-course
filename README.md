@@ -32,7 +32,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 5 | October, 10 | <b>Lecture:</b> Normalizing Flow (NF) intuition and definition. Forward and reverse KL divergence for NF. Linear flows. | [slides](lectures/lecture5/Lecture5.pdf) |
 |  |  | <b>Seminar:</b> VAE implementation hints. IWAE model. | [notebook](seminars/seminar5/seminar5.ipynb) |
 | 6 | October, 17 | <b>Lecture:</b> Autoregressive flows (gausian AR NR/inverse gaussian AR NF). Coupling layer (RealNVP). NF as VAE model. | [slides](lectures/lecture6/Lecture6.pdf) |
-|  |  | <b>Seminar:</b> Planar flows. Forward vs Reverse KL. VAE vs Normalizing flows. | TBA |
+|  |  | <b>Seminar:</b> Flows. Planar flows. Forward KL vs Reverse KL. Planar flows via Forward KL and Reverse KL | [notebook](seminars/seminar6/seminar6.ipynb) [planar_flow_practice](seminars/seminar6/planar_flow.ipynb) [autograd_jacobian](seminars/seminar6/jacobian_note.ipynb) |
 | 7 | October, 24 | <b>Lecture:</b> Uniform and variational dequantization. ELBO surgery and optimal VAE prior. Flows-based VAE posterior vs flow-based VAE prior. | TBA |
 |  |  | <b>Seminar:</b> VAE prior (VampPrior). SurVAE. RealNVP hints. | TBA |
 | 8 | October, 31 | <b>Lecture:</b> Disentanglement learning (beta-VAE, DIP-VAE + summary). Likelihood-free learning. GAN theorem. | TBA |
