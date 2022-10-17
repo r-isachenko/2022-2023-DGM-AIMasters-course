@@ -17,4 +17,4 @@
 
 # addition by PVMokrov
 *_git_ignore.*
-*__pycache__/*
+*__pycache__*
