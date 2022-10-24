@@ -70,8 +70,8 @@
 		\begin{tabular}{l|c|c}
 			& \textbf{VAE} & \textbf{NF} \\ \hline
 			\textbf{Objective} & ELBO $\cL$ & Forward KL/MLE \\ \hline
-			\textbf{Encoder} & \shortstack{stochastic \\ $\bz \sim q (\bz | \bx, \bphi)$} &  \shortstack{\\ deterministic \\ $\bz = f(\bx | \btheta)$ \\ $q(\bz | \bx, \btheta) = \delta(\bz - f(\bx, \btheta))$}  \\ \hline
-			\textbf{Decoder} & \shortstack{stochastic \\ $\bx \sim p (\bx | \bz, \btheta)$} & \shortstack{\\ deterministic \\ $\bx = g(\bz | \btheta)$ \\ $ p(\bx | \bz, \btheta) = \delta(\bx - g(\bz, \btheta))$} \\ \hline
+			\textbf{Encoder} & \shortstack{stochastic \\ $\bz \sim q (\bz | \bx, \bphi)$} &  \shortstack{\\ deterministic \\ $\bz = f(\bx, \btheta)$ \\ $q(\bz | \bx, \btheta) = \delta(\bz - f(\bx, \btheta))$}  \\ \hline
+			\textbf{Decoder} & \shortstack{stochastic \\ $\bx \sim p (\bx | \bz, \btheta)$} & \shortstack{\\ deterministic \\ $\bx = g(\bz, \btheta)$ \\ $ p(\bx | \bz, \btheta) = \delta(\bx - g(\bz, \btheta))$} \\ \hline
 			\textbf{Parameters}  & $\bphi, \btheta$ & $\btheta \equiv \bphi$\\ 
 		\end{tabular}
 	\end{table}
@@ -137,7 +137,7 @@
 	\begin{block}{Model discretization through CDF}
 		\vspace{-0.6cm}
 		\[
-			F(\bx | \btheta) = \int_{-\infty}^{\bx'} p(\bx' | \btheta) d\bx'; \quad 
+			F(\bx | \btheta) = \int_{-\infty}^{\bx} p(\bx' | \btheta) d\bx'; \quad 
 			P(\by | \btheta) = F(\by + 0.5 | \btheta) - F(\by - 0.5 | \btheta)
 		\]
 	\end{block}
@@ -186,7 +186,7 @@
 		\vspace{-0.8cm}
 		{\small
 		\begin{multline*}
-			\bbE_{\pi} \log p(\bx | \btheta) = \int \pi(\bx) \log p(\bx | \btheta) d \by = \sum \Pi(\by) \int_{U[0,1]} \log p(\by + \bu | \btheta) d \bu \leq \\
+			\bbE_{\pi} \log p(\bx | \btheta) = \int \pi(\bx) \log p(\bx | \btheta) d \bx = \sum \Pi(\by) \int_{U[0,1]} \log p(\by + \bu | \btheta) d \bu \leq \\
 			\leq \sum \Pi(\by) \log \int_{U[0,1]}  p(\by + \bu | \btheta) d \bu = \\ = \sum \Pi(\by) \log P(\by | \btheta) = \bbE_{\Pi} \log P(\by | \btheta).
 		\end{multline*}
 		}
@@ -226,16 +226,16 @@
 		\end{multline*}
 		\vspace{-0.6cm}
 	\end{block}
-	Uniform dequantization is a special case of variational dequantization ($q(\bu | \bx) = U[0, 1]$).
+	Uniform dequantization is a special case of variational dequantization ($q(\bu | \by) = U[0, 1]$).
 	\begin{block}{Flow++: flow-based variational dequantization}
-		Let $\bu = g(\bepsilon, \bx, \blambda)$ is a flow model with base distribution $\bepsilon \sim p(\bepsilon)$:
+		Let $\bu = g(\bepsilon, \by, \blambda)$ is a flow model with base distribution $\bepsilon \sim p(\bepsilon)$:
 		\vspace{-0.3cm}
 		\[
-		q(\bu | \bx) = p(f(\bu, \bx, \blambda)) \cdot \left| \det \frac{\partial f(\bu, \bx, \blambda)}{\partial \bu}\right|.
+		q(\bu | \by) = p(f(\bu, \by, \blambda)) \cdot \left| \det \frac{\partial f(\bu, \by, \blambda)}{\partial \bu}\right|.
 		\]
 		\vspace{-0.3cm}
 		\[
-		\log P(\bx | \btheta) \geq \cL(\blambda, \btheta) = \int p(\bepsilon) \log \left( \frac{p(\bx + g(\bepsilon, \bx, \blambda) | \btheta)}{p(\bepsilon) \cdot \left| \det \bJ_g\right|^{-1}} \right) d\bepsilon.
+		\log P(\by | \btheta) \geq \cL(\blambda, \btheta) = \int p(\bepsilon) \log \left( \frac{p(\by + g(\bepsilon, \by, \blambda) | \btheta)}{p(\bepsilon) \cdot \left| \det \bJ_g\right|^{-1}} \right) d\bepsilon.
 		\]
 		\vspace{-0.3cm}
 	\end{block}
@@ -252,7 +252,7 @@
 	\vspace{-0.3cm}
 	\begin{block}{Theorem}
 		\[
-		    \frac{1}{n} \sum_{i=1}^n KL(q(\bz | \bx_i) || p(\bz)) = {\color{violet} KL(q_{\text{agg}}(\bz) || p(\bz))} + {\color{teal}\bbI_{q} [\bx, \bz]}
+		    \frac{1}{n} \sum_{i=1}^n KL(q(\bz | \bx_i) || p(\bz)) = {\color{violet} KL(q_{\text{agg}}(\bz) || p(\bz))} + {\color{teal}\bbI_{q} [\bx, \bz]};
 		\]
 		\begin{itemize}
 			\item $q_{\text{agg}}(\bz) = \frac{1}{n} \sum_{i=1}^n q(\bz | \bx_i)$ -- \textbf{aggregated} posterior distribution.
@@ -445,114 +445,6 @@
 	Let $q(\bz | \bx, \bphi)$ (VAE encoder) be a base distribution for a flow model.
 \end{frame}
 %=======
-\begin{frame}{Flows in VAE posterior}
-	\begin{itemize}
-		\item Encoder outputs base distribution $q(\bz | \bx, \bphi)$.
-		\item Flow model $\bz^* = f(\bz, \blambda)$ transforms the base distribution $q(\bz | \bx, \bphi)$ to the distribution $q(\bz^* | \bx, \bphi, \blambda)$.
-		\item Distribution $q(\bz^* | \bx, \bphi, \blambda)$ is used as a variational distribution for ELBO maximization. 
-		\item Here $\bphi$~-- encoder parameters, $\blambda$~-- flow parameters.
-	\end{itemize}
-	\begin{block}{Flow model in latent space}
-		\vspace{-0.5cm}
-		\[
-			\log q(\bz^* | \bx, \bphi, \blambda) = \log q(\bz | \bx, \bphi) + \log \left | \det \left( \frac{d \bz}{d \bz^*}\right) \right|
-		\]
-		\vspace{-0.3cm}
-		\[
-			\bz^* = f(\bz, \blambda) = g^{-1}(\bz^*, \blambda)
-		\]
-		\vspace{-0.7cm}
-	\end{block}
-	\begin{block}{ELBO with flow-based VAE posterior}
-		\vspace{-0.6cm}
-		\[
-			\mathcal{L} (\bphi, \btheta, \blambda) =  \bbE_{q(\bz^* | \bx, \bphi, \blambda)} \log p(\bx | \bz^*, \btheta) - {\color{violet}KL (q(\bz^* | \bx, \bphi, \blambda) || p(\bz^*))}.
-		\]
-		\vspace{-0.6cm}
-	\end{block}
-	{\color{violet}The second term} in ELBO is reverse KL divergence with respect to $q(\bz^* | \bx, \bphi, \blambda)$.
-	
-	\myfootnotewithlink{https://arxiv.org/abs/1505.05770}{Rezende D. J., Mohamed S. Variational Inference with Normalizing Flows, 2015} 
-\end{frame}
-%=======
-\begin{frame}{Flow-based VAE posterior}
-	\begin{block}{ELBO objective}
-		\vspace{-0.5cm}
-		{ \small
-		\begin{multline*}
-			\mathcal{L} (\bphi, \btheta, \blambda)  
-			= \mathbb{E}_{q(\bz^* | \bx, \bphi, \blambda)} \bigl[\log p(\bx | \bz^*, \btheta) + \log p(\bz^*) - {\color{teal}\log q(\bz^*| \bx, \bphi, \blambda)} \bigr] = \\
-			= \mathbb{E}_{q(\bz^* | \bx, \bphi, \blambda)} \bigg[\log p(\bx| \bz^*, \btheta)  + \log p(\bz^*) - \\ - \Bigl({\color{teal}\log q(g(\bz^*, \blambda) | \bx, \bphi ) + \log | \det \left( \bJ_g ) \right| }\Bigr)  \bigg].
-		\end{multline*}
-		}
-		\vspace{-0.7cm}
-	\end{block}
-	\begin{itemize}
-		\item RealNVP with coupling layers.
-		\item Inverse autoregressive flow (slow $f(\bz, \blambda)$, fast $g(\bz^*, \blambda)$).
-		\item {\color{gray}Is it OK to use AF for VAE posterior?}
-	\end{itemize}
-	\begin{figure}
-		\includegraphics[width=\linewidth]{figs/iaf2.png}
-	\end{figure}
-
-	\myfootnotewithlink{https://arxiv.org/abs/1505.05770}{Rezende D. J., Mohamed S. Variational Inference with Normalizing Flows, 2015} 
-\end{frame}
-%=======
-\begin{frame}{Flows-based VAE prior vs posterior}
-	\begin{block}{Theorem}
-	VAE with the flow-based prior $p(\bz | \blambda)$ for latent code $\bz^*$ is equivalent to VAE with flow-based posterior $q(\bz | \bx, \bphi, \blambda)$ for latent code $\bz$.
-	\end{block}
-	\begin{block}{Proof}
-	\vspace{-0.5cm}
-	\begin{align*}
-		\mathcal{L}(\bphi, \btheta, \blambda) &= \mathbb{E}_{q(\bz | \bx, \bphi)} \log p(\bx | \bz, \btheta) - \underbrace{KL( q(\bz | \bx, \bphi) || p(\bz | {\color{violet}\blambda}))}_{\text{flow-based prior}} \\
-		& = \mathbb{E}_{q(\bz^* | \bx, \bphi, \blambda)} \log p(\bx | f(\bz^*, \blambda), \btheta) - \underbrace{KL( q(\bz^* | \bx, \bphi, {\color{violet}\blambda}) || p(\bz^*))}_{\text{flow-based posterior}}
-	\end{align*}
-	(Here we use Flow KL duality theorem from Lecture 5 and LOTUS)
-	\end{block}
-	\begin{itemize}
-		\item IAF posterior decoder path: $\bz \sim p(\bz)$, $\bx \sim p(\bx|\bz, \btheta)$.
-		\item AF prior decoder path: $\bz^* \sim p(\bz^*)$, $\bz = f(\bz^*, \blambda)$, $\bx \sim p(\bx|\bz, \btheta)$. 
-	\end{itemize}
-	\myfootnotewithlink{https://arxiv.org/abs/1611.02731}{Chen X. et al. Variational Lossy Autoencoder, 2016}
-\end{frame}
-%=======
-\begin{frame}{Flows-based VAE prior vs posterior}
-	\vspace{-0.2cm}
-	\begin{figure}
-		\includegraphics[width=0.9\linewidth]{figs/iaf1.png}
-	\end{figure}
-	\vspace{-0.3cm}
-	\begin{figure}
-		\includegraphics[width=0.65\linewidth]{figs/prior_vs_posterior}
-	\end{figure}
-
-	\myfootnote{\href{https://arxiv.org/abs/1606.04934}{Kingma D. P. et al. Improving Variational Inference with Inverse Autoregressive Flow, 2016} \\
-	\href{https://courses.cs.washington.edu/courses/cse599i/20au/slides/L09_flow.pdf}{image credit: https://courses.cs.washington.edu/courses/cse599i/20au}}
-\end{frame}
-%=======
-\begin{frame}{VAE limitations}
-	\begin{itemize}
-		\item Poor generative distribution (decoder)
-		\[
-			p(\bx | \bz, \btheta) = \mathcal{N}(\bx| \bmu_{\btheta}(\bz), \bsigma^2_{\btheta}(\bz)) \quad \text{or } = \text{Softmax}(\bpi_{\btheta}(\bz)).
-		\]
-		\item Loose lower bound
-		\[
-			\log p(\bx | \btheta) - \mathcal{L}(q, \btheta) = (?).
-		\]
-		\item Poor prior distribution
-		\[
-			p(\bz) = \mathcal{N}(0, \mathbf{I}).
-		\]
-		\item Poor variational posterior distribution (encoder)
-		\[
-			q(\bz | \bx, \bphi) = \mathcal{N}(\bz| \bmu_{\bphi}(\bx), \bsigma^2_{\bphi}(\bx)).
-		\]
-	\end{itemize}
-\end{frame}
-%=======
 \begin{frame}{Summary}
 	\begin{itemize}
 		\item Lots of data are discrete. We able to discretize the model or to dequantize our data to use continuous model.
@@ -563,7 +455,7 @@
 		\vfill
 		\item We could use flow-based prior in VAE (even autoregressive).
 		\vfill
-		\item We could use flows to make variational posterior more expressive. This is equivalent to the flow-based prior in some sort. 
+		\item We could use flows to make variational posterior more expressive. 
 	\end{itemize}
 \end{frame}
 
