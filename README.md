@@ -34,7 +34,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 6 | October, 17 | <b>Lecture:</b> Autoregressive flows (gausian AR NF/inverse gaussian AR NF). Coupling layer (RealNVP). NF as VAE model. | [slides](lectures/lecture6/Lecture6.pdf) |
 |  |  | <b>Seminar:</b> Flows. Planar flows. Forward KL vs Reverse KL. Planar flows via Forward KL and Reverse KL | [notebook](seminars/seminar6/seminar6.ipynb)<br>[planar_flow_practice](seminars/seminar6/planar_flow.ipynb)<br>[autograd_jacobian](seminars/seminar6/jacobian_note.ipynb) |
 | 7 | October, 24 | <b>Lecture:</b> Discrete data vs contiuous model: model discretization and data dequantization. Uniform and variational dequantizations. ELBO surgery and optimal VAE prior. Flows-based VAE prior and posterior. | [slides](lectures/lecture7/Lecture7.pdf) |
-|  |  | <b>Seminar:</b> VAE prior (VampPrior). SurVAE. RealNVP hints. | TBA |
+|  |  | <b>Seminar:</b> RealNVP hints. Discretization of continuous distribution. MADE++ | [notebook](seminars/seminar7/seminar7.ipynb) |
 | 8 | October, 31 | <b>Lecture:</b> Flows-based VAE prior and posterior. Disentanglement learning (beta-VAE, DIP-VAE + summary). Likelihood-free learning. GAN theorem. | TBA |
 |  |  | <b>Seminar:</b> GAN vs VAE vs NF. GAN in 1d coding. | TBA |
 | 9 | November, 7 | <b>Lecture:</b> Vanishing gradients and mode collapse, KL vs JSD. Adversarial Variational Bayes. Wasserstein distance. | TBA |
