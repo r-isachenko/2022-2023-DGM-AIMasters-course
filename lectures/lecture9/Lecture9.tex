@@ -10,6 +10,65 @@
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
+	\begin{block}{Standart ELBO}
+		\vspace{-0.3cm}
+		\[
+		p(\bx | \btheta) \geq \mathcal{L} (\bphi, \btheta)  = \mathbb{E}_{q(\bz | \bx, \bphi)} \log \frac{p(\bx, \bz | \btheta)}{q(\bz| \bx, \bphi)} \rightarrow \max_{\bphi, \btheta}.
+		\]
+		\vspace{-0.5cm}
+	\end{block}
+	\begin{block}{Expressive flow-based VAE posterior}
+		\vspace{-0.3cm}
+		\[
+		\log q(\bz^* | \bx, \bphi, \blambda) = \log q(\bz | \bx, \bphi) + \log \left| \det \left( \frac{\partial g(\bz, \blambda)}{\partial \bz} \right) \right|
+		\]
+		\vspace{-0.3cm}
+	\end{block}
+	\begin{block}{ELBO with flow-based posterior}
+		\vspace{-0.8cm}
+		\begin{multline*}
+			\mathcal{L} (\bphi, \btheta, \blambda)  
+			= \mathbb{E}_{q(\bz^* | \bx, \bphi, \blambda)} \bigl[\log p(\bx, \bz^* | \btheta) - \log q(\bz^*| \bx, \bphi, \blambda) \bigr] = \\
+			= \mathbb{E}_{q(\bz | \bx, \bphi)} \bigg[\log p(\bx, g(\bz, \blambda) | \btheta) -  \log q(\bz | \bx, \bphi ) + \log \left| \det (\bJ_g) \right| \bigg].
+		\end{multline*}
+		\vspace{-0.6cm}
+	\end{block}
+	\begin{itemize}
+		\item Obtain samples $\bz$ from the encoder $q(\bz | \bx, \bphi)$.
+		\item Apply flow model $\bz^* = g(\bz, \blambda)$.
+		\item Compute likelihood for $\bz^*$ using the decoder, base distribution for $\bz^*$ and the Jacobian.
+	\end{itemize}
+	\myfootnotewithlink{https://arxiv.org/abs/1505.05770}{Rezende D. J., Mohamed S. Variational Inference with Normalizing Flows, 2015} 
+\end{frame}
+%=======
+\begin{frame}{Recap of previous lecture}
+	\begin{block}{Expressive flow-based VAE posterior}
+		\vspace{-0.3cm}
+		\[
+		\log q(\bz^* | \bx, \bphi, \blambda) = \log q(\bz | \bx, \bphi) + \log \det \left | \frac{\partial g(\bz, \blambda)}{\partial \bz}\right|
+		\]
+		\vspace{-0.5cm}
+	\end{block}
+	\begin{block}{Expressive flow-based VAE prior}
+		\vspace{-0.5cm}
+		\[
+		\log p(\bz | \blambda) = \log p(\bz^*) + \log \left | \det \left(\frac{d \bz^*}{d\bz}\right)\right|; \quad 
+		\bz = f(\bz^*, \blambda) = g^{-1}(\bz^*, \blambda)
+		\]
+	\end{block}
+	\vspace{-0.6cm}
+	\begin{block}{Theorem}
+		VAE with the flow-based prior for latent code $\bz$ is equivalent to VAE with flow-based posterior for latent code $\bz$.
+	\end{block}
+	\vspace{-0.6cm}
+	\begin{align*}
+		\mathcal{L}(\bphi, \btheta, \blambda) &= \mathbb{E}_{q(\bz | \bx, \bphi)} \log p(\bx | \bz, \btheta) - \underbrace{KL( q(\bz | \bx, \bphi) || p(\bz | \blambda))}_{\text{flow-based prior}} \\
+		& = \mathbb{E}_{q(\bz | \bx, \bphi)} \log p(\bx | \bz, \btheta) - \underbrace{KL( q(\bz | \bx, \bphi, \blambda) || p(\bz))}_{\text{flow-based posterior}}
+	\end{align*}
+	\myfootnotewithlink{https://arxiv.org/abs/1611.02731}{Chen X. et al. Variational Lossy Autoencoder, 2016}
+\end{frame}
+%=======
+\begin{frame}{Recap of previous lecture}
 	\begin{block}{Disentanglement learning}
 	A disentangled representation is a one where single latent units are sensitive to changes in single generative factors, while being invariant to changes in other factors. 
 	\end{block}
