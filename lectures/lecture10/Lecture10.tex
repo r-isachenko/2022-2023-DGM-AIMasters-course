@@ -38,12 +38,6 @@
 		\]
 		\vspace{-0.7cm}
 	\end{block}
-	\begin{block}{Main problems}
-		\begin{itemize}
-			\item Vanishing gradients (non-saturating GAN does not suffer of it);
-			\item Mode collapse (caused by behaviour of Jensen-Shannon divergence).
-		\end{itemize}
-	\end{block}
 	\vspace{-0.1cm}
 	\begin{block}{Informal theoretical results}
 		The real images distribution $\pi(\bx)$ and the generated images distribution $p(\bx | \btheta)$ are low-dimensional and have disjoint supports. In this case
@@ -81,84 +75,6 @@
 %=======
 \begin{frame}{Outline}
 	\tableofcontents
-\end{frame}
-%=======
-\section{Wasserstein GAN}
-%=======
-\begin{frame}{Wasserstein GAN}
-		\begin{block}{Theorem (Kantorovich-Rubinstein duality)}
-		\[
-			W(\pi || p) = \frac{1}{K} \max_{\| f \|_L \leq K} \left[ \bbE_{\pi(\bx)} f(\bx)  - \bbE_{p(\bx)} f(\bx)\right],
-		\]
-	\end{block}
-	\begin{itemize}
-		\item Now we have to ensure that $f$ is $K$-Lipschitz continuous.
-		\item Let $f(\bx, \bphi)$ be a feedforward neural network parametrized by~$\bphi$.
-		\item If parameters $\bphi$ lie in a compact set $\boldsymbol{\Phi}$ then $f(\bx, \bphi)$ will be $K$-Lipschitz continuous function. 
-		\item Let the parameters be clamped to a fixed box $\boldsymbol{\Phi} \in [-0.01, 0.01]^d$ after each gradient update.
-	\end{itemize}
-	\begin{multline*}
-		 K \cdot W(\pi || p) = \max_{\| f \|_L \leq K} \left[ \bbE_{\pi(\bx)} f(\bx)  - \bbE_{p(\bx)} f(\bx)\right] \geq \\  \geq \max_{\bphi \in \boldsymbol{\Phi}} \left[ \bbE_{\pi(\bx)} f(\bx, \bphi)  - \bbE_{p(\bx)} f(\bx, \bphi )\right]
-	\end{multline*}
-
-	\myfootnotewithlink{https://arxiv.org/abs/1701.07875}{Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017}
-\end{frame}
-%=======
-\begin{frame}{Wasserstein GAN}
-	\begin{block}{Standard GAN objective}
-		\vspace{-0.2cm}
-		\[
-			\min_{\btheta} \max_{\bphi} \bbE_{\pi(\bx)} \log D(\bx, \bphi) + \bbE_{p(\bz)} \log (1 - D(G(\bz, \btheta), \bphi))
-		\]
-		\vspace{-0.2cm}
-	\end{block}
-	\begin{block}{WGAN objective}
-		\vspace{-0.6cm}
-		\[
-		\min_{\btheta} W(\pi || p) \approx \min_{\btheta} \max_{\bphi \in \boldsymbol{\Phi}} \left[ \bbE_{\pi(\bx)} f(\bx, \bphi)  - \bbE_{p(\bz)} f(G(\bz, \btheta), \bphi )\right].
-		\]
-	\end{block}
-	\begin{itemize}
-		\item Discriminator $D$ is similar to the function $f$, but not the same (it is not a classifier anymore). In the WGAN model, function~$f$ is usually called $\textit{critic}$.
-		\item "Weight clipping is a clearly terrible way to enforce a Lipschitz constraint". If the clipping parameter is large, it is hard to train the critic till optimality. If the clipping parameter is too small, it could lead to vanishing gradients.
-	\end{itemize}
-
-	\myfootnotewithlink{https://arxiv.org/abs/1701.07875}{Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017}
-\end{frame}
-%=======
-\begin{frame}{Wasserstein GAN}
-	\begin{figure}
-		\centering
-		\includegraphics[width=0.8\linewidth]{figs/wgan_toy}
-	\end{figure}
-
-	\myfootnotewithlink{https://arxiv.org/abs/1701.07875}{Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017}
-\end{frame}
-%=======
-\begin{frame}{Wasserstein GAN}
-	\begin{minipage}[t]{0.49\columnwidth}
-		\begin{figure}
-			\centering
-			\includegraphics[width=1.0\linewidth]{figs/dcgan_quality}
-		\end{figure}
-	\end{minipage}%
-	\begin{minipage}[t]{0.49\columnwidth}
-		\begin{figure}
-			\centering
-			\includegraphics[width=1.0\linewidth]{figs/wgan_quality}
-		\end{figure}
-	\end{minipage}
-	\begin{itemize}
-		\item $JSD$ correlates poorly with the sample quality. Stays constast nearly maximum value $\log 2 \approx 0.69$.
-		\item $W$ is highly correlated with the sample quality. 
-	\end{itemize}
-	\begin{figure}
-		\centering
-		\includegraphics[width=1.0\linewidth]{figs/wgan_mode_collapse}
-	\end{figure}
-	"In no experiment did we see evidence of mode collapse for the WGAN algorithm."
-
-	\myfootnotewithlink{https://arxiv.org/abs/1701.07875}{Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017}
 \end{frame}
 %=======
 \section{WGAN with Gradient Penalty}
@@ -449,8 +365,6 @@
 %=======
 \begin{frame}{Summary}
 	\begin{itemize} 
-		\item Wasserstein GAN uses Kantorovich-Rubinstein duality for getting Earth Mover distance as model objective.
-		\vfill
 		\item Weight clipping is a terrible way to enforce Lipschitzness. Gradient Penalty works better.
 		\vfill
 		\item Spectral normalization is a weight normalization technique to enforce Lipshitzness, which is helpful for generator and critic.
