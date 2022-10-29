@@ -32,10 +32,10 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 5 | October, 10 | <b>Lecture:</b> Normalizing Flow (NF) intuition and definition. Forward and reverse KL divergence for NF. Linear flows. | [slides](lectures/lecture5/Lecture5.pdf) |
 |  |  | <b>Seminar:</b> VAE implementation hints. IWAE model. | [notebook](seminars/seminar5/seminar5.ipynb) |
 | 6 | October, 17 | <b>Lecture:</b> Autoregressive flows (gausian AR NF/inverse gaussian AR NF). Coupling layer (RealNVP). NF as VAE model. | [slides](lectures/lecture6/Lecture6.pdf) |
-|  |  | <b>Seminar:</b> Flows. Planar flows. Forward KL vs Reverse KL. Planar flows via Forward KL and Reverse KL | [notebook](seminars/seminar6/seminar6.ipynb)<br>[planar_flow_practice](seminars/seminar6/planar_flow.ipynb)<br>[autograd_jacobian](seminars/seminar6/jacobian_note.ipynb) |
-| 7 | October, 24 | <b>Lecture:</b> Discrete data vs contiuous model: model discretization and data dequantization. Uniform and variational dequantizations. ELBO surgery and optimal VAE prior. Flows-based VAE prior and posterior. | [slides](lectures/lecture7/Lecture7.pdf) |
-|  |  | <b>Seminar:</b> RealNVP hints. Discretization of continuous distribution. MADE++ | [notebook](seminars/seminar7/seminar7.ipynb) |
-| 8 | October, 31 | <b>Lecture:</b> Flows-based VAE prior and posterior. Disentanglement learning (beta-VAE, DIP-VAE + summary). Likelihood-free learning. GAN theorem. | TBA |
+|  |  | <b>Seminar:</b> Flows. Planar flows. Forward KL vs Reverse KL. Planar flows via Forward KL and Reverse KL. | [notebook](seminars/seminar6/seminar6.ipynb)<br>[planar_flow_practice](seminars/seminar6/planar_flow.ipynb)<br>[autograd_jacobian](seminars/seminar6/jacobian_note.ipynb) |
+| 7 | October, 24 | <b>Lecture:</b> 7. Discrete data vs continuous model. Model discretization (PixelCNN++). Data dequantization: uniform and variational (Flow++). ELBO surgery and optimal VAE prior. Flow-based VAE prior. | [slides](lectures/lecture7/Lecture7.pdf) |
+|  |  | <b>Seminar:</b> RealNVP hints. Discretization of continuous distribution (MADE++). | [notebook](seminars/seminar7/seminar7.ipynb) |
+| 8 | October, 31 | <b>Lecture:</b> 8. Flows-based VAE posterior vs flow-based VAE prior. Likelihood-free learning. GAN optimality theorem. Vanishing gradients and mode collapse, KL vs JS divergences. | [slides](lectures/lecture8/Lecture8.pdf) |
 |  |  | <b>Seminar:</b> GAN vs VAE vs NF. GAN in 1d coding. | TBA |
 | 9 | November, 7 | <b>Lecture:</b> Vanishing gradients and mode collapse, KL vs JSD. Adversarial Variational Bayes. Wasserstein distance. | TBA |
 |  |  | <b>Seminar:</b> GAN vs VAE theory. KL vs JS divergences. | TBA |
