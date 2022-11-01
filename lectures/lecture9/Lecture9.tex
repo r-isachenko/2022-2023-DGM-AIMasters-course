@@ -23,7 +23,7 @@
 	\end{block}
 	{\color{violet}The second term} in ELBO is \textbf{reverse} KL divergence with respect to $q(\bz^* | \bx, \bphi, \blambda)$.
 		\begin{block}{Theorem}
-		VAE with the flow-based prior $p(\bz | \blambda)$ for latent code $\bz^*$ is equivalent to VAE with flow-based posterior $q(\bz | \bx, \bphi, \blambda)$ for latent code $\bz$.
+		VAE with the flow-based prior $p(\bz | \blambda)$ for latent code $\bz^*$ is equivalent to VAE with flow-based posterior $q(\bz^* | \bx, \bphi, \blambda)$ for latent code $\bz$.
 	\end{block}
 	\vspace{-0.7cm}
 	\begin{align*}
@@ -91,18 +91,116 @@
 		\centering
 		\includegraphics[width=1.0\linewidth]{figs/gan_1}
 	\end{figure}
-	\vspace{-0.3cm}
-	\begin{block}{Main problems}
-		\begin{itemize}
-			\item Vanishing gradients (solution: non-saturating GAN);
-			\item Mode collapse (caused by Jensen-Shannon divergence).
-		\end{itemize}
-	\end{block}
 	\myfootnotewithlink{https://arxiv.org/abs/1406.2661}{Goodfellow I. J. et al. Generative Adversarial Networks, 2014}
 \end{frame}
 %=======
 \begin{frame}{Outline}
 	\tableofcontents
+\end{frame}
+%=======
+\section{Vanishing gradients and mode collapse}
+%=======
+\begin{frame}{Vanishing gradients}
+	\vspace{-0.2cm}
+	\begin{block}{Objective}
+		\vspace{-0.8cm}
+		\[
+		\min_{\btheta} \max_{\bphi} \left[ \bbE_{\pi(\bx)} \log D(\bx, \bphi) + \bbE_{p(\bz)} \log (1 - D(G(\bz, \btheta), \bphi)) \right]
+		\]
+		\vspace{-0.6cm}
+	\end{block}
+	Early in learning, $G$ is poor, $D$ can reject samples with high confidence. In this case, $\log (1 - D(G(\bz, \btheta), \bphi))$ saturates.
+	\begin{minipage}[t]{0.5\columnwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.9\linewidth]{figs/vanishing_gradients_1}
+		\end{figure}
+	\end{minipage}%
+	\begin{minipage}[t]{0.5\columnwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.9\linewidth]{figs/vanishing_gradients_2}
+		\end{figure}
+	\end{minipage}
+	\myfootnotewithlink{https://arxiv.org/abs/1701.04862}{Arjovsky M., Bottou L. Towards Principled Methods for Training Generative Adversarial Networks, 2017}
+\end{frame}
+%=======
+\begin{frame}{Vanishing gradients}
+	\begin{block}{Objective}
+		\vspace{-0.4cm}
+		\[
+		\min_{\btheta} \max_{\bphi} \left[ \bbE_{\pi(\bx)} \log D(\bx, \bphi) + \bbE_{p(\bz)} \log (1 - D(G(\bz, \btheta), \bphi)) \right]
+		\]
+		\vspace{-0.4cm}
+	\end{block}
+	\begin{minipage}[t]{0.45\columnwidth}
+		\begin{block}{Non-saturating GAN}
+			\begin{itemize}
+				\item Maximize $\log D(G(z))$ instead of minimizing $\log (1 - D(G(\bz)))$. \\
+				\item Gradients are getting much stronger, but the training is unstable (with increasing mean and variance).
+			\end{itemize}
+		\end{block}
+	\end{minipage}%
+	\begin{minipage}[t]{0.55\columnwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=1.0\linewidth]{figs/vanishing_gradients_3}
+		\end{figure}
+	\end{minipage}
+	\myfootnotewithlink{https://arxiv.org/abs/1701.04862}{Arjovsky M., Bottou L. Towards Principled Methods for Training Generative Adversarial Networks, 2017}
+\end{frame}
+%=======
+\begin{frame}{Mode collapse}
+	The phenomena where the generator of a GAN collapses to one or few distribution modes.
+	\vspace{-0.15cm}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.75\linewidth]{figs/mode_collapse_1}
+	\end{figure}
+	\vspace{-0.3cm}
+	\begin{figure}
+		\centering
+		\includegraphics[width=1.0\linewidth]{figs/mode_collapse_4}
+	\end{figure}
+	Alternate architectures, adding regularization terms, injecting small noise
+	perturbations and other millions bags and tricks are used to avoid the mode collapse.
+	
+	\myfootnote{\href{https://arxiv.org/abs/1406.2661}{Goodfellow I. J. et al. Generative Adversarial Networks, 2014} \\
+		\href{https://arxiv.org/abs/1611.02163}{Metz L. et al. Unrolled Generative Adversarial Networks, 2016}}
+\end{frame}
+%=======
+\begin{frame}{Jensen-Shannon vs Kullback-Leibler }
+	\begin{itemize}
+		\item $\pi(\bx)$ is a fixed mixture of 2 gaussians.
+		\item $p(\bx | \mu, \sigma) - \cN(\mu, \sigma^2)$.
+	\end{itemize}
+	\begin{block}{Mode covering vs mode seeking}
+		\vspace{-0.7cm}
+		\[
+		KL(\pi || p) = \int \pi(\bx) \log \frac{\pi(\bx)}{p(\bx)}d\bx, \quad KL(p || \pi) = \int p(\bx) \log \frac{p(\bx)}{\pi(\bx)}d\bx
+		\]
+		\[
+		JSD(\pi || p) = \frac{1}{2} \left[KL \left(\pi(\bx) || \frac{\pi(\bx) + p(\bx)}{2}\right) + KL \left(p(\bx) || \frac{\pi(\bx) + p(\bx)}{2}\right) \right]
+		\]
+		\vspace{-0.7cm}
+		
+		\begin{minipage}[t]{0.33\columnwidth}
+			\begin{figure}
+				\includegraphics[width=\linewidth]{figs/forward_KL}
+			\end{figure}
+		\end{minipage}%
+		\begin{minipage}[t]{0.33\columnwidth}
+			\begin{figure}
+				\includegraphics[width=\linewidth]{figs/reverse_KL}
+			\end{figure}
+		\end{minipage}%
+		\begin{minipage}[t]{0.33\columnwidth}
+			\begin{figure}
+				\includegraphics[width=\linewidth]{figs/JSD}
+			\end{figure}
+		\end{minipage}
+		\vspace{-0.3cm}
+	\end{block}
 \end{frame}
 %=======
 \section{Adversatial variational Bayes}
@@ -286,8 +384,8 @@
 		\[
 			 \int \gamma(\bx, \by) d \bx = p(\by); \quad \int \gamma(\bx, \by) d \by = \pi(\bx).
 		\]
+		\item $\Gamma(\pi, p)$ -- the set of all joint distributions $\gamma (\bx, \by)$ with marginals $\pi$ and $p$.
 		\item $\gamma(\bx, \by)$ -- the amount, $\|\bx - \by \|$-- the distance.
-		\item $\Gamma(\pi, p)$ -- the set of all joint distributions $\Gamma (\bx, \by)$ with marginals $\pi$ and $p$.
 	\end{itemize}
 	{\color{gray}For better understanding of transportation plan function $\gamma$, try to write down the plan for previous discrete case.}
 	\myfootnotewithlink{https://arxiv.org/abs/1701.07875}{Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017}
@@ -453,6 +551,8 @@
 %=======
 \begin{frame}{Summary}
 	\begin{itemize}
+		\item Mode collapse and vanishing gradients are the two main problems of vanilla GAN.  Lots of tips and tricks has to be used to make the GAN training is stable and scalable.
+		\vfill
 		\item Adversarial Variational Bayes uses density ratio trick to get more powerful variational posterior.
 		\vfill
 		\item KL and JS divergences work poorly as model objective in the case of disjoint supports.
