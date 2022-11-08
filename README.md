@@ -38,7 +38,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 8 | October, 31 | <b>Lecture:</b> 8. Flows-based VAE posterior vs flow-based VAE prior. Likelihood-free learning. GAN optimality theorem. | [slides](lectures/lecture8/Lecture8.pdf) |
 |  |  | <b>Seminar:</b> VAE with learnable prior. Aggregated posterior. Integer discrete flows  | [notebook](seminars/seminar8/seminar8.ipynb) |
 | 9 | November, 7 | <b>Lecture:</b> Vanishing gradients and mode collapse, KL vs JS divergences. Adversarial Variational Bayes. Wasserstein distance. Wasserstein GAN. | [slides](lectures/lecture9/Lecture9.pdf) |
-|  |  | <b>Seminar:</b> GAN vs VAE theory. KL vs JS divergences. Mode collapse. Vanilla GAN in 1D coding | [notebook](seminars/seminar9/GAN_colab.ipynb)<br>[notebook_done](seminars/seminar9/GAN_colab_with_code.ipynb) |
+|  |  | <b>Seminar:</b> KL vs JS divergences. Mode collapse. Vanilla GAN in 1D coding | [notebook](seminars/seminar9/GAN_colab.ipynb)<br>[notebook_done](seminars/seminar9/GAN_colab_with_code.ipynb) |
 | 10 | November, 14 | <b>Lecture:</b> WGAN-GP. Spectral Normalization GAN. f-divergence minimization. | TBA |
 |  |  | <b>Seminar:</b> WGAN: practice. Optimal transport task. SN-GAN: practice. | TBA |
 | 11 | November, 21 | <b>Lecture:</b> GAN evaluation (Inception score, FID, Precision-Recall, truncation trick). GAN models (Self-Attention GAN, BigGAN, PGGAN, StyleGAN). | TBA |
