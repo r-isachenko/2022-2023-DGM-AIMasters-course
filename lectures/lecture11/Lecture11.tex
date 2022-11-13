@@ -94,61 +94,6 @@
 %=======
 \section{Evaluation of likelihood-free models}
 %=======
-\begin{frame}{Evaluation of likelihood-free models}
-	How to evaluate generative models?
-	\begin{block}{Likelihood-based models}
-		\begin{itemize}
-			\item Split data to train/val/test.
-			\item Fit model on the train part.
-			\item Tune hyperparameters on the validation part.
-			\item Evaluate generalization by reporting likelihoods on the test set.
-		\end{itemize}
-	\end{block}
-	\begin{block}{Not all models have tractable likelihoods}
-		\begin{itemize}
-			\item VAE: compare ELBO values.
-			\item GAN: ???
-		\end{itemize}
-	\end{block}
-\end{frame}
-%=======
-\begin{frame}{Evaluation of likelihood-free models}
-	Let take some pretrained image classification model to get the conditional label distribution $p(y | \bx)$ (e.g. ImageNet classifier).
-	\begin{block}{What do we want from samples?}
-		\begin{itemize}
-			\item \textbf{Sharpness}
-			\begin{figure}
-				\centering
-				\includegraphics[width=0.9\linewidth]{figs/sharpness}
-			\end{figure}
-			The conditional distribution $p(y | \bx)$ should have low entropy (each image $\bx$ should have distinctly recognizable object).
-			\item \textbf{Diversity}
-			\begin{figure}
-				\centering
-				\includegraphics[width=0.9\linewidth]{figs/diversity}
-			\end{figure}
-			The marginal distribution $p(y) = \int p(y | \bx) p(\bx) d \bx$ should have high entropy (there should be as many classes generated as possible).
-		\end{itemize}
-	\end{block}
-	\myfootnotewithlink{https://deepgenerativemodels.github.io}{image credit: https://deepgenerativemodels.github.io}
-\end{frame}
-%=======
-\begin{frame}{Evaluation of likelihood-free models}
-	\begin{block}{What do we want from samples?}
-		\begin{itemize}
-			\item \textbf{Sharpness.}
-			The conditional distribution $p(y | \bx)$ should have low entropy (each image $\bx$ should have distinctly recognizable object).
-			\item \textbf{Diversity.}
-			The marginal distribution $p(y) = \int p(y | \bx) p(\bx) d \bx$ should have high entropy (there should be as many classes generated as possible).
-		\end{itemize}
-	\end{block}
-	\begin{figure}
-		\centering
-		\includegraphics[width=1.0\linewidth]{figs/is_toy}
-	\end{figure}
-	\myfootnotewithlink{https://medium.com/octavian-ai/a-simple-explanation-of-the-inception-score-372dff6a8c7a}{image credit: https://medium.com/octavian-ai/a-simple-explanation-of-the-inception-score-372dff6a8c7a}
-\end{frame}
-%=======
 \subsection{Inception score}
 %=======
 \begin{frame}{Evaluation of likelihood-free models}
