@@ -80,6 +80,25 @@
 		\myfootnotewithlink{https://arxiv.org/abs/1701.07875}{Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017}
 \end{frame}
 %=======
+\begin{frame}{Recap of previous lecture}
+	\begin{block}{WGAN objective}
+		\vspace{-0.5cm}
+		\[
+		\min_{\btheta} W(\pi || p) = \min_{\btheta} \max_{\bphi \in \boldsymbol{\Phi}} \left[ \bbE_{\pi(\bx)} f(\bx, \bphi)  - \bbE_{p(\bz)} f(G(\bz, \btheta), \bphi )\right].
+		\]
+		\vspace{-0.5cm}
+	\end{block}
+	\begin{itemize}
+		\item Function~$f$ in WGAN is usually called $\textit{critic}$.
+		\item If parameters $\bphi$ lie in a compact set $\boldsymbol{\Phi} \in [-c, c]^d$ then $f(\bx, \bphi)$ will be $K$-Lipschitz continuous function. 
+	\end{itemize}
+	\begin{multline*}
+		K \cdot W(\pi || p) = \max_{\| f \|_L \leq K} \left[ \bbE_{\pi(\bx)} f(\bx)  - \bbE_{p(\bx)} f(\bx)\right] \geq \\  \geq \max_{\bphi \in \boldsymbol{\Phi}} \left[ \bbE_{\pi(\bx)} f(\bx, \bphi)  - \bbE_{p(\bx)} f(\bx, \bphi )\right]
+	\end{multline*}
+	\textit{"Weight clipping is a clearly terrible way to enforce a Lipschitz constraint"}
+	\myfootnotewithlink{https://arxiv.org/abs/1701.07875}{Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017}
+\end{frame}
+%=======
 \begin{frame}{Outline}
 	\tableofcontents
 \end{frame}
@@ -155,7 +174,7 @@
 		where $\lambda_{\text{max}}(\bA^T \bA)$ is the largest eigenvalue value of $\bA^T \bA$.
 	\end{block}
 	\begin{block}{Statement 1}
-		if $g$ is a K-Lipschitz function then 
+		if $\mathbf{g}$ is a K-Lipschitz vector function then 
 		\[
 			\| \mathbf{g} \|_L \leq K = \sup_\bx \| \nabla \mathbf{g}(\bx)) \|_2.
 		\]
@@ -179,7 +198,7 @@
 	This feedforward network is a superposition of simple functions.
 	\begin{itemize}
 		\item $\sigma_k$ is a pointwise nonlinearities. We assume that $\| \sigma_k \|_L = 1$ (it holds for ReLU).
-		\item $\mathbf{g}(\bx) = \bW \bx$ is a linear transformation ($\nabla \mathbf{g}(\bx) = \bW$).
+		\item $\mathbf{g}(\bx) = \bW^T \bx$ is a linear transformation ($\nabla \mathbf{g}(\bx) = \bW$).
 		\[
 			\| \mathbf{g} \|_L \leq \sup_\bx \| \nabla \mathbf{g}(\bx)\|_2 = \| \bW \|_2.
 		\]
@@ -204,15 +223,15 @@
 	 	\vspace{-0.2cm}
 	 	\begin{itemize}
 	 		\item $\bu_0$ -- random vector.
-	 		\item for $k = 0, \dots, K - 1$: ($K$ is a fixed number of steps)
+	 		\item for $m = 0, \dots, M - 1$: ($M$ is a fixed number of steps)
 	 		\vspace{-0.3cm}
 	 		\[
-	 			\bv_{k+1} = \frac{\bW^T \bu_{k}}{\| \bW^T \bu_{k} \|}, \quad \bu_{k+1} = \frac{\bW \bv_{k+1}}{\| \bW \bv_{k+1} \|}.
+	 			\bv_{m+1} = \frac{\bW^T \bu_{m}}{\| \bW^T \bu_{m} \|}, \quad \bu_{m+1} = \frac{\bW \bv_{m+1}}{\| \bW \bv_{m+1} \|}.
 	 		\]
 	 		\item approximate the spectral norm
 	 		\vspace{-0.3cm}
 	 		\[
-	 			\| \bW \|_2 = \sqrt{\lambda_{\text{max}}(\bW^T \bW)} \approx \bu_{K}^T \bW \bv_{K}.
+	 			\| \bW \|_2 = \sqrt{\lambda_{\text{max}}(\bW^T \bW)} \approx \bu_{M}^T \bW \bv_{M}.
 	 		\]
 	 	\end{itemize}
 	 \end{block}
