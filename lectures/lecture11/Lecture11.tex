@@ -9,17 +9,6 @@
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
-		\begin{block}{WGAN objective}
-			\vspace{-0.5cm}
-			\[
-				\min_{\btheta} W(\pi || p) = \min_{\btheta} \max_{\bphi \in \boldsymbol{\Phi}} \left[ \bbE_{\pi(\bx)} f(\bx, \bphi)  - \bbE_{p(\bz)} f(G(\bz, \btheta), \bphi )\right].
-			\]
-			\vspace{-0.5cm}
-		\end{block}
-		\begin{itemize}
-			\item Function~$f$ in WGAN is usually called $\textit{critic}$.
-			\item If parameters $\bphi$ lie in a compact set $\boldsymbol{\Phi} \in [-0.01, 0.01]^d$ then $f(\bx, \bphi)$ will be $K$-Lipschitz continuous function. 
-		\end{itemize}
 		\begin{block}{Gradient penalty}
 			\vspace{-0.7cm}
 			\[
