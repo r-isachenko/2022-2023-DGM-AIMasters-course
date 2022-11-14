@@ -40,7 +40,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 9 | November, 7 | <b>Lecture:</b> Vanishing gradients and mode collapse, KL vs JS divergences. Adversarial Variational Bayes. Wasserstein distance. Wasserstein GAN (WGAN). | [slides](lectures/lecture9/Lecture9.pdf) |
 |  |  | <b>Seminar:</b> KL vs JS divergences. Mode collapse. Vanilla GAN in 1D coding | [notebook](seminars/seminar9/GAN_colab.ipynb)<br>[notebook_done](seminars/seminar9/GAN_colab_with_code.ipynb) |
 | 10 | November, 14 | <b>Lecture:</b> WGAN with gradient penalty (WGAN-GP). Spectral Normalization GAN (SNGAN). f-divergence minimization. GAN evaluation. | [slides](lectures/lecture10/Lecture10.pdf) |
-|  |  | <b>Seminar:</b> WGAN: practice. Optimal transport task. SN-GAN: practice. | TBA |
+|  |  | <b>Seminar:</b> 1-Wasserstein distance introduction: discrete and continuous case. WGAN theory. Vanilla GAN on 2D data practice  | [notebook](seminars/seminar10/seminar10.ipynb)<br>[WGAN_theory](seminars/seminar10/Continuous_1_wasserstein_note.pdf) |
 | 11 | November, 21 | <b>Lecture:</b> GAN evaluation (Inception score, FID, Precision-Recall, truncation trick). GAN models (Self-Attention GAN, BigGAN, PGGAN, StyleGAN). | TBA |
 |  |  | <b>Seminar:</b> StyleGAN: implementation hints. | TBA |
 | 12 | November, 28 | <b>Lecture:</b> 12. Discrete VAE latent representations. Vector quantization, straight-through gradient estimation (VQ-VAE). Gumbel-softmax trick (DALL-E). Neural ODE. | TBA |
