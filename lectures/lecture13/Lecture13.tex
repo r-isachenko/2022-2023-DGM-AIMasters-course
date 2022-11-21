@@ -13,30 +13,6 @@
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
-	\begin{block}{Discrete VAE latents}
-		\begin{itemize}
-			\item Define dictionary (word book) space $\{\be_k\}_{k=1}^K$, where $\be_k \in \bbR^C$, $K$ is the size of the dictionary.
-			\item Our variational posterior $q(c | \bx, \bphi) = \text{Categorical}(\bpi(\bx, \bphi))$ (encoder) outputs discrete probabilities vector.
-			\item We sample $c^*$ from $q(c | \bx, \bphi)$ (reparametrization trick analogue).
-			\item Our generative distribution $p(\bx | \be_{c^*}, \btheta)$ (decoder).
-		\end{itemize}
-	\end{block}
-	\begin{block}{ELBO}
-		\vspace{-0.5cm}
-		\[
-			\mathcal{L} (\bphi, \btheta)  = \mathbb{E}_{q(c | \bx, \bphi)} \log p(\bx | c, \btheta) - KL(q(c| \bx, \bphi) || p(c)) \rightarrow \max_{\bphi, \btheta}.
-		\]
-		\vspace{-0.5cm}
-	\end{block}
-	\begin{block}{KL term}
-		\vspace{-0.4cm}
-		\[
-			KL(q(c| \bx, \bphi) || p(c)) = - H(q(c | \bx, \bphi)) + \log K. 
-		\]
-	\end{block}
-\end{frame}
-%=======
-\begin{frame}{Recap of previous lecture}
 	\begin{figure}
 		\centering
 		\includegraphics[width=0.85\linewidth]{figs/vqvae}
@@ -154,69 +130,6 @@
 	\end{block}
 
 	\myfootnotewithlink{https://arxiv.org/abs/1806.07366}{Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018}     
-\end{frame}
-%=======
-\section{Neural ODE: finish}
-%=======
-\begin{frame}{Neural ODE}
-	\begin{block}{Adjoint functions}
-		\vspace{-0.3cm}
-		\[
-			\ba_{\bz}(t) = \frac{\partial L(\by)}{\partial \bz(t)}; \quad \ba_{\btheta}(t) = \frac{\partial L(\by)}{\partial \btheta(t)}.
-		\]
-		\vspace{-0.6cm}
-	\end{block}
-	\begin{block}{Theorem (Pontryagin)}
-	\vspace{-0.6cm}
-	\[
-	     \frac{d \ba_{\bz}(t)}{dt} = - \ba_{\bz}(t)^T \cdot \frac{\partial f(\bz(t), \btheta)}{\partial \bz}; \quad \frac{d \ba_{\btheta}(t)}{dt} = - \ba_{\bz}(t)^T \cdot \frac{\partial f(\bz(t), \btheta)}{\partial \btheta}.
-	\]
-	Do we know any initilal condition?
-	\end{block}
-	\begin{block}{Solution for adjoint function}
-		\vspace{-0.8cm}
-		\begin{align*}
-			 \frac{\partial L}{\partial \btheta(t_0)} &= \ba_{\btheta}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \btheta(t)} dt + 0\\
-			 \frac{\partial L}{\partial \bz(t_0)} &= \ba_{\bz}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \bz(t)} dt + \frac{\partial L}{\partial \bz(t_1)}\\
-		\end{align*}
-		\vspace{-1.5cm}
-	\end{block}
-	\textbf{Note:} These equations are solved back in time.
-	\myfootnotewithlink{https://arxiv.org/abs/1806.07366}{Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018}   
-\end{frame}
-%=======
-\begin{frame}{Neural ODE}
-	\vspace{-0.2cm}
-	\begin{block}{Forward pass}
-		\vspace{-0.5cm}
-		\[
-			\bz(t_1) = \int^{t_1}_{t_0} f(\bz(t), \btheta) d t  + \bz_0 \quad \Rightarrow \quad \text{ODE Solver}
-		\]
-		\vspace{-0.6cm}
-	\end{block}
-	\begin{block}{Backward pass}
-		\vspace{-0.8cm}
-		\begin{equation*}
-			\left.
-				{\footnotesize 
-				\begin{aligned}
-					\frac{\partial L}{\partial \btheta(t_0)} &= \ba_{\btheta}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \btheta(t)} dt + 0 \\
-					\frac{\partial L}{\partial \bz(t_0)} &= \ba_{\bz}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \bz(t)} dt + \frac{\partial L}{\partial \bz(t_1)} \\
-					\bz(t_0) &= - \int^{t_0}_{t_1} f(\bz(t), \btheta) d t  + \bz_1.
-				\end{aligned}
-				}
-			\right\rbrace
-			 \Rightarrow
-			\text{ODE Solver}
-		\end{equation*}
-		\vspace{-0.4cm} 
-	\end{block}
-	\textbf{Note:} These scary formulas are the standard backprop in the discrete case.
-	\begin{figure}
-		\centering
-		\includegraphics[width=\linewidth]{figs/neural_ode}
-	\end{figure}
-	\myfootnotewithlink{https://arxiv.org/abs/1806.07366}{Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018}   
 \end{frame}
 %=======
 \section{Continuous-in-time normalizing flows}
@@ -480,8 +393,6 @@
 %=======
 \begin{frame}{Summary}
 	\begin{itemize}
-		\item Adjoint method generalizes backpropagation procedure and allows to train Neural ODE solving ODE for adjoint function back in time.
-		\vfill
 		\item Kolmogorov-Fokker-Planck theorem allows to construct continuous-in-time normalizing flow with less functional restrictions.
 		\vfill
 		\item FFJORD model makes such kind of flows scalable.
