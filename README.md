@@ -42,7 +42,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 10 | November, 14 | <b>Lecture:</b> WGAN with gradient penalty (WGAN-GP). Spectral Normalization GAN (SNGAN). f-divergence minimization. GAN evaluation. | [slides](lectures/lecture10/Lecture10.pdf) |
 |  |  | <b>Seminar:</b> 1-Wasserstein distance introduction: discrete and continuous case. WGAN theory. Vanilla GAN on 2D data practice  | [notebook](seminars/seminar10/seminar10.ipynb)<br>[WGAN_theory](seminars/seminar10/Continuous_1_wasserstein_note.pdf) |
 | 11 | November, 21 | <b>Lecture:</b> GAN evaluation (Inception score, FID, Precision-Recall, truncation trick). GAN models (Self-Attention GAN, BigGAN, PGGAN, StyleGAN). | TBA |
-|  |  | <b>Seminar:</b> StyleGAN: implementation hints. | TBA |
+|  |  | <b>Seminar:</b> WGANs on multimodal 2D data. GANs zoo. Evolution of GANs. StyleGAN implementation : start discussion | [notebook](seminars/seminar11/seminar11.ipynb)<br>[GANevolution](seminars/seminar11/GANs_evolution_and_StyleGAN.pdf)<br>[StyleGAN_not_completed](seminars/seminar11/StyleGAN.ipynb) |
 | 12 | November, 28 | <b>Lecture:</b> 12. Discrete VAE latent representations. Vector quantization, straight-through gradient estimation (VQ-VAE). Gumbel-softmax trick (DALL-E). Neural ODE. | TBA |
 |  |  | <b>Seminar:</b> NeuralODE explanation. | TBA |
 | 13 | December, 5 | <b>Lecture:</b> Adjoint method. Continuous-in-time NF (FFJORD, Hutchinson's trace estimator). Kolmogorov-Fokker-Planck equation and Langevin dynamic. SDE basics. | TBA |
