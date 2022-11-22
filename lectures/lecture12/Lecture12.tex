@@ -94,6 +94,103 @@
 %=======
 \section{Discrete VAE latent representations}
 %=======
+\subsection{Vector quantization}
+%=======
+\begin{frame}{Vector quantization}
+	\begin{block}{Quantized representation}
+		$\bz_q \in \bbR^{C}$  for $\bz \in \bbR^C$ is defined by a nearest neighbour look-up using the shared dictionary space
+		\vspace{-0.3cm}
+		\[
+		\bz_q = \be_{k^*}, \quad \text{where } k^* = \argmin_k \| \bz - \be_k \|.
+		\] 
+		\vspace{-0.7cm}
+	\end{block}
+	\begin{itemize}
+		\item Let our encoder outputs continuous representation $\bz$. 
+		\item Quantization will give us the discrete distribution $q(c | \bx, \bphi)$.
+	\end{itemize}
+	\vspace{-0.2cm}
+	\begin{block}{Quantization procedure}
+		If we have tensor with the spatial dimenstions we apply the quantization for each of $W \times H$ locations.
+		\begin{minipage}[t]{0.65\columnwidth}
+			\begin{figure}
+				\includegraphics[width=0.8\linewidth]{figs/fqgan_cnn.png}
+			\end{figure}
+		\end{minipage}%
+		\begin{minipage}[t]{0.35\columnwidth}
+			\begin{figure}
+				\includegraphics[width=0.7\linewidth]{figs/fqgan_lookup}
+			\end{figure}
+		\end{minipage}
+	\end{block}
+	\myfootnotewithlink{https://arxiv.org/abs/2004.02088}{Zhao Y. et al. Feature Quantization Improves GAN Training, 2020} 
+\end{frame}
+%=======
+\begin{frame}{Vector Quantized VAE}
+	Let VAE latent variable $\bc \in \bbR^{W \times H}$ is the discrete with spatial-independent variational posterior and prior distributions  
+	\vspace{-0.3cm}
+	\[
+	q(\bc | \bx, \bphi) = \prod_{i=1}^W \prod_{j=1}^H q(c_{ij} | \bx, \bphi); \quad p(\bc) = \prod_{i=1}^W \prod_{j=1}^H \text{Uniform}\{1, \dots, K\}.
+	\]
+	Let $\bz_e = \text{NN}_e(\bx, \bphi) \in \bbR^{W \times H \times C}$ is the encoder output.
+	\begin{block}{Deterministic variational posterior}
+		\vspace{-0.6cm}
+		\[
+		q(c_{ij} = k^* | \bx, \bphi) = \begin{cases}
+			1 , \quad \text{for } k^* = \argmin_k \| [\bz_e]_{ij} - \be_k \|; \\
+			0, \quad \text{otherwise}.
+		\end{cases}
+		\]
+		$KL(q(c| \bx, \bphi) || p(c))$ term in ELBO is constant, entropy of the posterior is zero.
+		\[
+		KL(q(c | \bx, \bphi) || p(c)) = - H(q(c | \bx, \bphi)) + \log K = \log K. 
+		\]
+	\end{block}
+	
+	\myfootnotewithlink{https://arxiv.org/abs/1711.00937}{Oord A., Vinyals O., Kavukcuoglu K. Neural Discrete Representation Learning, 2017} 
+\end{frame}
+%=======
+\begin{frame}{Vector Quantized VAE}
+	\begin{block}{ELBO}
+		\vspace{-0.6cm}
+		\[
+		\mathcal{L} (\bphi, \btheta)  = \mathbb{E}_{q(c | \bx, \bphi)} \log p(\bx | \be_{c} , \btheta) - \log K =  \log p(\bx | \bz_q, \btheta) - \log K,
+		\]
+		where $z_q = \be_{k^*}$, $k^* = \argmin_k \| \bz_e - \be_k \|$.
+	\end{block}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.85\linewidth]{figs/vqvae}
+	\end{figure}
+	\textbf{Problem:} $\argmin$ is not differentiable.
+	\begin{block}{Straight-through gradient estimation}
+		\vspace{-0.6cm}
+		\[
+		\frac{\partial \log p(\bx | \bz_q , \btheta)}{\partial \bphi} = \frac{\partial \log p(\bx | \bz_q, \btheta)}{\partial \bz_q} \cdot {\color{red}\frac{\partial \bz_q}{\partial \bphi}} \approx \frac{\partial \log p(\bx | \bz_q, \btheta)}{\partial \bz_q} \cdot \frac{\partial \bz_e}{\partial \bphi}
+		\]
+	\end{block}
+	\myfootnotewithlink{https://arxiv.org/abs/1711.00937}{Oord A., Vinyals O., Kavukcuoglu K. Neural Discrete Representation Learning, 2017} 
+\end{frame}
+%=======
+\begin{frame}{Vector Quantized VAE-2}
+	\begin{block}{Samples 1024x1024}
+		\vspace{-0.2cm}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.63\linewidth]{figs/vqvae2_faces}
+		\end{figure}
+	\end{block}
+	\vspace{-0.6cm}
+	\begin{block}{Samples diversity}
+		\vspace{-0.2cm}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.65\linewidth]{figs/vqvae2_diversity}
+		\end{figure}
+	\end{block}
+	\myfootnotewithlink{https://arxiv.org/abs/1906.00446}{Razavi A., Oord A., Vinyals O. Generating Diverse High-Fidelity Images with VQ-VAE-2, 2019} 
+\end{frame}
+%=======
 \subsection{Gumbel-softmax}
 %=======
 \begin{frame}{Gumbel-softmax trick}
@@ -350,6 +447,9 @@
 %=======
 \begin{frame}{Summary}
 	\begin{itemize}
+		\item Vector Quantization is the way to create VAE with discrete latent space and deterministic variational posterior. 
+		\vfill
+		\item Straight-through gradient ignores quanrize operation in backprop.
 		\vfill
 		\item Gumbel-softmax trick relaxes discrete problem to continuous one using Gumbel-max reparametrization trick.
 		\vfill
