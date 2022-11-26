@@ -1,12 +1,12 @@
 # Deep Generative Models course, AIMasters, 2022-2023
 
 ## Description
-The course is devoted to modern generative models (mostly in the application to computer vision). 
+The course is devoted to modern generative models (mostly in the application to computer vision).
 
-We will study the following types of generative models: 
-- autoregressive models, 
-- latent variable models, 
-- normalization flow models, 
+We will study the following types of generative models:
+- autoregressive models,
+- latent variable models,
+- normalization flow models,
 - adversarial models,
 - diffusion models.
 
@@ -41,17 +41,17 @@ The course is accompanied by practical tasks that allow you to understand the pr
 |  |  | <b>Seminar:</b> KL vs JS divergences. Mode collapse. Vanilla GAN in 1D coding | [notebook](seminars/seminar9/GAN_colab.ipynb)<br>[notebook_done](seminars/seminar9/GAN_colab_with_code.ipynb) |
 | 10 | November, 14 | <b>Lecture:</b> WGAN with gradient penalty (WGAN-GP). Spectral Normalization GAN (SNGAN). f-divergence minimization. GAN evaluation. | [slides](lectures/lecture10/Lecture10.pdf) |
 |  |  | <b>Seminar:</b> 1-Wasserstein distance introduction: discrete and continuous case. WGAN theory. Vanilla GAN on 2D data practice  | [notebook](seminars/seminar10/seminar10.ipynb)<br>[WGAN_theory](seminars/seminar10/Continuous_1_wasserstein_note.pdf) |
-| 11 | November, 21 | <b>Lecture:</b> GAN evaluation (Inception score, FID, Precision-Recall, truncation trick). GAN models (Self-Attention GAN, BigGAN, PGGAN, StyleGAN). | TBA |
+| 11 | November, 21 | <b>Lecture:</b> GAN evaluation (Inception score, FID, Precision-Recall, truncation trick). Discrete VAE latent representations. | [slides](lectures/lecture11/Lecture11.pdf) |
 |  |  | <b>Seminar:</b> WGANs on multimodal 2D data. GANs zoo. Evolution of GANs. StyleGAN implementation : start discussion | [notebook](seminars/seminar11/seminar11.ipynb)<br>[GANevolution](seminars/seminar11/GANs_evolution_and_StyleGAN.pdf)<br>[StyleGAN_not_completed](seminars/seminar11/StyleGAN.ipynb) |
-| 12 | November, 28 | <b>Lecture:</b> 12. Discrete VAE latent representations. Vector quantization, straight-through gradient estimation (VQ-VAE). Gumbel-softmax trick (DALL-E). Neural ODE. | TBA |
+| 12 | November, 28 | <b>Lecture:</b> 12. Vector quantization, straight-through gradient estimation (VQ-VAE). Gumbel-softmax trick (DALL-E). Neural ODE. Adjoint method. | [slides](lectures/lecture12/Lecture12.pdf) |
 |  |  | <b>Seminar:</b> NeuralODE explanation. | TBA |
-| 13 | December, 5 | <b>Lecture:</b> Adjoint method. Continuous-in-time NF (FFJORD, Hutchinson's trace estimator). Kolmogorov-Fokker-Planck equation and Langevin dynamic. SDE basics. | TBA |
+| 13 | December, 5 | <b>Lecture:</b> Continuous-in-time NF (FFJORD, Hutchinson's trace estimator). Kolmogorov-Fokker-Planck equation and Langevin dynamic. SDE basics. | TBA |
 |  |  | <b>Seminar:</b> TBA | TBA |
 | 14 | December, 12 | <b>Lecture:</b> Score matching. Noise conditioned score network (NCSN). Denoising diffusion probabilistic model (DDPM). | TBA |
 |  |  | <b>Seminar:</b> TBA | TBA |
 |  | December, 19 | <b>Oral exam</b> | TBA |
 
-## Homeworks 
+## Homeworks
 | Homework | Date | Deadline | Description | Link |
 |---------|------|-------------|--------|-------|
 | 1 | September, 22 | October, 6 | <ol><li>Theory (KDE, MADE, alpha-divergences).</li><li>PixelCNN on MNIST.</li><li>PixelCNN autocomplete and receptive field.</li></ol> | [![Open In Github](https://img.shields.io/static/v1.svg?logo=github&label=Repo&message=Open%20in%20Github&color=lightgrey)](homeworks/hw1.ipynb)<br>[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/r-isachenko/2022-2023-DGM-AIMasters-course/blob/main/homeworks/hw1.ipynb)  |

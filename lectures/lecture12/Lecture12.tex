@@ -73,12 +73,13 @@
 			\item Our generative distribution $p(\bx | \be_{c^*}, \btheta)$ (decoder).
 		\end{itemize}
 	\end{block}
+	\vspace{-0.3cm}
 	\begin{block}{ELBO}
-		\vspace{-0.5cm}
+		\vspace{-0.7cm}
 		\[
 		\mathcal{L} (\bphi, \btheta)  = \mathbb{E}_{q(c | \bx, \bphi)} \log p(\bx | c, \btheta) - KL(q(c| \bx, \bphi) || p(c)) \rightarrow \max_{\bphi, \btheta}.
 		\]
-		\vspace{-0.5cm}
+		\vspace{-0.7cm}
 	\end{block}
 	\begin{block}{KL term}
 		\vspace{-0.4cm}
@@ -86,6 +87,7 @@
 		KL(q(c| \bx, \bphi) || p(c)) = - H(q(c | \bx, \bphi)) + \log K. 
 		\]
 	\end{block}
+	Is it possible to make reparametrization trick? (we sample from discrete distribution now!).
 \end{frame}
 %=======
 \begin{frame}{Outline}
@@ -385,6 +387,7 @@
 \end{frame}
 %=======
 \begin{frame}{Neural ODE}
+	\vspace{-0.3cm}
 	\begin{block}{Adjoint functions}
 		\vspace{-0.3cm}
 		\[
@@ -405,7 +408,7 @@
 			\frac{\partial L}{\partial \btheta(t_0)} &= \ba_{\btheta}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \btheta(t)} dt + 0\\
 			\frac{\partial L}{\partial \bz(t_0)} &= \ba_{\bz}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \bz(t)} dt + \frac{\partial L}{\partial \bz(t_1)}\\
 		\end{align*}
-		\vspace{-1.5cm}
+		\vspace{-1.2cm}
 	\end{block}
 	\textbf{Note:} These equations are solved back in time.
 	\myfootnotewithlink{https://arxiv.org/abs/1806.07366}{Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018}   

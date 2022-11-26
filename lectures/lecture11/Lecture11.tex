@@ -346,11 +346,12 @@
 		\vspace{-0.8cm}
 		\begin{multline*}
 			KL(q(c| \bx, \bphi) || p(c)) = \sum_{k=1}^K q(k | \bx, \bphi) \log \frac{q(k | \bx, \bphi)}{p(k)} = 
-			\\ = \sum_{k=1}^K q(k | \bx, \bphi) \left[\log q(k | \bx, \bphi)  - \log p(k) \right] = - H(q(c | \bx, \bphi)) + \log K. 
+			\\ = \color{violet}{\sum_{k=1}^K q(k | \bx, \bphi) \log q(k | \bx, \bphi)}  \color{teal}{- \sum_{k=1}^K q(k | \bx, \bphi) \log p(k)}  = \\ = \color{violet}{- H(q(c | \bx, \bphi))} + \color{teal}{\log K}. 
 		\end{multline*}
+		\vspace{-0.6cm}
 	\end{block}
 	\begin{itemize}
-		\item Reparametrization trick does not work now (we sample from discrete distribution).
+		\item Is it possible to make reparametrization trick? (we sample from discrete distribution now!).
 		\item Entropy term should be estimated.
 	\end{itemize}
 \end{frame}
