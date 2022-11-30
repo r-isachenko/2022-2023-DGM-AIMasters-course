@@ -6,6 +6,9 @@ import numpy as np
 import torch.distributions as TD
 import pickle
 
+def logit2im(x):
+    return x * 0.5 + 0.5
+
 class MappingLayers(nn.Module):
     
     '''
@@ -252,10 +255,10 @@ class MicroStyleGANGenerator(nn.Module):
 
         return x
 
-    def sample(self, n, step=0, alpha=-1, w_mean=None, w_weight=None):
+    def sample(self, n, step=3, alpha=-1, w_mean=None, w_weight=None):
         with torch.no_grad():
             return self.rsample(n, step, alpha, w_mean, w_weight)
 
-    def rsample(self, n, step=0, alpha=-1, w_mean=None, w_weight=None):
+    def rsample(self, n, step=3, alpha=-1, w_mean=None, w_weight=None):
         noise = self._sample_prior(n)
-        return self.forward(noise, step, alpha, w_mean, w_weight)
+        return logit2im(self.forward(noise, step, alpha, w_mean, w_weight))
