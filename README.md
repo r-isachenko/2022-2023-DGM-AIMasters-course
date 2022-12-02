@@ -44,7 +44,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 11 | November, 21 | <b>Lecture:</b> GAN evaluation (Inception score, FID, Precision-Recall, truncation trick). Discrete VAE latent representations. | [slides](lectures/lecture11/Lecture11.pdf) |
 |  |  | <b>Seminar:</b> WGANs on multimodal 2D data. GANs zoo. Evolution of GANs. StyleGAN implementation : start discussion | [notebook](seminars/seminar11/seminar11.ipynb)<br>[GANevolution](seminars/seminar11/GANs_evolution_and_StyleGAN.pdf)<br>[StyleGAN_not_completed](seminars/seminar11/StyleGAN.ipynb) |
 | 12 | November, 28 | <b>Lecture:</b> 12. Vector quantization, straight-through gradient estimation (VQ-VAE). Gumbel-softmax trick (DALL-E). Neural ODE. Adjoint method. | [slides](lectures/lecture12/Lecture12.pdf) |
-|  |  | <b>Seminar:</b> NeuralODE explanation. | TBA |
+|  |  | <b>Seminar:</b> VQ-VAE implementation hints. StyleGAN coding and assessing | [notebook](seminars/seminar12/seminar12.ipynb)<br>[StyleGAN](seminars/seminar12/StyleGAN_final.ipynb) |
 | 13 | December, 5 | <b>Lecture:</b> Continuous-in-time NF (FFJORD, Hutchinson's trace estimator). Kolmogorov-Fokker-Planck equation and Langevin dynamic. SDE basics. | TBA |
 |  |  | <b>Seminar:</b> TBA | TBA |
 | 14 | December, 12 | <b>Lecture:</b> Score matching. Noise conditioned score network (NCSN). Denoising diffusion probabilistic model (DDPM). | TBA |
