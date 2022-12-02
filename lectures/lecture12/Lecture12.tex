@@ -100,7 +100,7 @@
 %=======
 \begin{frame}{Vector quantization}
 	\begin{block}{Quantized representation}
-		$\bz_q \in \bbR^{C}$  for $\bz \in \bbR^C$ is defined by a nearest neighbour look-up using the shared dictionary space
+		$\bz_q \in \bbR^{C}$  for $\bz \in \bbR^C$ is defined by a nearest neighbor look-up using the shared dictionary space
 		\vspace{-0.3cm}
 		\[
 		\bz_q = \be_{k^*}, \quad \text{where } k^* = \argmin_k \| \bz - \be_k \|.
@@ -113,7 +113,7 @@
 	\end{itemize}
 	\vspace{-0.2cm}
 	\begin{block}{Quantization procedure}
-		If we have tensor with the spatial dimenstions we apply the quantization for each of $W \times H$ locations.
+		If we have tensor with the spatial dimensions we apply the quantization for each of $W \times H$ locations.
 		\begin{minipage}[t]{0.65\columnwidth}
 			\begin{figure}
 				\includegraphics[width=0.8\linewidth]{figs/fqgan_cnn.png}
@@ -128,8 +128,8 @@
 	\myfootnotewithlink{https://arxiv.org/abs/2004.02088}{Zhao Y. et al. Feature Quantization Improves GAN Training, 2020} 
 \end{frame}
 %=======
-\begin{frame}{Vector Quantized VAE}
-	Let VAE latent variable $\bc \in \bbR^{W \times H}$ is the discrete with spatial-independent variational posterior and prior distributions  
+\begin{frame}{Vector Quantized VAE (VQ-VAE)}
+	Let VAE latent variable $\bc \in \{1, \dots, K\}^{W \times H}$ is the discrete with spatial-independent variational posterior and prior distributions  
 	\vspace{-0.3cm}
 	\[
 	q(\bc | \bx, \bphi) = \prod_{i=1}^W \prod_{j=1}^H q(c_{ij} | \bx, \bphi); \quad p(\bc) = \prod_{i=1}^W \prod_{j=1}^H \text{Uniform}\{1, \dots, K\}.
@@ -152,7 +152,7 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1711.00937}{Oord A., Vinyals O., Kavukcuoglu K. Neural Discrete Representation Learning, 2017} 
 \end{frame}
 %=======
-\begin{frame}{Vector Quantized VAE}
+\begin{frame}{Vector Quantized VAE (VQ-VAE)}
 	\begin{block}{ELBO}
 		\vspace{-0.6cm}
 		\[
@@ -174,7 +174,7 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1711.00937}{Oord A., Vinyals O., Kavukcuoglu K. Neural Discrete Representation Learning, 2017} 
 \end{frame}
 %=======
-\begin{frame}{Vector Quantized VAE-2}
+\begin{frame}{Vector Quantized VAE-2  (VQ-VAE-2)}
 	\begin{block}{Samples 1024x1024}
 		\vspace{-0.2cm}
 		\begin{figure}
@@ -202,7 +202,7 @@
 	\end{itemize}
 	\vspace{-0.2cm}
 	\begin{block}{Gumbel-max trick}
-		Let $g_k \sim \text{Gumbel}(0, 1)$ for $k = 1, \dots, K$, i.e. $g = - \log (\log u)$, $u \sim \text{Uniform}[0, 1]$. Then a discrete random variable
+		Let $g_k \sim \text{Gumbel}(0, 1)$ for $k = 1, \dots, K$, i.e. $g = - \log (- \log u)$, $u \sim \text{Uniform}[0, 1]$. Then a discrete random variable
 		\vspace{-0.2cm}
 		\[
 			c = \argmax_k [\log \pi_k + g_k],
@@ -222,7 +222,7 @@
 \end{frame}
 %=======
 \begin{frame}{Gumbel-softmax trick}
-	\begin{block}{Reparametrization trick}
+	\begin{block}{Reparametrization trick (LOTUS)}
 		\vspace{-0.7cm}
 		\[
 			\nabla_{\bphi} \mathbb{E}_{q(c | \bx, \bphi)} \log p(\bx | \be_{c} , \btheta) = \bbE_{\text{Gumbel}(0, 1)} \nabla_{\bphi} \log p(\bx | \be_{k^*} , \btheta),
@@ -232,7 +232,7 @@
 	\textbf{Problem:} We still have non-differentiable $\argmax$ operation.
 	
 	\begin{block}{Gumbel-softmax relaxation}
-		Concrete distribution = continuous + discrete
+		{\color{violet}Con}{\color{cyan}crete} distribution = {\color{violet}\textbf{con}tinuous} + {\color{cyan}dis\textbf{crete}}
 		\vspace{-0.2cm}
 		\[
 			\hat{c}_k = \frac{\exp \left(\frac{\log q(k | \bx, \bphi) + g_k}{\tau}\right)}{\sum_{j=1}^K \exp \left(\frac{\log q(j | \bx, \bphi) + g_j}{\tau}\right)}, \quad k = 1, \dots, K.
@@ -272,7 +272,7 @@
 	}
 \end{frame}
 %=======
-\begin{frame}{DALL-E}
+\begin{frame}{DALL-E/dVAE}
 	\begin{block}{Deterministic VQ-VAE posterior}
 		\vspace{-0.3cm}
 		\[
@@ -297,7 +297,7 @@
 \section{Neural ODE}
 %=======
 \begin{frame}{Neural ODE}
-	Consider Ordinary Differential Equation    
+	Consider Ordinary Differential Equation (ODE)
 	\begin{align*}
 	    \frac{d \bz(t)}{dt} &= f(\bz(t), \btheta); \quad \text{with initial condition }\bz(t_0) = \bz_0. \\
 	    \bz(t_1) &= \int^{t_1}_{t_0} f(\bz(t), \btheta) d t  + \bz_0 = \text{ODESolve}(\bz(t_0), f, t_0,t_1, \btheta).
