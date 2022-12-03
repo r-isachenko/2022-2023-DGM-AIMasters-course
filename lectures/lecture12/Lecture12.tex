@@ -232,7 +232,7 @@
 	\textbf{Problem:} We still have non-differentiable $\argmax$ operation.
 	
 	\begin{block}{Gumbel-softmax relaxation}
-		{\color{violet}Con}{\color{cyan}crete} distribution = {\color{violet}\textbf{con}tinuous} + {\color{cyan}dis\textbf{crete}}
+		{\color{violet}Con}{\color{teal}crete} distribution = {\color{violet}\textbf{con}tinuous} + {\color{teal}dis\textbf{crete}}
 		\vspace{-0.2cm}
 		\[
 			\hat{c}_k = \frac{\exp \left(\frac{\log q(k | \bx, \bphi) + g_k}{\tau}\right)}{\sum_{j=1}^K \exp \left(\frac{\log q(j | \bx, \bphi) + g_j}{\tau}\right)}, \quad k = 1, \dots, K.
