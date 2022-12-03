@@ -13,41 +13,6 @@
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
-	\begin{block}{Continuous dynamic}
-		\vspace{-0.5cm}
-		\[
-			\frac{d\bz(t)}{dt} = f(\bz(t), \btheta).
-		\]
-		\vspace{-0.5cm}
-	\end{block}
-	\begin{block}{Forward pass}
-		\vspace{-0.5cm}
-		\[
-			\bz(t_1) = \int^{t_1}_{t_0} f(\bz(t), \btheta) d t  + \bz_0 \quad \Rightarrow \quad \text{ODE Solver}
-		\]
-		\vspace{-0.6cm}
-	\end{block}
-	\begin{block}{Backward pass}
-		\vspace{-0.6cm}
-		\begin{equation*}
-			\left.
-				{\footnotesize 
-				\begin{aligned}
-					\frac{\partial L}{\partial \btheta(t_0)} &= \ba_{\btheta}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \btheta(t)} dt + 0 \\
-					\frac{\partial L}{\partial \bz(t_0)} &= \ba_{\bz}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \bz(t)} dt + \frac{\partial L}{\partial \bz(t_1)} \\
-					\bz(t_0) &= - \int^{t_0}_{t_1} f(\bz(t), \btheta) d t  + \bz_1.
-				\end{aligned}
-				}
-			\right\rbrace
-			 \Rightarrow
-			\text{ODE Solver}
-		\end{equation*}
-		\vspace{-0.4cm} 
-	\end{block}
-	\myfootnotewithlink{https://arxiv.org/abs/1806.07366}{Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018}   
-\end{frame}
-%=======
-\begin{frame}{Recap of previous lecture}
 	\vspace{-0.5cm}
 	\begin{block}{Continuous normalizing flows}
 		\[
@@ -112,146 +77,6 @@
 %=======
 \begin{frame}{Outline}
 	\tableofcontents
-\end{frame}
-%=======
-\section{Score matching}
-%=======
-\begin{frame}{Score matching}
-	We could sample from the model if we have $\nabla_{\bx}\log p(\bx| \btheta)$.
-	\begin{block}{Fisher divergence}
-		\vspace{-0.3cm}
-		\[
-			D_F(\pi, p) = \frac{1}{2}\bbE_{\pi}\bigl\| \nabla_{\bx}\log p(\bx| \btheta) - \nabla_\bx \log \pi(\bx) \bigr\|^2_2 \rightarrow \min_{\btheta}
-		\]
-		\vspace{-0.5cm}
-	\end{block}
-	\begin{block}{Score function}
-		\vspace{-0.3cm}
-		\[
-			\bs(\bx, \btheta) = \nabla_{\bx}\log p(\bx| \btheta)
-		\]
-		\vspace{-0.3cm}
-	\end{block}
-	\textbf{Problem:} we do not know $\nabla_\bx \log \pi(\bx)$.
-	\begin{block}{Theorem}
-		Under some regularity conditions, it holds
-		\vspace{-0.2cm}
-		\[
-			\frac{1}{2} \bbE_{\pi}\bigl\| \bs(\bx, \btheta) - \nabla_\bx \log \pi(\bx) \bigr\|^2_2 = \bbE_{\pi}\Bigr[ \frac{1}{2}\| \bs(\bx, \btheta) \|_2^2 + \text{tr}\bigl(\nabla_{\bx} \bs(\bx, \btheta)\bigr) \Bigr] + \text{const}
-		\]
-		\vspace{-0.4cm}
-	\end{block}
-	Here $\nabla_{\bx} \bs(\bx, \btheta) = \nabla_{\bx}^2 \log p(\bx | \btheta)$ is a Hessian matrix.
-	\myfootnotewithlink{https://jmlr.org/papers/volume6/hyvarinen05a/old.pdf}{Hyvarinen A. Estimation of non-normalized statistical models by score matching, 2005} 
-\end{frame}
-%=======
-\begin{frame}{Score matching}
-	\begin{block}{Theorem}
-		\vspace{-0.6cm}
-		\[
-			\frac{1}{2} \bbE_{\pi}\bigl\| \bs(\bx, \btheta) - \nabla_\bx \log \pi(\bx) \bigr\|^2_2 = \bbE_{\pi}\Bigr[ \frac{1}{2}\| \bs(\bx, \btheta) \|_2^2 + \text{tr}\bigl(\nabla_{\bx} \bs(\bx, \btheta)\bigr) \Bigr] + \text{const}
-		\]
-		\vspace{-0.6cm}
-	\end{block}
-	\begin{block}{Proof (only for 1D)}
-		\vspace{-0.6cm}
-		{\small
-		\begin{multline*}
-			\bbE_{\pi}\bigl\| s(x) - \nabla_x \log \pi(x) \bigr\|^2_2 = \bbE_{\pi} \bigl[ s(x)^2 + (\nabla_x \log \pi(x))^2 - 2{\color{teal}[s(x) \nabla_x \log \pi(x) ] \bigr] }
-		\end{multline*}
-		\vspace{-0.8cm}
-		\begin{align*}
-			{\color{teal}\bbE_{\pi} [{\color{violet}s(x) } \nabla_x \log \pi(x) ] } &= \int {\color{olive}\pi(x) {\color{violet}\nabla_x \log p(x)} \nabla_x \log \pi(x)} d x \\ 
-			&= \int {\color{violet}\nabla_x \log p(x) } {\color{olive}\nabla_x \pi(x) } dx = \Bigl.\pi(x) \nabla_x \log p(x) \Bigr|_{-\infty}^{+\infty} \\
-			&- \int \nabla^2_x \log p(x)  \pi(x) dx =- \bbE_{\pi} \nabla^2_x \log p(x)
-		\end{align*}
-		\[
-			\frac{1}{2} \bbE_{\pi}\bigl\| s(x) - \nabla_x \log \pi(x) \bigr\|^2_2 = \frac{1}{2} \bbE_{\pi} \Bigr[s(x)^2 + \nabla_x s(x) \Bigl]+ \text{const}.
-		\]
-		}
-	\end{block}
-	\myfootnotewithlink{https://jmlr.org/papers/volume6/hyvarinen05a/old.pdf}{Hyvarinen A. Estimation of non-normalized statistical models by score matching, 2005} 
-\end{frame}
-%=======
-\begin{frame}{Score matching}
-	\vspace{-0.3cm}
-	\begin{figure}
-		\centering
-		\includegraphics[width=0.8\linewidth]{figs/smld}
-	\end{figure}
-	\vspace{-0.6cm}
-	\begin{block}{Theorem (implicit score matching)}
-		\vspace{-0.6cm}
-		\[
-			\frac{1}{2} \bbE_{\pi}\bigl\| \bs(\bx, \btheta) - \nabla_\bx \log \pi(\bx) \bigr\|^2_2 = \bbE_{\pi}\Bigr[ \frac{1}{2}\| \bs(\bx, \btheta) \|_2^2 + \text{tr}\bigl(\nabla_{\bx} \bs(\bx, \btheta)\bigr) \Bigr] + \text{const}
-		\]
-		\vspace{-0.4cm}
-	\end{block}
-	\begin{enumerate}
-	    \item The left hand side is intractable due to unknown $\pi(\bx)$ -- \textbf{denoising score matching}. 
-	    \item The right hand side is complex due to Hessian matrix -- \textbf{sliced score matching}.
-	\end{enumerate}
-	\myfootnotewithlink{https://yang-song.github.io/blog/2019/ssm/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021}
-\end{frame}
-%=======
-\begin{frame}{Score matching}
-	\vspace{-0.3cm}
-	\begin{block}{Sliced score matching (Hutchinson's trace estimation)}
-		\vspace{-0.3cm}
-		\[
-			\text{tr}\bigl(\nabla_{\bx} \bs(\bx, \btheta)\bigr) = \mathbb{E}_{p(\bepsilon)} \left[ {\color{violet}\bepsilon^T \nabla_{\bx} \bs(\bx, \btheta)} \bepsilon \right],
-		\]
-		where $\mathbb{E} [\bepsilon] = 0$ and $\text{Cov} (\bepsilon) = \bI$.
-	\end{block}
-	\vspace{-0.2cm}
-	\begin{block}{Denoising score mathing}
-		Let perturb original data by normal noise $p(\bx | \bx', \sigma) = \cN(\bx | \bx', \sigma^2 \bI)$
-		\vspace{-0.3cm}
-		\[
-			\pi(\bx | \sigma) = \int \pi(\bx') p(\bx | \bx', \sigma) d\bx'.
-		\]
-		\vspace{-0.6cm} \\
-		Then the solution of 
-		\vspace{-0.2cm}
-		\[
-			\frac{1}{2} \bbE_{\pi(\bx | \sigma)}\bigl\| \bs(\bx, \btheta, \sigma) - \nabla_\bx \log \pi(\bx | \sigma) \bigr\|^2_2 \rightarrow \min_{\btheta}
-		\]
-		\vspace{-0.5cm} \\
-		satisfies $\bs(\bx, \btheta, \sigma) \approx \bs(\bx, \btheta, 0) = \bs(\bx, \btheta)$ using small enough noise scale $\sigma$.
-	\end{block}
-	\myfootnote{\href{https://arxiv.org/abs/1905.07088}{Song Y. Sliced Score Matching: A Scalable Approach to Density and Score Estimation, 2019} \\
-	\href{http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf}{Vincent P. A connection between score matching and denoising autoencoders. Neural computation, 2011}}.
-\end{frame}
-%=======
-\begin{frame}{Denoising score matching}
-	\begin{block}{Theorem}
-		\vspace{-0.8cm}
-		\begin{multline*}
-			\bbE_{\pi(\bx | \sigma)}\bigl\| \bs(\bx, \btheta, \sigma) - \nabla_\bx \log \pi(\bx | \sigma) \bigr\|^2_2 = \\ = \bbE_{\pi(\bx')} \bbE_{p(\bx | \bx', \sigma)}\bigl\| \bs(\bx, \btheta, \sigma) - \nabla_\bx \log p(\bx | \bx', \sigma) \bigr\|^2_2	
-		\end{multline*}
-		\vspace{-0.8cm}
-	\end{block}
-	Here $\nabla_{\bx} \log p(\bx | \bx', \sigma) = - \frac{\bx - \bx'}{\sigma^2}$.
-	\begin{itemize}
-		\item The RHS does not need to compute $\nabla_{\bx} \log \pi(\bx | \sigma)$ and even more $\nabla_{\bx} \log \pi(\bx)$.
-		\item $\bs(\bx, \btheta, \sigma)$ tries to \textbf{denoise} a corrupted sample.
-		\item Score function $\bs(\bx, \btheta, \sigma)$ parametrized by $\sigma$. How to make it?
-	\end{itemize}
-	\myfootnotewithlink{http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf}{Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010}
-\end{frame}
-%=======
-\begin{frame}{Denoising score matching}
-	\begin{itemize}
-		\item If $\sigma$ is \textbf{small}, the score function is not accurate and Langevin dynamics will probably fail to jump between modes.
-		\begin{figure}
-			\includegraphics[width=0.75\linewidth]{figs/pitfalls}
-		\end{figure}
-		\item If $\sigma$ is \textbf{large}, it is good for low-density regions and  multimodal distributions, but we will learn too corrupted distribution.
-		\begin{figure}
-			\includegraphics[width=0.75\linewidth]{figs/single_noise}
-		\end{figure}
-	\end{itemize}
-	\myfootnotewithlink{https://yang-song.github.io/blog/2019/ssm/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021}
 \end{frame}
 %=======
 \section{Noise conditioned score network}
@@ -479,11 +304,7 @@
 %=======
 \begin{frame}{Summary}
 	\begin{itemize}
-		\item Score matching proposes to minimize Fisher divergence to get score function.
-		\vfill
-		\item Sliced score matching and denoising score matching are two techniques to get scalable algorithm for fitting Fisher divergence.
-		\vfill
-		\item Noise conditioned score nework uses multiple noise levels and annealed Langevin dynamics to fit score function.
+		\item Noise conditioned score network uses multiple noise levels and annealed Langevin dynamics to fit score function.
 		\vfill
 		\item Gaussian diffusion process is a Markov chain that inject Gaussian noise.
 		\vfill

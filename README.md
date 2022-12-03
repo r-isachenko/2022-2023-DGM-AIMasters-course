@@ -45,9 +45,9 @@ The course is accompanied by practical tasks that allow you to understand the pr
 |  |  | <b>Seminar:</b> WGANs on multimodal 2D data. GANs zoo. Evolution of GANs. StyleGAN implementation : start discussion | [notebook](seminars/seminar11/seminar11.ipynb)<br>[GANevolution](seminars/seminar11/GANs_evolution_and_StyleGAN.pdf)<br>[StyleGAN_not_completed](seminars/seminar11/StyleGAN.ipynb) |
 | 12 | November, 28 | <b>Lecture:</b> 12. Vector quantization, straight-through gradient estimation (VQ-VAE). Gumbel-softmax trick (DALL-E). Neural ODE. Adjoint method. | [slides](lectures/lecture12/Lecture12.pdf) |
 |  |  | <b>Seminar:</b> VQ-VAE implementation hints. StyleGAN coding and assessing | [notebook](seminars/seminar12/seminar12.ipynb)<br>[StyleGAN](seminars/seminar12/StyleGAN_final.ipynb) |
-| 13 | December, 5 | <b>Lecture:</b> Continuous-in-time NF (FFJORD, Hutchinson's trace estimator). Kolmogorov-Fokker-Planck equation and Langevin dynamic. SDE basics. | TBA |
+| 13 | December, 5 | <b>Lecture:</b> Continuous-in-time NF (FFJORD, Hutchinson's trace estimator). Kolmogorov-Fokker-Planck equation and Langevin dynamic. SDE basics. Score matching. | [slides](lectures/lecture13/Lecture13.pdf) |
 |  |  | <b>Seminar:</b> TBA | TBA |
-| 14 | December, 12 | <b>Lecture:</b> Score matching. Noise conditioned score network (NCSN). Denoising diffusion probabilistic model (DDPM). | TBA |
+| 14 | December, 12 | <b>Lecture:</b> Noise conditioned score network (NCSN). Denoising diffusion probabilistic model (DDPM). | TBA |
 |  |  | <b>Seminar:</b> TBA | TBA |
 |  | December, 19 | <b>Oral exam</b> | TBA |
 

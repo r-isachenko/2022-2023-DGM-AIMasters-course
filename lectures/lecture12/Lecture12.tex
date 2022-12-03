@@ -299,14 +299,14 @@
 \begin{frame}{Neural ODE}
 	Consider Ordinary Differential Equation (ODE)
 	\begin{align*}
-	    \frac{d \bz(t)}{dt} &= f(\bz(t), \btheta); \quad \text{with initial condition }\bz(t_0) = \bz_0. \\
+	    \frac{d \bz(t)}{dt} &= f(\bz(t), t, \btheta); \quad \text{with initial condition }\bz(t_0) = \bz_0. \\
 	    \bz(t_1) &= \int^{t_1}_{t_0} f(\bz(t), \btheta) d t  + \bz_0 = \text{ODESolve}(\bz(t_0), f, t_0,t_1, \btheta).
 	\end{align*}
 	\vspace{-0.4cm}
 	\begin{block}{Euler update step}
 		\vspace{-0.6cm}
 		\[
-		    \frac{\bz(t + \Delta t) - \bz(t)}{\Delta t} = f(\bz(t), \btheta) \quad \Rightarrow \quad \bz(t + \Delta t) = \bz(t) + \Delta t \cdot f(\bz(t), \btheta).
+		    \frac{\bz(t + \Delta t) - \bz(t)}{\Delta t} = f(\bz(t), t, \btheta) \,\, \Rightarrow \,\, \bz(t + \Delta t) = \bz(t) + \Delta t \cdot f(\bz(t), t, \btheta)
 		\]
 		\vspace{-0.7cm}
 	\end{block}
@@ -369,7 +369,7 @@
 	\begin{block}{Forward pass (loss function)}
 		\vspace{-0.8cm}
 		\begin{align*}
-			L(\by) = L(\bz(t_1)) &= L\left( \bz(t_0) + \int_{t_0}^{t_1} f(\bz(t), \btheta) dt \right) \\ &= L\bigl(\text{ODESolve}(\bz(t_0), f, t_0,t_1, \btheta) \bigr)
+			L(\by) = L(\bz(t_1)) &= L\left( \bz(t_0) + \int_{t_0}^{t_1} f(\bz(t), t, \btheta) dt \right) \\ &= L\bigl(\text{ODESolve}(\bz(t_0), f, t_0,t_1, \btheta) \bigr)
 		\end{align*}
 	\vspace{-0.5cm}
 	\end{block}
@@ -398,15 +398,15 @@
 	\begin{block}{Theorem (Pontryagin)}
 		\vspace{-0.6cm}
 		\[
-		\frac{d \ba_{\bz}(t)}{dt} = - \ba_{\bz}(t)^T \cdot \frac{\partial f(\bz(t), \btheta)}{\partial \bz}; \quad \frac{d \ba_{\btheta}(t)}{dt} = - \ba_{\bz}(t)^T \cdot \frac{\partial f(\bz(t), \btheta)}{\partial \btheta}.
+		\frac{d \ba_{\bz}(t)}{dt} = - \ba_{\bz}(t)^T \cdot \frac{\partial f(\bz(t), t, \btheta)}{\partial \bz}; \quad \frac{d \ba_{\btheta}(t)}{dt} = - \ba_{\bz}(t)^T \cdot \frac{\partial f(\bz(t),  t, \btheta)}{\partial \btheta}.
 		\]
 		Do we know any initilal condition?
 	\end{block}
 	\begin{block}{Solution for adjoint function}
 		\vspace{-0.8cm}
 		\begin{align*}
-			\frac{\partial L}{\partial \btheta(t_0)} &= \ba_{\btheta}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \btheta(t)} dt + 0\\
-			\frac{\partial L}{\partial \bz(t_0)} &= \ba_{\bz}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \bz(t)} dt + \frac{\partial L}{\partial \bz(t_1)}\\
+			\frac{\partial L}{\partial \btheta(t_0)} &= \ba_{\btheta}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), t, \btheta)}{\partial \btheta(t)} dt + 0\\
+			\frac{\partial L}{\partial \bz(t_0)} &= \ba_{\bz}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), t, \btheta)}{\partial \bz(t)} dt + \frac{\partial L}{\partial \bz(t_1)}\\
 		\end{align*}
 		\vspace{-1.2cm}
 	\end{block}
@@ -419,7 +419,7 @@
 	\begin{block}{Forward pass}
 		\vspace{-0.5cm}
 		\[
-		\bz(t_1) = \int^{t_1}_{t_0} f(\bz(t), \btheta) d t  + \bz_0 \quad \Rightarrow \quad \text{ODE Solver}
+		\bz(t_1) = \int^{t_1}_{t_0} f(\bz(t), t, \btheta) d t  + \bz_0 \quad \Rightarrow \quad \text{ODE Solver}
 		\]
 		\vspace{-0.6cm}
 	\end{block}
@@ -429,9 +429,9 @@
 			\left.
 			{\footnotesize 
 				\begin{aligned}
-					\frac{\partial L}{\partial \btheta(t_0)} &= \ba_{\btheta}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \btheta(t)} dt + 0 \\
-					\frac{\partial L}{\partial \bz(t_0)} &= \ba_{\bz}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), \btheta)}{\partial \bz(t)} dt + \frac{\partial L}{\partial \bz(t_1)} \\
-					\bz(t_0) &= - \int^{t_0}_{t_1} f(\bz(t), \btheta) d t  + \bz_1.
+					\frac{\partial L}{\partial \btheta(t_0)} &= \ba_{\btheta}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), t, \btheta)}{\partial \btheta(t)} dt + 0 \\
+					\frac{\partial L}{\partial \bz(t_0)} &= \ba_{\bz}(t_0) =  - \int_{t_1}^{t_0} \ba_{\bz}(t)^T \frac{\partial f(\bz(t), t, \btheta)}{\partial \bz(t)} dt + \frac{\partial L}{\partial \bz(t_1)} \\
+					\bz(t_0) &= - \int^{t_0}_{t_1} f(\bz(t), t, \btheta) d t  + \bz_1.
 				\end{aligned}
 			}
 			\right\rbrace
@@ -452,11 +452,11 @@
 	\begin{itemize}
 		\item Vector Quantization is the way to create VAE with discrete latent space and deterministic variational posterior. 
 		\vfill
-		\item Straight-through gradient ignores quanrize operation in backprop.
+		\item Straight-through gradient ignores quantize operation in backprop.
 		\vfill
 		\item Gumbel-softmax trick relaxes discrete problem to continuous one using Gumbel-max reparametrization trick.
 		\vfill
-		\item It becomes more and more popular to use discrete latent spaces in the fields of image/video/music generaton.
+		\item It becomes more and more popular to use discrete latent spaces in the fields of image/video/music generation.
 		\vfill		
 		\item Residual networks could be interpreted as solution of ODE with Euler method.
 		\vfill
