@@ -47,7 +47,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 |  |  | <b>Seminar:</b> VQ-VAE implementation hints. StyleGAN coding and assessing | [notebook](seminars/seminar12/seminar12.ipynb)<br>[StyleGAN](seminars/seminar12/StyleGAN_final.ipynb) |
 | 13 | December, 5 | <b>Lecture:</b> Continuous-in-time NF (FFJORD, Hutchinson's trace estimator). Kolmogorov-Fokker-Planck equation and Langevin dynamic. SDE basics. Score matching. | [slides](lectures/lecture13/Lecture13.pdf) |
 |  |  | <b>Seminar:</b> CNF theory. Langevin Dynamics. Score matching practice | [notebook](seminars/seminar13/seminar13.ipynb) |
-| 14 | December, 12 | <b>Lecture:</b> Noise conditioned score network (NCSN). Denoising diffusion probabilistic model (DDPM). | TBA |
+| 14 | December, 12 | <b>Lecture:</b> Noise conditioned score network (NCSN). Gaussian diffusion process. Denoising diffusion probabilistic model (DDPM). | [slides](lectures/lecture14/Lecture14.pdf) |
 |  |  | <b>Seminar:</b> TBA | TBA |
 |  | December, 19 | <b>Oral exam</b> | TBA |
 
