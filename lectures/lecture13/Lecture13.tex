@@ -153,9 +153,9 @@
 %=======
 \section{Continuous-in-time normalizing flows}
 %=======
-\begin{frame}{Continuous Normalizing Flows}
+\begin{frame}{Continuous-in-time Normalizing Flows}
 	\vspace{-0.3cm}
-	\begin{block}{Discrete Normalizing Flows}
+	\begin{block}{Discrete-in-time NF}
 		\vspace{-0.8cm}
 		  \[
 		  \bz_{t+1} = f(\bz_t, \btheta); \quad \log p(\bz_{t+1}) = \log p(\bz_{t}) - \log \left| \det \frac{\partial f(\bz_t, \btheta)}{\partial \bz_{t}} \right| .
@@ -184,7 +184,7 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1810.01367}{Grathwohl W. et al. FFJORD: Free-form Continuous Dynamics for Scalable Reversible Generative Models, 2018}  
 \end{frame}
 %=======
-\begin{frame}{Continuous Normalizing Flows}
+\begin{frame}{Continuous-in-time Normalizing Flows}
 	\begin{block}{Theorem (Picard)}
 		If $f$ is uniformly Lipschitz continuous in $\bz$ and continuous in $t$, then the ODE has a \textbf{unique} solution.
 	\end{block}
@@ -206,7 +206,7 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1806.07366}{Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018}   
 \end{frame}
 %=======
-\begin{frame}{Continuous Normalizing Flows}
+\begin{frame}{Continuous-in-time Normalizing Flows}
 	\begin{block}{Density evaluation}
 		\vspace{-0.4cm}
 		\[
@@ -242,7 +242,7 @@
 	\myfootnotewithlink{https://arxiv.org/abs/1806.07366}{Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018}   
 \end{frame}
 %=======
-\begin{frame}{Continuous Normalizing Flows}
+\begin{frame}{Continuous-in-time Normalizing Flows}
 	\vspace{0.2cm}
 	\begin{itemize}
 		\item $\text{tr} \left( \frac{\partial f(\bz(t), \btheta)}{\partial \bz(t)} \right)$ costs $O(m^2)$ ($m$
