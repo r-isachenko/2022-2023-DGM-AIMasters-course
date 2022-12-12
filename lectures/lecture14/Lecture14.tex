@@ -171,14 +171,19 @@
 \begin{frame}{Noise conditioned score network}
 	
 	\begin{minipage}{0.5\linewidth}
-		\vspace{-1.7cm}
+		\vspace{-0.7cm}
 		\begin{block}{Training: loss function}
-			\vspace{-0.5cm}
+			\vspace{-0.8cm}
 			\[
-			\sum_{i=1}^L \sigma_l^2\bbE_{\pi(\bx')} \bbE_{\bepsilon}\bigl\| \bs_l - \bepsilon \bigr\|^2_2,
+			\sum_{i=1}^L \sigma_l^2\bbE_{\pi(\bx')} \bbE_{\bepsilon}\left\| \bs_l + \frac{\bepsilon}{\sigma_l} \right\|^2_2,
 			\]
-			where $\bs_l = \bs(\bx' + \sigma_l \cdot \bepsilon, \btheta, \sigma_l)$.
 		\end{block}
+		\vspace{-0.5cm}
+		Here
+		\begin{itemize}
+			\item $\bs_l = \bs(\bx' + \sigma_l \cdot \bepsilon, \btheta, \sigma_l)$.
+			\item $\nabla_{\bx} \log p(\bx | \bx', \sigma) = - \frac{\bx - \bx'}{\sigma^2} = - \frac{\bepsilon}{\sigma_l}$.
+		\end{itemize}
 	\end{minipage}%
 	\begin{minipage}{0.5\linewidth}
 		\begin{block}{Inference: annealed Langevin dynamic}
@@ -187,7 +192,7 @@
 			\end{figure}
 		\end{block}
 	\end{minipage}
-	\vspace{-1cm}
+	\vspace{-0.7cm}
 	\begin{block}{Samples}
 		\begin{figure}
 			\includegraphics[width=\linewidth]{figs/NCSNv2}
