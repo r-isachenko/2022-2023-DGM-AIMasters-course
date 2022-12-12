@@ -48,7 +48,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 13 | December, 5 | <b>Lecture:</b> Continuous-in-time NF (FFJORD, Hutchinson's trace estimator). Kolmogorov-Fokker-Planck equation and Langevin dynamic. SDE basics. Score matching. | [slides](lectures/lecture13/Lecture13.pdf) |
 |  |  | <b>Seminar:</b> CNF theory. Langevin Dynamics. Score matching practice | [notebook](seminars/seminar13/seminar13.ipynb) |
 | 14 | December, 12 | <b>Lecture:</b> Noise conditioned score network (NCSN). Gaussian diffusion process. Denoising diffusion probabilistic model (DDPM). | [slides](lectures/lecture14/Lecture14.pdf) |
-|  |  | <b>Seminar:</b> TBA | TBA |
+|  |  | <b>Seminar:</b> NCSN and DDPM : theory and implementation on 2D data | [notebook](seminars/seminar14/seminar14.ipynb) |
 |  | December, 19 | <b>Oral exam</b> | TBA |
 
 ## Homeworks
