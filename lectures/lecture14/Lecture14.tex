@@ -211,7 +211,7 @@
 		\bx_t = \sqrt{1 - \beta} \cdot \bx_{t - 1} + \sqrt{\beta} \cdot \bepsilon, \quad \text{where }\bepsilon \sim \cN(0, 1);
 	\]
 	\[
-		q(\bx_t | \bx_{t-1}) = \cN(\bx_t | \sqrt{1 - \beta} \bx_{t-1}, \beta \bI).
+		q(\bx_t | \bx_{t-1}) = \cN(\bx_t | \sqrt{1 - \beta} \cdot \bx_{t-1}, \beta \cdot \bI).
 	\]
 	\vspace{-0.6cm}
 	\begin{block}{Statement 1}
@@ -230,7 +230,7 @@
 		\]
 		\vspace{-0.7cm}
 		\[
-			q(\bx_t | \bx_0) = \cN(\bx_t | \sqrt{\bar{\alpha}_t} \bx_0, (1 - \bar{\alpha}_t) \bI).
+			q(\bx_t | \bx_0) = \cN(\bx_t | \sqrt{\bar{\alpha}_t} \cdot \bx_0, (1 - \bar{\alpha}_t) \cdot \bI).
 		\]
 		We could sample from any timestamp using only $\bx_0$!
 	\end{block}
@@ -345,7 +345,7 @@
 %=======
 \begin{frame}{Gaussian diffusion model as VAE}
 	\[
-		\cL_t = {\color{teal}KL \bigl(q(\bx_{t-1} | \bx_t, \bx_0) || p(\bx_{t - 1} | \bx_t, \btheta )\bigr)},
+		\cL_t = {\color{teal}KL \bigl(q(\bx_{t-1} | \bx_t, \bx_0) || p(\bx_{t - 1} | \bx_t, \btheta )\bigr)}.
 	\]
 	Here
 	\[
@@ -353,23 +353,23 @@
 	\]
 	$\tilde{\bmu}_t(\bx_t, \bx_0)$ and $\tilde{\beta}_t$ have analytical formulas (we omit it) and both dependent on $\beta_t$.
 	\begin{itemize}
+		\item \textbf{Note:} We do not have an analytical expression for $q(\bx_{t-1} | \bx_t)$.
 		\item Assume $\bsigma^2(\bx_t, \btheta, t) = \tilde{\beta}_t \bI$ {\color{gray}(reminder: $p(\bx_{t - 1} | \bx_t, \btheta) = \cN(\bx_{t - 1} | \bmu(\bx_t, \btheta, t), \bsigma^2(\bx_t, \btheta, t))$)}.
-		\item Use KL formula for normal distributions.
-		\item Use the fact $\bx_t = \sqrt{\bar{\alpha}_t} \bx_{0} + \sqrt{1 - \bar{\alpha}_t} \bepsilon$
+		\item Use KL formula between two normal distributions:
+		\begin{align*}
+			\cL_t &= KL\Bigl(\cN\bigl(\tilde{\bmu}_t(\bx_t, \bx_0), \tilde{\beta}_t \bI \bigr) || \cN\bigl(\bmu(\bx_t, \btheta, t), \tilde{\beta}_t \bI\bigr)\Bigr) \\ 
+			&= \bbE_{\bepsilon} \left[ \frac{1}{2\tilde{\beta}_t} \bigl\| \tilde{\bmu}_t(\bx_t, \bx_0) - \bmu(\bx_t, \btheta, t) \bigr\|^2 \right]
+		\end{align*}
 	\end{itemize}
-	\begin{multline*}
-		\cL_t = \bbE_{\bepsilon} \left[ \frac{1}{2\tilde{\beta}_t} \| {\color{violet} \tilde{\bmu}_t(\bx_t, \bx_0)} - \bmu(\bx_t, \btheta, t) \|^2 \right] = \\ 
-		= \bbE_{\bepsilon} \left[ \frac{1}{2\tilde{\beta}_t} \left\| {\color{violet} \frac{1}{\sqrt{1 - \beta_t}}\left( \bx_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t} } \bepsilon \right)} - \bmu(\bx_t, \btheta, t) \right\|^2 \right]
-	\end{multline*}
 	\myfootnotewithlink{https://arxiv.org/abs/2006.11239}{Ho J. Denoising Diffusion Probabilistic Models, 2020}
 	\end{frame}
 %=======
 \begin{frame}{Gaussian diffusion model as VAE}
-	\vspace{-0.3cm}
-	\[
-		\cL_t = \bbE_{\bepsilon} \left[ \frac{1}{2\tilde{\beta}_t} \left\| {\color{violet} \frac{1}{\sqrt{1 - \beta_t}}\left( \bx_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t} } \bepsilon \right)} - \bmu(\bx_t, \btheta, t) \right\|^2 \right]
-	\]
-	\vspace{-0.3cm}
+	\begin{multline*}
+		\cL_t = \bbE_{\bepsilon} \left[ \frac{1}{2\tilde{\beta}_t} \| {\color{violet} \tilde{\bmu}_t(\bx_t, \bx_0)} - \bmu(\bx_t, \btheta, t) \|^2 \right] = \\ 
+		= \bbE_{\bepsilon} \left[ \frac{1}{2\tilde{\beta}_t} \left\| {\color{violet} \frac{1}{\sqrt{1 - \beta_t}}\left( \bx_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t} } \bepsilon \right)} - \bmu(\bx_t, \btheta, t) \right\|^2 \right]
+	\end{multline*}
+    {\color{gray}Here we used the analytic expression for $\tilde{\bmu}_t(\bx_t, \bx_0)$.}
 	\begin{block}{Reparametrization}
 		\vspace{-0.3cm}
 		\[
@@ -378,13 +378,37 @@
 		\vspace{-0.6cm}
 	\end{block}
 	\begin{block}{KL term}
-		\vspace{-0.7cm}
-		\begin{multline*}
-			\cL_t = \bbE_{\bepsilon} \left[ \frac{1}{2\tilde{\beta}_t} \left\|\frac{1}{\sqrt{1 - \beta_t}}\left( \bx_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t} } \bepsilon \right) - \bmu(\bx_t, \btheta, t) \right\|^2 \right] \\ 
-			= {\color{olive}\bbE_{\bepsilon}} \left[ \frac{\beta_t^2}{2\tilde{\beta}_t (1 - \beta_t) (1 - \bar{\alpha_t})} \left\| {\color{violet}\bepsilon} - {\color{teal}\bepsilon(\bx_t, \btheta, t)}\right\|^2 \right]
-		\end{multline*}
+		\vspace{-0.2cm}
+		\[
+			\cL_t = \bbE_{\bepsilon} \left[ \frac{\beta_t^2}{2\tilde{\beta}_t (1 - \beta_t)} \left\| \frac{\bepsilon}{\sqrt{1 - \bar{\alpha}_t}} - \frac{\bepsilon({\color{teal}\bx_t}, \btheta, t)}{\sqrt{1 - \bar{\alpha}_t}}\right\|^2 \right]
+		\]
+		\[
+			{\color{teal}\bx_t} = \sqrt{\bar{\alpha}_t} \cdot \bx_{0} + \sqrt{1 - \bar{\alpha}_t} \cdot \bepsilon, \quad \text{where } \bepsilon \sim \cN(0, 1)
+		\]
 		\vspace{-0.5cm}
 	\end{block}
+	\myfootnotewithlink{https://arxiv.org/abs/2006.11239}{Ho J. Denoising Diffusion Probabilistic Models, 2020}
+\end{frame}
+%=======
+\begin{frame}{Gaussian diffusion model vs Score matching}
+	\vspace{-0.3cm}
+	\[
+		\cL_t = {\color{olive}\bbE_{\bepsilon}} \left[ \frac{\beta_t^2}{2\tilde{\beta}_t (1 - \beta_t)} \left\| {\color{violet}\frac{\bepsilon}{\sqrt{1 - \bar{\alpha}_t}}} - {\color{teal}\frac{\bepsilon(\bx_t, \btheta, t)}{\sqrt{1 - \bar{\alpha}_t}}}\right\|^2 \right]
+	\]
+	\begin{itemize}
+		\item Result from Statement 2
+		\[
+			q(\bx_t | \bx_0) = \cN(\bx_t | \sqrt{\bar{\alpha}_t} \cdot \bx_0, (1 - \bar{\alpha}_t) \cdot \bI).
+		\]
+		\item Score of noised distribution
+		\[
+			\nabla_{\bx_t} \log q(\bx_t | \bx_0) = - \frac{\bepsilon}{\sqrt{1 - \bar{\alpha}_t}}, \quad \text{where } \bepsilon \sim \cN(0, 1).
+		\]
+		\item Let reparametrize our model: 
+		\[
+			\bs(\bx_t, \btheta, t) = \frac{\bepsilon(\bx_t, \btheta, t)}{\sqrt{1 - \bar{\alpha}_t}}.
+		\]
+	\end{itemize}
 	\begin{block}{Noise conditioned score network}
 		\vspace{-0.2cm}
 		\[
