@@ -48,7 +48,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 13 | December, 5 | <b>Lecture:</b> Continuous-in-time NF (FFJORD, Hutchinson's trace estimator). Kolmogorov-Fokker-Planck equation and Langevin dynamic. SDE basics. Score matching. | [slides](lectures/lecture13/Lecture13.pdf) |
 |  |  | <b>Seminar:</b> CNF theory. Langevin Dynamics. Score matching practice | [notebook](seminars/seminar13/seminar13.ipynb) |
 | 14 | December, 12 | <b>Lecture:</b> Noise conditioned score network (NCSN). Gaussian diffusion process. Denoising diffusion probabilistic model (DDPM). | [slides](lectures/lecture14/Lecture14.pdf) |
-|  |  | <b>Seminar:</b> TBA | TBA |
+|  |  | <b>Seminar:</b> NCSN and DDPM : theory and implementation on 2D data | [notebook](seminars/seminar14/seminar14.ipynb) |
 |  | December, 19 | <b>Oral exam</b> | TBA |
 
 ## Homeworks
@@ -59,7 +59,7 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 3 | October, 20 | November, 3 | <ol><li>Theory (Sylvester flows, NF Expressivity).</li><li>RealNVP on 2D data.</li><li>RealNVP on CIFAR10.</li></ol> | [![Open In Github](https://img.shields.io/static/v1.svg?logo=github&label=Repo&message=Open%20in%20Github&color=lightgrey)](homeworks/hw3.ipynb)<br>[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/r-isachenko/2022-2023-DGM-AIMasters-course/blob/main/homeworks/hw3.ipynb) |
 | 4 | November, 3 | November, 17 | <ol><li>Theory (Mixture of Logistics, MI in ELBO surgery).</li><li>VAE with AR decoder on MNIST.</li><li>VAE with AR prior on CIFAR10.</li></ol> | [![Open In Github](https://img.shields.io/static/v1.svg?logo=github&label=Repo&message=Open%20in%20Github&color=lightgrey)](homeworks/hw4.ipynb)<br>[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/r-isachenko/2022-2023-DGM-AIMasters-course/blob/main/homeworks/hw4.ipynb) |
 | 5 | November, 17 | December, 1 | <ol><li>Theory (IW dequantization, LSGAN, GP theorem).</li><li>WGAN/WGAN-GP/SN-GAN on CIFAR10.</li></ol>  | [![Open In Github](https://img.shields.io/static/v1.svg?logo=github&label=Repo&message=Open%20in%20Github&color=lightgrey)](homeworks/hw5.ipynb)<br>[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/r-isachenko/2022-2023-DGM-AIMasters-course/blob/main/homeworks/hw5.ipynb) |
-| 6 | December, 1 | December, 14 | <ol><li>Theory (Neural ODE vs backprop, Gumbel-Max trick).</li><li>FID and Inception Score.</li><li>VQ-VAE with PixelCNN prior.</li></ol> | [![Open In Github](https://img.shields.io/static/v1.svg?logo=github&label=Repo&message=Open%20in%20Github&color=lightgrey)](homeworks/hw6.ipynb)<br>[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/r-isachenko/2022-2023-DGM-AIMasters-course/blob/main/homeworks/hw6.ipynb) |
+| 6 | December, 1 | December, 15 | <ol><li>Theory (Neural ODE vs backprop, Gumbel-Max trick).</li><li>FID and Inception Score.</li><li>VQ-VAE with PixelCNN prior.</li></ol> | [![Open In Github](https://img.shields.io/static/v1.svg?logo=github&label=Repo&message=Open%20in%20Github&color=lightgrey)](homeworks/hw6.ipynb)<br>[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/r-isachenko/2022-2023-DGM-AIMasters-course/blob/main/homeworks/hw6.ipynb) |
 
 ## Game rules
 - 6 homeworks each of 13 points = **78 points**
