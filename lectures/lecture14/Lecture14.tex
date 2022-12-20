@@ -249,7 +249,7 @@
 		\item $\bx_t = \sqrt{1 - \beta} \cdot \bx_{t - 1} + \sqrt{\beta} \cdot \bepsilon$, where $\bepsilon \sim \cN(0, 1)$, $t \geq 1$;
 		\item $\bx_T \sim p_{\infty}(\bx) = \cN(0, 1)$, where $T >> 1$.
 	\end{enumerate}
-	If we are able to invert this process, we will get the way to sample $\bx \sim \pi(\bx)$ using noise samples $p_{\infty}(\bx)\cN(0, 1)$. \\ 
+	If we are able to invert this process, we will get the way to sample $\bx \sim \pi(\bx)$ using noise samples $p_{\infty}(\bx) = \cN(0, 1)$. \\ 
 	Now our goal is to revert this process.
 	\myfootnotewithlink{https://ayandas.me/blog-tut/2021/12/04/diffusion-prob-models.html}{Das A. An introduction to Diffusion Probabilistic Models, blog post, 2021}
 \end{frame}
@@ -331,7 +331,7 @@
 		\begin{multline*}
 			\cL(q, \btheta) = \bbE_{q({\color{teal}\bx_1, \dots, \bx_T} | \bx_0)}\frac{p(\bx_0, {\color{teal}\bx_1, \dots, \bx_T} | \btheta)}{q({\color{teal}\bx_1, \dots, \bx_T} | \bx_0)} = \\ 
 			= \bbE_{q} \Bigl[ {\color{violet}KL\bigl(q(\bx_T | \bx_0) || p(\bx_T)\bigr)}
-			+ \sum_{t=2}^T \underbrace{KL \bigl(q(\bx_{t-1} | \bx_t, \bx_0) || p(\bx_{t - 1} || \bx_t, \btheta )\bigr)}_{\cL_t} - \\
+			+ \sum_{t=2}^T \underbrace{KL \bigl(q(\bx_{t-1} | \bx_t, \bx_0) || p(\bx_{t - 1} | \bx_t, \btheta )\bigr)}_{\cL_t} - \\
 			- {\color{olive}\log p(\bx_0 | \bx_1, \btheta)} \Bigr]
 		\end{multline*}
 		\vspace{-0.5cm}
