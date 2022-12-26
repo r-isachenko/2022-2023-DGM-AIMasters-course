@@ -1,4 +1,4 @@
-from .visualize import init_samples_vis_ctx, show_epoch_samples
+from .visualize import init_visual_ctx, show_epoch_samples_losses
 
 from collections import defaultdict
 from tqdm.notebook import tqdm
@@ -108,7 +108,7 @@ def train_model(
         train_params_dict['loss_key'] = loss_key
 
     if visualization_samples_enabled:
-        samples_ctx = init_samples_vis_ctx()
+        ctx = init_visual_ctx()
 
     for epoch in forrange:
         model.train()
@@ -130,6 +130,13 @@ def train_model(
                 samples = model.sample(64, **sample_kwargs)
                 if torch.is_tensor(samples):
                     samples = samples.cpu()
-                show_epoch_samples(samples_ctx, samples, title=f'Samples (epoch={epoch})')
+                show_epoch_samples_losses(ctx, {
+                    'samples' : samples, 
+                    title=f'Samples (epoch={epoch})'
+                }, 
+                {
+                    'train_losses' : train_losses,
+                    'test_losses' : test_losses
+                })
 
     return dict(train_losses), dict(test_losses)
