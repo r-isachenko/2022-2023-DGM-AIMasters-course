@@ -15,7 +15,7 @@ LABEL_FONT_SIZE = 14
 TITLE_FONT_SIZE = 16
 
 
-def init_samples_vis_ctx():
+def init_visual_ctx():
     ctx = Output()
     display.display(ctx)
     return ctx
@@ -70,7 +70,7 @@ def show_epoch_samples_losses(ctx, samples_kwargs, losses_kwargs):
     with ctx:
         display.clear_output(wait=True)
         show_samples(samples_kwargs['samples'], samples_kwargs['title'])
-        plot_training_curves(losses_kwargs['train_losses'], losses_kwargs['test_losses']):
+        plot_training_curves(losses_kwargs['train_losses'], losses_kwargs['test_losses'])
 
 
 def visualize_images(data, title):
