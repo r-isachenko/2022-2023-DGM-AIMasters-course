@@ -1,3 +1,5 @@
+from visualize import init_samples_vis_ctx, show_epoch_samples
+
 from collections import defaultdict
 from tqdm.notebook import tqdm
 
@@ -47,7 +49,9 @@ def train_model(
     lr,
     use_tqdm=False,
     use_cuda=False,
-    loss_key='total_loss'
+    visualisation_enabled=True, # model should have 'sample' method
+    sample_kwargs={},
+    loss_key='total_loss',
 ):
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
@@ -56,6 +60,8 @@ def train_model(
     forrange = tqdm(range(epochs)) if use_tqdm else range(epochs)
     if use_cuda:
         model = model.cuda()
+    if visualisation_enabled:
+        ctx = init_samples_vis_ctx()
 
     for epoch in forrange:
         model.train()
@@ -65,4 +71,11 @@ def train_model(
         for k in train_loss.keys():
             train_losses[k].extend(train_loss[k])
             test_losses[k].append(test_loss[k])
+
+        # visualise samples
+        if visualisation_enabled:
+            model.eval()
+            samples = model.sample(64, **sample_kwargs)
+            show_epoch_samples(ctx, samples, title=f'Samples (epoch={epoch})')
+
     return dict(train_losses), dict(test_losses)

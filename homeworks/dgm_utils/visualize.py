@@ -4,6 +4,10 @@ import torch
 from matplotlib import pyplot as plt
 from torchvision.utils import make_grid
 
+# to visualize samples at each training epoch
+from IPython import display
+from ipywidgets import Output
+
 
 TICKS_FONT_SIZE = 12
 LEGEND_FONT_SIZE = 12
@@ -54,6 +58,18 @@ def show_samples(samples, title, figsize=None, nrow=None):
     plt.imshow(grid_img)
     plt.axis('off')
     plt.show()
+
+
+def init_samples_vis_ctx():
+    ctx = Output()
+    display.display(ctx)
+    return ctx
+
+
+def show_epoch_samples(ctx, samples, title, figsize=None, nrow=None):
+    with ctx:
+        display.clear_output(wait=True)
+        show_samples(samples, title, figsize, nrow)
 
 
 def visualize_images(data, title):
