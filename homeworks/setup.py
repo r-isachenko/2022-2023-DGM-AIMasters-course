@@ -15,5 +15,7 @@ setup(
         'torchaudio',
         'gdown',
         'scikit-learn'
+        'ipython',
+        'ipywidgets',
     ]
 )
