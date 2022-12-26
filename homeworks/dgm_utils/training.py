@@ -76,7 +76,7 @@ def train_model(
         'end' : 1,
         'anneal_fn': lambda x: x
     },
-    visualization_samples_enabled=True, # model should have 'sample' method
+    visualization_samples_enabled=False, # model should have 'sample' method
     sample_kwargs={},
     loss_key='total_loss',
 ):
