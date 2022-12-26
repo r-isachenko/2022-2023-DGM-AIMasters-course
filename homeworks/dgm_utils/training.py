@@ -132,7 +132,7 @@ def train_model(
                     samples = samples.cpu()
                 show_epoch_samples_losses(ctx, {
                     'samples' : samples, 
-                    title=f'Samples (epoch={epoch})'
+                    'title': f'Samples (epoch={epoch})'
                 }, 
                 {
                     'train_losses' : train_losses,
