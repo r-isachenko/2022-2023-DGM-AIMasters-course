@@ -78,7 +78,7 @@ def train_model(
                 model.eval()
                 samples = model.sample(64, **sample_kwargs)
                 if torch.is_tensor(samples):
-                    samples = samples.detach().cpu()
+                    samples = samples.cpu()
                 show_epoch_samples(samples_ctx, samples, title=f'Samples (epoch={epoch})')
 
     return dict(train_losses), dict(test_losses)
