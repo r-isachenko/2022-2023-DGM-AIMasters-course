@@ -15,6 +15,12 @@ LABEL_FONT_SIZE = 14
 TITLE_FONT_SIZE = 16
 
 
+def init_samples_vis_ctx():
+    ctx = Output()
+    display.display(ctx)
+    return ctx
+
+
 def plot_training_curves(train_losses, test_losses, logscale_y=False, logscale_x=False):
     n_train = len(train_losses[list(train_losses.keys())[0]])
     n_test = len(test_losses[list(train_losses.keys())[0]])
@@ -58,12 +64,6 @@ def show_samples(samples, title, figsize=None, nrow=None):
     plt.imshow(grid_img)
     plt.axis('off')
     plt.show()
-
-
-def init_samples_vis_ctx():
-    ctx = Output()
-    display.display(ctx)
-    return ctx
 
 
 def show_epoch_samples(ctx, samples, title, figsize=None, nrow=None):

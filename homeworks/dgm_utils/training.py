@@ -49,7 +49,7 @@ def train_model(
     lr,
     use_tqdm=False,
     use_cuda=False,
-    visualisation_enabled=True, # model should have 'sample' method
+    visualization_samples_enabled=True, # model should have 'sample' method
     sample_kwargs={},
     loss_key='total_loss',
 ):
@@ -60,8 +60,8 @@ def train_model(
     forrange = tqdm(range(epochs)) if use_tqdm else range(epochs)
     if use_cuda:
         model = model.cuda()
-    if visualisation_enabled:
-        ctx = init_samples_vis_ctx()
+    if visualization_samples_enabled:
+        samples_ctx = init_samples_vis_ctx()
 
     for epoch in forrange:
         model.train()
@@ -73,9 +73,10 @@ def train_model(
             test_losses[k].append(test_loss[k])
 
         # visualise samples
-        if visualisation_enabled:
-            model.eval()
-            samples = model.sample(64, **sample_kwargs).detach().cpu()
-            show_epoch_samples(ctx, samples, title=f'Samples (epoch={epoch})')
+        if visualization_samples_enabled:
+            with torch.no_grad():
+                model.eval()
+                samples = model.sample(64, **sample_kwargs).detach().cpu()
+                show_epoch_samples(samples_ctx, samples, title=f'Samples (epoch={epoch})')
 
     return dict(train_losses), dict(test_losses)
