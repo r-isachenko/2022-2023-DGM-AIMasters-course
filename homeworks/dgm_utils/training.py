@@ -76,7 +76,9 @@ def train_model(
         if visualization_samples_enabled:
             with torch.no_grad():
                 model.eval()
-                samples = model.sample(64, **sample_kwargs).detach().cpu()
+                samples = model.sample(64, **sample_kwargs)
+                if torch.is_tensor(samples):
+                    samples = samples.detach().cpu()
                 show_epoch_samples(samples_ctx, samples, title=f'Samples (epoch={epoch})')
 
     return dict(train_losses), dict(test_losses)
