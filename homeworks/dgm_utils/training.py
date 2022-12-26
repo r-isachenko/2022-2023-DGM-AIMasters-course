@@ -75,7 +75,7 @@ def train_model(
         # visualise samples
         if visualisation_enabled:
             model.eval()
-            samples = model.sample(64, **sample_kwargs)
+            samples = model.sample(64, **sample_kwargs).detach().cpu()
             show_epoch_samples(ctx, samples, title=f'Samples (epoch={epoch})')
 
     return dict(train_losses), dict(test_losses)
