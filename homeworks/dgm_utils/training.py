@@ -77,7 +77,7 @@ def train_model(
         'end' : 1,
         'anneal_fn': lambda x: x
     },
-    visualization_samples_enabled=False, # model should have 'sample' method
+    visualization_enabled=False, # model should have 'sample' method
     sample_kwargs={},
     loss_key='total_loss',
 ):
@@ -107,7 +107,7 @@ def train_model(
         train_epoch_fn = train_epoch
         train_params_dict['loss_key'] = loss_key
 
-    if visualization_samples_enabled:
+    if visualization_enabled:
         ctx = init_visual_ctx()
 
     for epoch in forrange:
@@ -123,8 +123,7 @@ def train_model(
             train_losses[k].extend(train_loss[k])
             test_losses[k].append(test_loss[k])
 
-        # visualise samples
-        if visualization_samples_enabled:
+        if visualization_enabled:
             with torch.no_grad():
                 model.eval()
                 samples = model.sample(64, **sample_kwargs)
