@@ -3,8 +3,8 @@ from .visualize import init_samples_vis_ctx, show_epoch_samples
 from collections import defaultdict
 from tqdm.notebook import tqdm
 
-import np
 import torch
+import numpy as np
 from torch import optim
 
 
