@@ -95,7 +95,7 @@
 		\item {\color{violet}The left hand side} is intractable due to unknown $\pi(\bx)$ -- \textbf{denoising score matching}. 
 		\item {\color{teal}The right hand side} is complex due to Hessian matrix -- \textbf{sliced score matching (Hutchinson's trace estimation)}.
 	\end{enumerate}
-	\myfootnotewithlink{https://yang-song.github.io/blog/2019/ssm/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021}
+	\myfootnotewithlink{https://yang-song.github.io/blog/2021/score/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021}
 \end{frame}
 %=======
 \begin{frame}{Recap of previous lecture}
@@ -115,7 +115,7 @@
 	\begin{block}{Theorem (denoising score matching)}
 		\vspace{-0.8cm}
 		\begin{multline*}
-			\bbE_{\pi(\bx | \sigma)}\bigl\| \bs(\bx, \btheta, \sigma) - \nabla_\bx \log \pi(\bx | \sigma) \bigr\|^2_2 = \\ = \bbE_{\pi(\bx')} \bbE_{p(\bx | \bx', \sigma)}\bigl\| \bs(\bx, \btheta, \sigma) - \nabla_\bx \log p(\bx | \bx', \sigma) \bigr\|^2_2	
+			\bbE_{\pi(\bx | \sigma)}\bigl\| \bs(\bx, \btheta, \sigma) - \nabla_\bx \log \pi(\bx | \sigma) \bigr\|^2_2 = \\ = \bbE_{\pi(\bx')} \bbE_{p(\bx | \bx', \sigma)}\bigl\| \bs(\bx, \btheta, \sigma) - \nabla_\bx \log p(\bx | \bx', \sigma) \bigr\|^2_2 + \text{const}(\btheta)
 		\end{multline*}
 		\vspace{-0.8cm}
 	\end{block}
@@ -145,7 +145,7 @@
 			\includegraphics[width=0.75\linewidth]{figs/single_noise}
 		\end{figure}
 	\end{itemize}
-	\myfootnotewithlink{https://yang-song.github.io/blog/2019/ssm/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021}
+	\myfootnotewithlink{https://yang-song.github.io/blog/2021/score/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021}
 \end{frame}
 %=======
 \begin{frame}{Noise conditioned score network}
@@ -322,23 +322,23 @@
 	\begin{block}{ELBO}
 		\vspace{-0.4cm}
 		\[
-			\log p(\bx | \btheta) \geq \bbE_{q({\color{teal}\bz} | \bx)} \frac{p(\bx, {\color{teal}\bz} | \btheta)}{q({\color{teal}\bz} | \bx)} = \cL(q, \btheta) \rightarrow \max_{q, \btheta}
+			\log p(\bx | \btheta) \geq \bbE_{q({\color{teal}\bz} | \bx)} \log \frac{p(\bx, {\color{teal}\bz} | \btheta)}{q({\color{teal}\bz} | \bx)} = \cL(q, \btheta) \rightarrow \max_{q, \btheta}
 		\]
 		\vspace{-0.5cm}
 	\end{block}
 	\begin{block}{Statement}
 		\vspace{-0.8cm}
 		\begin{multline*}
-			\cL(q, \btheta) = \bbE_{q({\color{teal}\bx_1, \dots, \bx_T} | \bx_0)}\frac{p(\bx_0, {\color{teal}\bx_1, \dots, \bx_T} | \btheta)}{q({\color{teal}\bx_1, \dots, \bx_T} | \bx_0)} = \\ 
-			= \bbE_{q} \Bigl[ {\color{violet}KL\bigl(q(\bx_T | \bx_0) || p(\bx_T)\bigr)}
-			+ \sum_{t=2}^T \underbrace{KL \bigl(q(\bx_{t-1} | \bx_t, \bx_0) || p(\bx_{t - 1} | \bx_t, \btheta )\bigr)}_{\cL_t} - \\
-			- {\color{olive}\log p(\bx_0 | \bx_1, \btheta)} \Bigr]
+			\cL(q, \btheta) = \bbE_{q({\color{teal}\bx_1, \dots, \bx_T} | \bx_0)} \log \frac{p(\bx_0, {\color{teal}\bx_1, \dots, \bx_T} | \btheta)}{q({\color{teal}\bx_1, \dots, \bx_T} | \bx_0)} = \\ 
+			= \bbE_{q} \Bigl[ {\color{olive}\log p(\bx_0 | \bx_1, \btheta)}
+			- \sum_{t=2}^T \underbrace{KL \bigl(q(\bx_{t-1} | \bx_t, \bx_0) || p(\bx_{t - 1} | \bx_t, \btheta )\bigr)}_{\cL_t} - \\
+		    - {\color{violet}KL\bigl(q(\bx_T | \bx_0) || p(\bx_T)\bigr)} \Bigr]
 		\end{multline*}
 		\vspace{-0.5cm}
 	\end{block}
 	\begin{itemize}
-		\item {\color{violet}First term} is constant (KL between two standard normals).
-		\item {\color{olive}Third term} is a decoder distribution (could be AR model or discretized distribution (like mixture of logistics)). 
+		\item {\color{olive}First term} is a decoder distribution (could be AR model or discretized distribution (like mixture of logistics)). 
+		\item {\color{violet}Third term} is constant (KL between two standard normals).
 	\end{itemize}
 	\myfootnotewithlink{https://arxiv.org/abs/2006.11239}{Ho J. Denoising Diffusion Probabilistic Models, 2020}
 \end{frame}
