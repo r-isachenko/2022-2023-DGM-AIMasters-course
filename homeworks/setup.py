@@ -14,6 +14,8 @@ setup(
         'torchvision', 
         'torchaudio',
         'gdown',
-        'scikit-learn'
+        'scikit-learn',
+        'ipython',
+        'ipywidgets',
     ]
 )

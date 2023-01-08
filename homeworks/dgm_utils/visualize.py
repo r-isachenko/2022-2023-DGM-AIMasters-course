@@ -4,11 +4,21 @@ import torch
 from matplotlib import pyplot as plt
 from torchvision.utils import make_grid
 
+# to visualize samples at each training epoch
+from IPython import display
+from ipywidgets import Output
+
 
 TICKS_FONT_SIZE = 12
 LEGEND_FONT_SIZE = 12
 LABEL_FONT_SIZE = 14
 TITLE_FONT_SIZE = 16
+
+
+def init_visual_ctx():
+    ctx = Output()
+    display.display(ctx)
+    return ctx
 
 
 def plot_training_curves(train_losses, test_losses, logscale_y=False, logscale_x=False):
@@ -54,6 +64,13 @@ def show_samples(samples, title, figsize=None, nrow=None):
     plt.imshow(grid_img)
     plt.axis('off')
     plt.show()
+
+
+def show_epoch_samples_losses(ctx, samples_kwargs, losses_kwargs):
+    with ctx:
+        display.clear_output(wait=True)
+        show_samples(samples_kwargs['samples'], samples_kwargs['title'])
+        plot_training_curves(losses_kwargs['train_losses'], losses_kwargs['test_losses'])
 
 
 def visualize_images(data, title):

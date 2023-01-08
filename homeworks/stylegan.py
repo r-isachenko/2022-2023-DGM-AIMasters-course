@@ -9,8 +9,7 @@ import pickle
 def logit2im(x):
     return x * 0.5 + 0.5
 
-class MappingLayers(nn.Module):
-    
+class MappingLayers(nn.Module): 
     '''
     Mapping Layers Class
     Values:
