@@ -11,7 +11,7 @@ LABEL_FONT_SIZE = 14
 TITLE_FONT_SIZE = 16
 
 
-def plot_training_curves(train_losses, test_losses, logscale_y=False, logscale_x=False):
+def plot_training_curves(train_losses, test_losses, logscale_y=False, logscale_x=False) -> None:
     n_train = len(train_losses[list(train_losses.keys())[0]])
     n_test = len(test_losses[list(train_losses.keys())[0]])
     x_train = np.linspace(0, n_test - 1, n_train)
@@ -39,7 +39,7 @@ def plot_training_curves(train_losses, test_losses, logscale_y=False, logscale_x
     plt.show()
 
 
-def show_samples(samples, title, figsize=None, nrow=None):
+def show_samples(samples, title, figsize=None, nrow=None) -> None:
     if isinstance(samples, np.ndarray):
         samples = torch.FloatTensor(samples)
     if nrow is None:
@@ -56,13 +56,13 @@ def show_samples(samples, title, figsize=None, nrow=None):
     plt.show()
 
 
-def visualize_images(data, title):
+def visualize_images(data, title) -> None:
     idxs = np.random.choice(len(data), replace=False, size=(100,))
     images = data[idxs]
     show_samples(images, title)
 
 
-def visualize_2d_data(train_data, test_data, train_labels=None, test_labels=None):
+def visualize_2d_data(train_data, test_data, train_labels=None, test_labels=None) -> None:
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
     ax1.set_title('train', fontsize=TITLE_FONT_SIZE)
     ax1.scatter(train_data[:, 0], train_data[:, 1], s=1, c=train_labels)
@@ -73,7 +73,7 @@ def visualize_2d_data(train_data, test_data, train_labels=None, test_labels=None
     plt.show()
 
 
-def visualize_2d_samples(data, title, labels=None, xlabel=None, ylabel=None):
+def visualize_2d_samples(data, title, labels=None, xlabel=None, ylabel=None) -> None:
     plt.figure(figsize=(5, 5))
     plt.scatter(data[:, 0], data[:, 1], s=1, c=labels)
     plt.title(title, fontsize=TITLE_FONT_SIZE)
@@ -86,7 +86,7 @@ def visualize_2d_samples(data, title, labels=None, xlabel=None, ylabel=None):
     plt.show()
 
 
-def visualize_2d_densities(x_grid, y_grid, densities, title, xlabel=None, ylabel=None):
+def visualize_2d_densities(x_grid, y_grid, densities, title, xlabel=None, ylabel=None) -> None:
     densities = densities.reshape([y_grid.shape[0], y_grid.shape[1]])
     plt.figure(figsize=(5, 5))
     plt.pcolor(x_grid, y_grid, densities)
