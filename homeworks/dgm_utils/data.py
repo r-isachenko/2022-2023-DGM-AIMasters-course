@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 
 
-def load_pickle(path, flatten=False, binarize=False):
+def load_pickle(path: str, flatten: bool = False, binarize: bool = False) -> Tuple[np.ndarray, np.ndarray]:
     with open(path, 'rb') as f:
         data = pickle.load(f)
     train_data = data['train'].astype('float32')
