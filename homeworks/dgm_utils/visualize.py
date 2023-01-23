@@ -3,6 +3,7 @@ import torch
 
 from matplotlib import pyplot as plt
 from torchvision.utils import make_grid
+from typing import Dict, List, Optional, Tuple
 
 
 TICKS_FONT_SIZE = 12
