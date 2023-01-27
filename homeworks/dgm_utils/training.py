@@ -5,7 +5,13 @@ import torch
 from torch import optim
 
 
-def train_epoch(model: object, train_loader: object, optimizer: object, use_cuda: bool, loss_key: str='total') -> defaultdict:
+def train_epoch(
+    model: object,
+    train_loader: object,
+    optimizer: object,
+    use_cuda: bool,
+    loss_key: str = "total",
+) -> defaultdict:
     model.train()
 
     stats = defaultdict(list)
@@ -45,9 +51,9 @@ def train_model(
     test_loader: object,
     epochs: int,
     lr: float,
-    use_tqdm: bool=False,
-    use_cuda: bool=False,
-    loss_key: str='total_loss'
+    use_tqdm: bool = False,
+    use_cuda: bool = False,
+    loss_key: str = "total_loss",
 ) -> Tuple[dict, dict]:
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
