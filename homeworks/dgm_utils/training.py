@@ -14,7 +14,7 @@ def train_epoch(
     train_loader: object,
     optimizer: object,
     use_cuda: bool,
-    loss_key: str = "total_key",
+    loss_key: str = "total_loss",
 ) -> defaultdict:
     model.train()
 
