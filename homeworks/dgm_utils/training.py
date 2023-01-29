@@ -59,6 +59,7 @@ def train_model(
     use_cuda: bool = False,
     loss_key: str = "total_loss",
     visualization_enabled: bool = True,
+    sample_kwargs: Dict = {},
 ) -> Tuple[dict, dict]:
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
