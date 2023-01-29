@@ -76,7 +76,7 @@ def train_model(
     for epoch in forrange:
         model.train()
         
-        train_loss = train_epoch(model, train_loader, optimizer, use_cuda, **train_params_dict)
+        train_loss = train_epoch(model, train_loader, optimizer, use_cuda)
         test_loss = eval_model(model, test_loader, use_cuda)
 
         for k in train_loss.keys():
