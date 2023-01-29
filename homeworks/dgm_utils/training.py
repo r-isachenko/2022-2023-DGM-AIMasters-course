@@ -14,12 +14,11 @@ def train_epoch(
     train_loader: object,
     optimizer: object,
     use_cuda: bool,
-    loss_key: str = "total",
+    loss_key: str = "total_key",
 ) -> defaultdict:
     model.train()
 
     stats = defaultdict(list)
-    loss_key = kwargs['loss_key']
     for x in train_loader:
         if use_cuda:
             x = x.cuda()
