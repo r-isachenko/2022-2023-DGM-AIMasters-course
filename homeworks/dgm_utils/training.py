@@ -59,6 +59,7 @@ def train_model(
     use_tqdm: bool = False,
     use_cuda: bool = False,
     loss_key: str = "total_loss",
+    visualization_enabled: bool = True,
 ) -> Tuple[dict, dict]:
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
@@ -70,7 +71,6 @@ def train_model(
         model = model.cuda()
 
     if visualization_enabled:
-        assert hasattr(model, "sample")
         ctx = init_visual_ctx()
 
     for epoch in forrange:
@@ -86,6 +86,9 @@ def train_model(
         if visualization_enabled:
             with torch.no_grad():
                 model.eval()
+
+                assert hasattr(model, "sample")
+
                 samples = model.sample(64, **sample_kwargs)
                 if torch.is_tensor(samples):
                     samples = samples.cpu()
