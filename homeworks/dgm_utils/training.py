@@ -27,26 +27,6 @@ def train_epoch(model, train_loader, optimizer, use_cuda, **kwargs):
     return stats
 
 
-def train_epoch_vae_kl_anneal(model, train_loader, optimizer, use_cuda, **kwargs):
-    model.train()
-
-    stats = defaultdict(list)
-    beta = kwargs['beta']
-    for x in train_loader:
-        if use_cuda:
-            x = x.cuda()
-        losses = model.loss(x)
-        optimizer.zero_grad()
-        loss = losses['recon_loss'] + beta * losses['kl_loss']
-        loss.backward()
-        optimizer.step()
-
-        for k, v in losses.items():
-            stats[k].append(v.item())
-
-    return stats
-
-
 def eval_model(model, data_loader, use_cuda):
     model.eval()
     stats = defaultdict(float)
@@ -71,13 +51,7 @@ def train_model(
     lr,
     use_tqdm=False,
     use_cuda=False,
-    use_kl_annealing=False, # loss should be dict contained keys 'recon_loss' and 'kl_loss'
-    annealing_kwargs={
-        'begin' : 0,
-        'end' : 1,
-        'anneal_fn': lambda x: x
-    },
-    visualization_enabled=False, # model should have 'sample' method
+    visualization_enabled=False,
     sample_kwargs={},
     loss_key='total_loss',
 ):
@@ -90,33 +64,14 @@ def train_model(
     if use_cuda:
         model = model.cuda()
 
-    train_params_dict = {} # passed to train_epoch function
-    if use_kl_annealing:
-        train_epoch_fn = train_epoch_vae_kl_anneal
-        assert('begin' in annealing_kwargs)
-        assert('end' in annealing_kwargs)
-        assert('anneal_fn' in annealing_kwargs)
-        begin = annealing_kwargs['begin']
-        end = annealing_kwargs['end']
-        assert(begin < end)
-        anneal_fn = annealing_kwargs['anneal_fn']
-
-        assert(hasattr(anneal_fn, '__call__'))
-        beta = np.linspace(begin, end, epochs)
-    else:
-        train_epoch_fn = train_epoch
-        train_params_dict['loss_key'] = loss_key
-
     if visualization_enabled:
+        assert hasattr(model, "sample")
         ctx = init_visual_ctx()
 
     for epoch in forrange:
         model.train()
         
-        if use_kl_annealing:
-            train_params_dict['beta'] = anneal_fn(beta[epoch])
-
-        train_loss = train_epoch_fn(model, train_loader, optimizer, use_cuda, **train_params_dict)
+        train_loss = train_epoch(model, train_loader, optimizer, use_cuda, **train_params_dict)
         test_loss = eval_model(model, test_loader, use_cuda)
 
         for k in train_loss.keys():
