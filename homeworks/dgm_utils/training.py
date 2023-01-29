@@ -8,7 +8,13 @@ import numpy as np
 from torch import optim
 
 
-def train_epoch(model, train_loader, optimizer, use_cuda, **kwargs):
+def train_epoch(
+    model: object,
+    train_loader: object,
+    optimizer: object,
+    use_cuda: bool,
+    loss_key: str = "total",
+) -> defaultdict:
     model.train()
 
     stats = defaultdict(list)
@@ -27,7 +33,7 @@ def train_epoch(model, train_loader, optimizer, use_cuda, **kwargs):
     return stats
 
 
-def eval_model(model, data_loader, use_cuda):
+def eval_model(model: object, data_loader: object, use_cuda: bool) -> defaultdict:
     model.eval()
     stats = defaultdict(float)
     with torch.no_grad():
@@ -44,17 +50,15 @@ def eval_model(model, data_loader, use_cuda):
 
 
 def train_model(
-    model,
-    train_loader,
-    test_loader,
-    epochs,
-    lr,
-    use_tqdm=False,
-    use_cuda=False,
-    visualization_enabled=False,
-    sample_kwargs={},
-    loss_key='total_loss',
-):
+    model: object,
+    train_loader: object,
+    test_loader: object,
+    epochs: int,
+    lr: float,
+    use_tqdm: bool = False,
+    use_cuda: bool = False,
+    loss_key: str = "total_loss",
+) -> Tuple[dict, dict]:
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
     train_losses = defaultdict(list)

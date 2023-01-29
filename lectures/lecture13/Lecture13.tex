@@ -363,7 +363,7 @@
 			\includegraphics[width=0.9\linewidth]{figs/langevin_dynamic}
 		\end{figure}
 	\end{minipage}
-	\myfootnotewithlink{https://yang-song.github.io/blog/2019/ssm/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021} 
+	\myfootnotewithlink{https://yang-song.github.io/blog/2021/score/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021} 
 	\end{frame}
 %=======
 \section{Score matching}
@@ -432,7 +432,7 @@
 	\end{figure}
 	\vspace{-0.3cm} 
 	\textbf{Problem:} we do not know $\nabla_\bx \log \pi(\bx)$.
-	\myfootnotewithlink{https://yang-song.github.io/blog/2019/ssm/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021}
+	\myfootnotewithlink{https://yang-song.github.io/blog/2021/score/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021}
 \end{frame}
 %=======
 \begin{frame}{Score matching}
@@ -483,8 +483,8 @@
 		\text{tr}\bigl(\nabla_{\bx} \bs(\bx, \btheta)\bigr) = \mathbb{E}_{p(\bepsilon)} \left[ {\color{olive}\bepsilon^T \nabla_{\bx} \bs(\bx, \btheta)} \bepsilon \right]
 	\]
 	\end{block}
-	\myfootnote{\href{https://arxiv.org/abs/1905.07088}{Song Y. Sliced Score Matching: A Scalable Approach to Density and Score Estimation, 2019} \\
-	\href{https://yang-song.github.io/blog/2019/ssm/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021}}
+	\myfootnote{\href{https://yang-song.net/blog/2021/ssm/}{Song Y. Sliced Score Matching: A Scalable Approach to Density and Score Estimation, 2019} \\
+	\href{https://yang-song.net/blog/2021/score/}{Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021}}
 \end{frame}
 %=======
 \begin{frame}{Denoising score matching}
@@ -504,7 +504,7 @@
 	\begin{block}{Theorem}
 	\vspace{-0.8cm}
 	\begin{multline*}
-		\bbE_{\pi(\bx | \sigma)}\bigl\| \bs(\bx, \btheta, \sigma) - \nabla_\bx \log \pi(\bx | \sigma) \bigr\|^2_2 = \\ = \bbE_{\pi(\bx')} \bbE_{p(\bx | \bx', \sigma)}\bigl\| \bs(\bx, \btheta, \sigma) - \nabla_\bx \log p(\bx | \bx', \sigma) \bigr\|^2_2	
+		\bbE_{\pi(\bx | \sigma)}\bigl\| \bs(\bx, \btheta, \sigma) - \nabla_\bx \log \pi(\bx | \sigma) \bigr\|^2_2 = \\ = \bbE_{\pi(\bx')} \bbE_{p(\bx | \bx', \sigma)}\bigl\| \bs(\bx, \btheta, \sigma) - \nabla_\bx \log p(\bx | \bx', \sigma) \bigr\|^2_2 + \text{const}(\btheta)
 	\end{multline*}
 	\vspace{-0.8cm}
 	\end{block}
