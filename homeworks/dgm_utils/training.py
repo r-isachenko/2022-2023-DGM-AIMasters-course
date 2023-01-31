@@ -2,7 +2,9 @@ from .visualize import init_visual_ctx, show_epoch_samples_losses
 
 from collections import defaultdict
 from tqdm.notebook import tqdm
+
 from typing import Dict, List, Optional, Tuple
+
 
 import torch
 import numpy as np
