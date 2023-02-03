@@ -36,20 +36,20 @@ The course is accompanied by practical tasks that allow you to understand the pr
 | 7 | October, 24 | <b>Lecture:</b> 7. Discrete data vs continuous model. Model discretization (PixelCNN++). Data dequantization: uniform and variational (Flow++). ELBO surgery and optimal VAE prior. Flow-based VAE prior. | [slides](lectures/lecture7/Lecture7.pdf) |
 |  |  | <b>Seminar:</b> RealNVP hints. Discretization of continuous distribution (MADE++). | [notebook](seminars/seminar7/seminar7.ipynb) |
 | 8 | October, 31 | <b>Lecture:</b> 8. Flows-based VAE posterior vs flow-based VAE prior. Likelihood-free learning. GAN optimality theorem. | [slides](lectures/lecture8/Lecture8.pdf) |
-|  |  | <b>Seminar:</b> VAE with learnable prior. Aggregated posterior. Integer discrete flows  | [notebook](seminars/seminar8/seminar8.ipynb) |
+|  |  | <b>Seminar:</b> VAE with learnable prior. Aggregated posterior. Integer discrete flows.  | [notebook](seminars/seminar8/seminar8.ipynb) |
 | 9 | November, 7 | <b>Lecture:</b> Vanishing gradients and mode collapse, KL vs JS divergences. Adversarial Variational Bayes. Wasserstein distance. Wasserstein GAN (WGAN). | [slides](lectures/lecture9/Lecture9.pdf) |
-|  |  | <b>Seminar:</b> KL vs JS divergences. Mode collapse. Vanilla GAN in 1D coding | [notebook](seminars/seminar9/GAN_colab.ipynb)<br>[notebook_done](seminars/seminar9/GAN_colab_with_code.ipynb) |
+|  |  | <b>Seminar:</b> KL vs JS divergences. Mode collapse. Vanilla GAN in 1D coding. | [notebook](seminars/seminar9/GAN_colab.ipynb)<br>[notebook_done](seminars/seminar9/GAN_colab_with_code.ipynb) |
 | 10 | November, 14 | <b>Lecture:</b> WGAN with gradient penalty (WGAN-GP). Spectral Normalization GAN (SNGAN). f-divergence minimization. GAN evaluation. | [slides](lectures/lecture10/Lecture10.pdf) |
-|  |  | <b>Seminar:</b> 1-Wasserstein distance introduction: discrete and continuous case. WGAN theory. Vanilla GAN on 2D data practice  | [notebook](seminars/seminar10/seminar10.ipynb)<br>[WGAN_theory](seminars/seminar10/Continuous_1_wasserstein_note.pdf) |
+|  |  | <b>Seminar:</b> 1-Wasserstein distance introduction: discrete and continuous case. WGAN theory. Vanilla GAN on 2D data practice. | [notebook](seminars/seminar10/seminar10.ipynb)<br>[WGAN_theory](seminars/seminar10/Continuous_1_wasserstein_note.pdf) |
 | 11 | November, 21 | <b>Lecture:</b> GAN evaluation (Inception score, FID, Precision-Recall, truncation trick). Discrete VAE latent representations. | [slides](lectures/lecture11/Lecture11.pdf) |
-|  |  | <b>Seminar:</b> WGANs on multimodal 2D data. GANs zoo. Evolution of GANs. StyleGAN implementation : start discussion | [notebook](seminars/seminar11/seminar11.ipynb)<br>[GANevolution](seminars/seminar11/GANs_evolution_and_StyleGAN.pdf)<br>[StyleGAN_not_completed](seminars/seminar11/StyleGAN.ipynb) |
-| 12 | November, 28 | <b>Lecture:</b> 12. Vector quantization, straight-through gradient estimation (VQ-VAE). Gumbel-softmax trick (DALL-E). Neural ODE. Adjoint method. | [slides](lectures/lecture12/Lecture12.pdf) |
-|  |  | <b>Seminar:</b> VQ-VAE implementation hints. StyleGAN coding and assessing | [notebook](seminars/seminar12/seminar12.ipynb)<br>[StyleGAN](seminars/seminar12/StyleGAN_final.ipynb) |
+|  |  | <b>Seminar:</b> WGANs on multimodal 2D data. GANs zoo. Evolution of GANs. StyleGAN implementation: start discussion. | [notebook](seminars/seminar11/seminar11.ipynb)<br>[GANevolution](seminars/seminar11/GANs_evolution_and_StyleGAN.pdf)<br>[StyleGAN_not_completed](seminars/seminar11/StyleGAN.ipynb) |
+| 12 | November, 28 | <b>Lecture:</b> Vector quantization, straight-through gradient estimation (VQ-VAE). Gumbel-softmax trick (DALL-E). Neural ODE. Adjoint method. | [slides](lectures/lecture12/Lecture12.pdf) |
+|  |  | <b>Seminar:</b> VQ-VAE implementation hints. StyleGAN coding and assessing. | [notebook](seminars/seminar12/seminar12.ipynb)<br>[StyleGAN](seminars/seminar12/StyleGAN_final.ipynb) |
 | 13 | December, 5 | <b>Lecture:</b> Continuous-in-time NF (FFJORD, Hutchinson's trace estimator). Kolmogorov-Fokker-Planck equation and Langevin dynamic. SDE basics. Score matching. | [slides](lectures/lecture13/Lecture13.pdf) |
-|  |  | <b>Seminar:</b> CNF theory. Langevin Dynamics. Score matching practice | [notebook](seminars/seminar13/seminar13.ipynb) |
+|  |  | <b>Seminar:</b> CNF theory. Langevin Dynamics. Score matching practice. | [notebook](seminars/seminar13/seminar13.ipynb) |
 | 14 | December, 12 | <b>Lecture:</b> Noise conditioned score network (NCSN). Gaussian diffusion process. Denoising diffusion probabilistic model (DDPM). | [slides](lectures/lecture14/Lecture14.pdf) |
-|  |  | <b>Seminar:</b> NCSN and DDPM : theory and implementation on 2D data | [notebook](seminars/seminar14/seminar14.ipynb) |
-|  | December, 19 | <b>Oral exam</b> | TBA |
+|  |  | <b>Seminar:</b> NCSN and DDPM: theory and implementation on 2D data. | [notebook](seminars/seminar14/seminar14.ipynb) |
+|  | December, 19 | <b>Oral exam</b> |  |
 
 ## Homeworks
 | Homework | Date | Deadline | Description | Link |
