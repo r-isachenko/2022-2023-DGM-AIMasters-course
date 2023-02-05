@@ -1,8 +1,13 @@
+from .visualize import init_visual_ctx, show_epoch_samples_losses
+
 from collections import defaultdict
 from tqdm.notebook import tqdm
-from typing import Tuple
+
+from typing import Dict, List, Optional, Tuple
+
 
 import torch
+import numpy as np
 from torch import optim
 
 
@@ -11,7 +16,7 @@ def train_epoch(
     train_loader: object,
     optimizer: object,
     use_cuda: bool,
-    loss_key: str = "total",
+    loss_key: str = "total_loss",
 ) -> defaultdict:
     model.train()
 
@@ -55,21 +60,47 @@ def train_model(
     use_tqdm: bool = False,
     use_cuda: bool = False,
     loss_key: str = "total_loss",
+    visualization_enabled: bool = False,
+    sample_kwargs: Dict = {},
 ) -> Tuple[dict, dict]:
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
     train_losses = defaultdict(list)
     test_losses = defaultdict(list)
     forrange = tqdm(range(epochs)) if use_tqdm else range(epochs)
+    
     if use_cuda:
         model = model.cuda()
 
+    if visualization_enabled:
+        ctx = init_visual_ctx()
+
     for epoch in forrange:
         model.train()
-        train_loss = train_epoch(model, train_loader, optimizer, use_cuda, loss_key)
+        
+        train_loss = train_epoch(model, train_loader, optimizer, use_cuda=use_cuda, loss_key=loss_key)
         test_loss = eval_model(model, test_loader, use_cuda)
 
         for k in train_loss.keys():
             train_losses[k].extend(train_loss[k])
             test_losses[k].append(test_loss[k])
+
+        if visualization_enabled:
+            with torch.no_grad():
+                model.eval()
+
+                assert hasattr(model, "sample")
+
+                samples = model.sample(64, **sample_kwargs)
+                if torch.is_tensor(samples):
+                    samples = samples.cpu()
+                show_epoch_samples_losses(ctx, {
+                    'samples' : samples, 
+                    'title': f'Samples (epoch={epoch})'
+                }, 
+                {
+                    'train_losses' : train_losses,
+                    'test_losses' : test_losses
+                })
+
     return dict(train_losses), dict(test_losses)
